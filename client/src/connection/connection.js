@@ -1,4 +1,4 @@
-import "./connection.css";
+import "./Connection.css";
 import { useEffect, useState } from "react";
 import socket from "../socket";
 
@@ -16,10 +16,11 @@ function Connection() {
 
     return (
         <div id="connectionDiv">
-            <input placeholder="Entrez un nom" type="text" onChange={(event) => { setPseudo(event.target.value) }}></input>
-            <input placeholder="Entrez le mot de passe" type="password" onChange={(event) => { setPassword(event.target.value) }}></input>
-            <button onClick={register}>S'inscrire</button>
-            <button onClick={connect}>Se connecter</button>
+            <label id="connectionLabel" aria-hidden="true">Bienvenue</label>
+            <input className="connectionInput" placeholder="Entrez un nom" type="text" onChange={(event) => { setPseudo(event.target.value) }}></input>
+            <input className="connectionInput" placeholder="Entrez le mot de passe" type="password" onChange={(event) => { setPassword(event.target.value) }}></input>
+            <button className="connectionButton" onClick={register}>S'inscrire</button>
+            <button className="connectionButton" onClick={connect}>Se connecter</button>
         </div>
     );
 }
