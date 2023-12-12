@@ -1,11 +1,12 @@
-div {
+#selectionJeuxDiv {
+    background-color: blue;
     display:flex;
-    height: 900px;
+    height: 95vh;
     justify-content: center;
     align-items: center;
 }
 
-button {
+.selectionJeuxButton {
     width: 30px;
     font-size: larger;
     text-align: center;

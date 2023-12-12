@@ -5,7 +5,6 @@
     border-radius: 10px;
     box-shadow: 5px 20px 50px #000;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    margin: auto;
 }
 
 #connectionLabel {
@@ -16,7 +15,15 @@
     margin: 60px;
     font-weight: bold;
     cursor: pointer;
-    transition: .5s ease-in-out;
+}
+
+#message {
+    color: #b00;
+    font-size: 1em;
+    justify-content: center;
+    display: flex;
+    margin: 5px;
+
 }
 
 .connectionInput {
@@ -25,7 +32,7 @@
     background: #e0dede;
     justify-content: center;
     display: flex;
-    margin: 20px auto;
+    margin: 5px auto 15px auto;
     padding: 10px;
     border: none;
     outline: none;
@@ -35,18 +42,16 @@
 .connectionButton {
     width: 60%;
     height: 40px;
-    margin: 10px auto;
+    margin: 5px auto 15px auto;
     justify-content: center;
     display: block;
     color: #fff;
     background: #573b8a;
     font-size: 1em;
     font-weight: bold;
-    margin-top: 20px;
     outline: none;
     border: none;
     border-radius: 5px;
-    transition: .2s ease-in;
     cursor: pointer;
 }
 
