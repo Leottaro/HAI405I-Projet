@@ -27,4 +27,8 @@ io.on("connection", function (socket) {
     socket.on("reqMessage", function(data) {    
         socket.broadcast.emit("resMessage", data);
     });
+
+    socket.on("reqRegister", data => {
+        console.log(data);
+    });
 });
