@@ -1,9 +1,10 @@
+import { lazy } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import socket from "./socket";
 import './App.css';
 
-import Connection from "./pages/connection/Connection";
-import SelectionJeux from "./pages/selectionJeux/selectionJeux";
+const Connection = lazy(() => import("./pages/connection/Connection"));
+const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
 
 function App() {
   const navigate = useNavigate();
