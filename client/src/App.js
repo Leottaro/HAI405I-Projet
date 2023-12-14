@@ -7,11 +7,13 @@ const Connection = lazy(() => import("./pages/connection/Connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
 const Creer = lazy(() => import("./creerRejoindre/creer"));
 const Rejoindre = lazy(() => import("./creerRejoindre/rejoindre"));
+const PlateauBataille = lazy(() => import("./plateauBataille/plateauBataille"));
+
 function App() {
   const navigate = useNavigate();
 
   socket.on("goTo", page => {
-    navigate(page);
+    setTimeout(() => navigate(page), 10);
   });
 
   return (
@@ -19,8 +21,9 @@ function App() {
       <Route exact path="/" element={<Connection />} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
-      <Route path="/creer" element={<Creer />} />
-      <Route path="/rejoindre" element={<Rejoindre />} />
+      <Route path="/creer/:jeux" element={<Creer />} />
+      <Route path="/rejoindre/:jeux" element={<Rejoindre />} />
+      <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
     </Routes>
   );
 }

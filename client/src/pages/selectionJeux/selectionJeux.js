@@ -6,10 +6,9 @@ import belote from './belote.png'
 import bataille from './bataille.png'
 
 function SelectionJeux() {
-    const [jeux, setJeux] = useState("");
     const [i, setI] = useState(0);
-    let listeJeux = [bataille, belote];
-    let listeStringJeux = ["bataille", "belote"];
+    const listeJeux = [bataille, belote];
+    const listeNomJeux = ["bataille", "belote"];
 
     function gauche() {
         if (i > 0) {
@@ -25,7 +24,7 @@ function SelectionJeux() {
 
     const navigate = useNavigate();
     function choisir() {
-        navigate("/creer");
+        setTimeout(() => navigate("/creer/" + listeNomJeux[i]), 10);
     }
 
     return (

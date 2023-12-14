@@ -1,10 +1,12 @@
 import socket from "../socket";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import TapisBataille from "./TapisBataille/TapisBataille";
 import './plateauBataille.css'
 
-function plateauBataille(){
+function PlateauBataille(){
+    const { code } = useParams();
     let listeJoueurs=["moi","Joueur1","Joueur2","Joueur3","Joueur4","Joueur5","Joueur6","Joueur7","Joueur8","Joueur9"]
     let nbJoueurs=7;
 
@@ -15,7 +17,7 @@ function plateauBataille(){
     })
 
     function start(){
-        socket.emit("start")
+        socket.emit("start");
     }
 
     return (
@@ -62,5 +64,4 @@ function plateauBataille(){
         </div>
     );
 }
-
-export default plateauBataille;
+export default PlateauBataille;
