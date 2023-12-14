@@ -20,6 +20,9 @@ const database = new sqlite3.Database("./databases/HAI405I.db", err => {
     database.run("CREATE TABLE IF NOT EXISTS account (pseudo VARCHAR(255) PRIMARY KEY, password VARCHAR(255) NOT NULL);");
 });
 
+const Bataille = require("./games/Bataille");
+const jeux = { "bataille": Bataille };
+
 app.get("/", (req, res) => {
     res.send("<h1>voici le serveur</h1>");
 });
@@ -29,6 +32,7 @@ io.listen(3001, () => {
 });
 
 const sockets = {};
+const parties = {};
 
 io.on("connection", function (socket) {
     console.log(`New user connected: ${socket.id}`);
@@ -62,5 +66,14 @@ io.on("connection", function (socket) {
             socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
             socket.emit("goTo", "/selectionJeux");
         });
+    });
+
+    socket.on("reqLogOut", () => {
+        delete sockets[socket.id];
+        console.log(`user disconnected: ${socket.id}`);
+    });
+
+    socket.on("reqCreate", json => {
+        parties[roomID] = { jeux: };
     });
 });

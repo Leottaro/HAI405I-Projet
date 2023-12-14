@@ -25,3 +25,4 @@ class Carte {
         return paquet;
     }
 }
+module.exports = Carte;

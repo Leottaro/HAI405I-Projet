@@ -24,4 +24,9 @@ function App() {
     </Routes>
   );
 }
+
+window.addEventListener("beforeunload", function () {
+  socket.emit("reqLogOut");
+});
+
 export default App;

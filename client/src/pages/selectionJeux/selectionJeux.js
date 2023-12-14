@@ -1,5 +1,6 @@
 import socket from "../../socket";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './selectionJeux.css';
 import belote from './belote.png'
 import bataille from './bataille.png'
@@ -8,6 +9,7 @@ function SelectionJeux() {
     const [jeux, setJeux] = useState("");
     const [i, setI] = useState(0);
     let listeJeux = [bataille, belote];
+    let listeStringJeux = ["bataille", "belote"];
 
     function gauche() {
         if (i > 0) {
@@ -21,8 +23,9 @@ function SelectionJeux() {
         setI((i + 1) % listeJeux.length);
     }
 
+    const navigate = useNavigate();
     function choisir() {
-        socket.emit("choixJeux", listeJeux[i]);
+        navigate("/creer");
     }
 
     return (
