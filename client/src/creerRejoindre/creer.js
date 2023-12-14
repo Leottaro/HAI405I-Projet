@@ -18,6 +18,7 @@ function Creer() {
 
     function valider() {
         socket.emit("reqCreate", {nbrJoueurs: nbrJoueurs, lien: lien, jeux: "bataille"});
+        socket.emit("reqCreate", {nbrJoueurs: nbrJoueurs, lien: lien, jeux: "bataille"});
     }
 
     const navigate=useNavigate();
