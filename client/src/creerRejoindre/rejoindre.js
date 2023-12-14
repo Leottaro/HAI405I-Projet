@@ -9,7 +9,7 @@ function Rejoindre() {
     const [message, setMessage] = useState("");
     //const [listParties, setListParties] = useState([]);
     const [listPartiesString, setListPartiesString] = useState("");
-    let listParties=[{code:1,nbrJoueurs:2},{code:2,nbrJoueurs:3},{code:4,nbrJoueurs:3},{code:8,nbrJoueurs:3}]
+    let listParties=[{code:1,nbrJoueurs:2},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3},{code:2,nbrJoueurs:3}]
     
 
     function afficheListPartie(){
@@ -26,7 +26,7 @@ function Rejoindre() {
         navigate("/creer");
     }
     function jsonToHtml(json){
-        return "<button onClick={rejoindre("+json.code+")}>Rejoindre</button>"
+        return "<div class='divParties'><label class='labelParties'>"+json.nbrJoueurs+" Joueurs</label><button onClick={rejoindre("+json.code+")}>Rejoindre</button></div>"
     }
     function valider(){
         socket.emit("reqJoin", lien);
@@ -44,12 +44,12 @@ function Rejoindre() {
                 <button id="creerButton"onClick={creer}>Creer</button>
                 <button id="rejoindreButton">Rejoindre</button>
             </div>
-            <label>entrez un lien de partie</label>
+            <label class="labelChris">entrez un lien de partie</label>
             <input className="lienInput" type="number" max={9999999} onChange={(event) => {setLienPartie(parseInt(event.target.value)) }}></input>
             <button className="submitButton" onClick={valider}>submit</button>
             <label id="message">{message}</label>
-            <label>Parties en cours:</label>
-            <div dangerouslySetInnerHTML={{ __html: listPartiesString}}/>
+            <label id="partiesEnCours">Parties en cours:</label>
+            <div id="listeParties" dangerouslySetInnerHTML={{ __html: listPartiesString}}/>
             <button onClick={afficheListPartie}>afficheListPartie</button>
         </div>
     );
