@@ -1,5 +1,33 @@
 #plateauBataille {
     width: 100%;
     height: 100vh;
-    background-color: #2E5894;
+    display: block;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+
+#listeJoueurs {
+    width: 100vw;
+    height: 140px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
+
+#tapis {
+    width: 100%;
+    height: calc(100vh - 280px);
+}
+
+#moi {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+}
+
+#start {
+    width: 100px;
+    height: 30px;
+
 }
