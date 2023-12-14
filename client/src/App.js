@@ -5,7 +5,8 @@ import './App.css';
 
 const Connection = lazy(() => import("./pages/connection/Connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
-
+const Creer = lazy(() => import("./creerRejoindre/creer"));
+const Rejoindre = lazy(() => import("./creerRejoindre/rejoindre"));
 function App() {
   const navigate = useNavigate();
 
@@ -18,6 +19,8 @@ function App() {
       <Route exact path="/" element={<Connection />} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
+      <Route path="/creer" element={<Creer />} />
+      <Route path="/rejoindre" element={<Rejoindre />} />
     </Routes>
   );
 }
