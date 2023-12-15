@@ -58,13 +58,22 @@ class Bataille {
     }
 
     coup(playerID, carte) {
-        if (this.choosed[playerID] || !this.paquets[playerID].some(carteJson => carteJson.valeur == carte.valeur && carteJson.type == carte.type)) {
+        if (this.choosed[playerID] || !this.paquets[playerID].some(carteJson => Carte.equals(carteJson, carte))) {
             return false;
         }
-
-        this.paquets[playerID].splice(this.paquets[playerID].indexOf(carte), 1);
+        let i = 0;
+        while (!Carte.equals(carte, this.paquets[playerID][i])) i++;
+        this.paquets[playerID].splice(i, 1);
         this.choosed[playerID] = carte;
+        return true;
+    }
 
+    nextRound() {
+        if (!this.playersIDs.every(playerID => this.choosed[playerID])) {
+            return false;
+        }
+        this.choosed = {};
+        this.round++;
         return true;
     }
 }

@@ -156,5 +156,8 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         if (!jeux.coup(socket.id, carte)) return; 
         resPlayers(code);
+        if (jeux.nextRound()) {
+            setTimeout(() => resPlayers(code), 500);
+        }
     });
 });

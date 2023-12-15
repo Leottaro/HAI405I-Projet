@@ -27,12 +27,12 @@ function PlateauBataille() {
         <div id="plateauBataille">
             <Chat />
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} key={"joueur" + index} carte={json.choisie} />)}
+                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} key={"joueur" + index} />)}
             </div>
             <div id="moi" className="joueurBataille">
                 <p>{account}</p>
                 <div id="mesCartes">
-                    {monPaquet.filter(carte => carte).map((carte, index) => <Carte nom={carte.valeur + "De" + carte.type} key={"carte" + index} />)}
+                    {monPaquet.filter(carte => carte).map((carte, index) => <Carte valeur={carte.valeur} type={carte.type} visible={true} key={"carte" + index} />)}
                 </div>
                 <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
             </div>
