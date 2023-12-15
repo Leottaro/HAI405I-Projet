@@ -135,6 +135,7 @@ io.on("connection", function (socket) {
     // JEUX
 
     function resPlayers(code) {
+        if (!parties[code]) return;
         const jeux = parties[code];
         const socketsIDs = parties[code].playersIDs;
         const final = socketsIDs.filter(socketID => sockets[socketID]).map(socketID => { return { "nom": sockets[socketID].compte, "paquet": jeux.paquets[socketID] }; })
@@ -142,9 +143,19 @@ io.on("connection", function (socket) {
     }
 
     socket.on("reqStart", () => {
+        if (!sockets[socket.id]) return;
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
         jeux.start();
         resPlayers(code);
+    });
+
+    socket.on("reqCoup", carte => {
+        if (!sockets[socket.id]) return;
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (jeux.coup(socket.id, carte)) {
+            io.in(code).emit("resCoup", socketID);
+        }
     });
 });

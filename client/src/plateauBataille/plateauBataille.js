@@ -5,18 +5,17 @@ import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../component/Chat/Chat";
 import Carte from "./carte";
 import './plateauBataille.css'
-import Chat from "../component/Chat/Chat"
 
 function PlateauBataille() {
     const { code } = useParams();
-    const [autresJoueurs, setAutresJoueurs] = useState([]);
+    const [listeJoueurs, setListeJoueurs] = useState([]);
     const [monPaquet, setMonPaquet] = useState([]);
     const [estCreateur, setEstCreateur] = useState(false);
 
     socket.emit("reqPlayers");
     socket.on("resPlayers", listJson => { // [{nom, paquet}, ..., {nom, paquet}]
         console.log(listJson);
-        setAutresJoueurs(listJson.filter(joueur => joueur.nom !== account));
+        setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMonPaquet(listJson.find(joueur => joueur.nom === account).paquet);
         setEstCreateur(listJson[0].nom === account);
     });
@@ -27,9 +26,9 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
-            <Chat/>
+            <Chat />
             <div id="listeJoueurs">
-                {autresJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} key={"joueur" + index} />)}
+                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} key={"joueur" + index} />)}
             </div>
             <div id="moi" className="joueurBataille">
                 <p>{account}</p>

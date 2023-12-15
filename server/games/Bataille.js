@@ -57,7 +57,7 @@ class Bataille {
         return true;
     }
 
-    jouer(playerID, carte) {
+    coup(playerID, carte) {
         if (!this.played[playerID] || !this.paquets[playerID].includes(carte)) {
             return false;
         }
