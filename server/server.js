@@ -154,10 +154,11 @@ io.on("connection", function (socket) {
         if (!sockets[socket.id]) return;
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux.coup(socket.id, carte)) return; 
+        if (!jeux.coup(socket.id, carte)) return;
+        socket.emit("select", carte);
         resPlayers(code);
-        if (jeux.nextRound()) {
-            setTimeout(() => resPlayers(code), 500);
-        }
+        //if (jeux.nextRound()) {
+           // setTimeout(() => resPlayers(code), 500);
+        //}
     });
 });
