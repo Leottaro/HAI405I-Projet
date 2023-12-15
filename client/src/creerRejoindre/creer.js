@@ -26,7 +26,7 @@ function Creer() {
                 <button id="creerButton">Creer</button>
                 <button id="rejoindreButton" onClick={rejoindre}>Rejoindre</button>
             </div>
-            <label>Nombre de joueurs dans la partie:</label>
+            <label className="label1">Nombre de joueurs dans la partie:</label>
             <input className="nbrJoueursInput" defaultValue={2} type="number" min={2} max={10} onChange={(event) => { setNbrJoueurs(parseInt(event.target.value)) }}></input>
             <button className='validerButton' onClick={valider}>Valider</button>
         </div>
