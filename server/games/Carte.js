@@ -27,5 +27,11 @@ class Carte {
     static equals(carte1, carte2) {
         return carte1.valeur === carte2.valeur && carte1.type === carte2.type;
     }
+
+    static sort(carte1, carte2, AsFort) { // adFort est un boolean qui placera le roi à la fin ou au début
+        const valeur1 = Carte.valeurs.indexOf(carte1.valeur);
+        const valeur2 = Carte.valeurs.indexOf(carte2.valeur);
+        return AsFort ? valeur2 - valeur1 : (valeur2 + 1) % Carte.valeurs.length - (valeur1 + 1) % Carte.valeurs.length;
+    }
 }
 module.exports = Carte;

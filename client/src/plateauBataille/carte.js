@@ -6,7 +6,6 @@ function Carte(props) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        console.log("hehe carte " + JSON.stringify(props));
         if (props.valeur && props.type) setNom(props.valeur + "De" + props.type);
         else setNom("RectoCarte");
         if (props.visible) setVisible(true);

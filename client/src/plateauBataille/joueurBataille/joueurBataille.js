@@ -4,13 +4,14 @@ import './joueurBataille.css';
 import Carte from '../carte';
 
 function JoueurBataille(props) { // nom de la carte
-    const [carteVisible, setCarteVisible] = useState(props.carteVisible);
-    const [carte, setCarte] = useState(props.carte);
+    const [carte, setCarte] = useState({});
+    const [carteVisible, setCarteVisible] = useState(true);
 
     useEffect(() => {
-        console.log("hehe joueur " + JSON.stringify(props));
-        setCarteVisible(props.carteVisible);
-        setCarte(props.carte);
+        if (props.carte) setCarte(props.carte);
+        else setCarte({});
+        if (props.carteVisible) setCarteVisible(true);
+        else setCarteVisible(false);
     }, [props]);
 
     return (

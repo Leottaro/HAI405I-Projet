@@ -75,6 +75,11 @@ class Bataille {
         if (!this.everyonePlayed()) {
             return false;
         }
+        const sortedChoosed = Object.keys(this.choosed).sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
+        const winner = sortedChoosed[0];
+        console.log(this.paquets[winner]);
+        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed));
+        console.log(this.paquets[winner]);
         this.choosed = {};
         this.round++;
         return true;
