@@ -33,7 +33,7 @@ function PlateauBataille() {
         <div id="plateauBataille">
             <Chat />
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} catreVisible={estFinDeTour} key={"joueur" + index} />)}
+                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
                 {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
