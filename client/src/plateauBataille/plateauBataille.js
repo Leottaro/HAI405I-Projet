@@ -13,8 +13,7 @@ function PlateauBataille() {
     const [estCreateur, setEstCreateur] = useState(false);
 
     socket.emit("reqPlayers");
-    socket.on("resPlayers", listJson => { // [{nom, paquet}, ..., {nom, paquet}]
-        console.log(listJson);
+    socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
         setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMonPaquet(listJson.find(joueur => joueur.nom === account).paquet);
         setEstCreateur(listJson[0].nom === account);
@@ -28,12 +27,12 @@ function PlateauBataille() {
         <div id="plateauBataille">
             <Chat />
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} key={"joueur" + index} />)}
+                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} key={"joueur" + index} carte={json.choisie} />)}
             </div>
             <div id="moi" className="joueurBataille">
                 <p>{account}</p>
                 <div id="mesCartes">
-                    {monPaquet.map((carte, index) => <Carte valeur={carte.valeur} type={carte.type} key={"carte" + index} />)}
+                    {monPaquet.filter(carte => carte).map((carte, index) => <Carte nom={carte.valeur + "De" + carte.type} key={"carte" + index} />)}
                 </div>
                 <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
             </div>

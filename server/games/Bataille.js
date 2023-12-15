@@ -15,7 +15,7 @@ class Bataille {
         this.paquets[creatorID] = [];
 
         this.round = 0;
-        this.played = {};
+        this.choosed = {};
     }
 
     hasStarted() {
@@ -52,25 +52,24 @@ class Bataille {
         }
         this.started = true;
         for (const playerID of this.playersIDs) {
-            this.played[playerID] = false;
+            delete this.choosed[playerID];
         }
         return true;
     }
 
     coup(playerID, carte) {
-        if (!this.played[playerID] || !this.paquets[playerID].includes(carte)) {
+        if (this.choosed[playerID] || !this.paquets[playerID].some(carteJson => carteJson.valeur == carte.valeur && carteJson.type == carte.type)) {
             return false;
         }
         this.paquets[playerID].splice(this.paquets[playerID].indexOf(carte), 1);
-        this.played[playerID] = true;
+        this.choosed[playerID] = carte;
 
-        if (this.playersIDs.every(playerID => this.played[playerID])) {
+        if (this.playersIDs.every(playerID => this.choosed[playerID])) {
             for (const playerID of this.playersIDs) {
                 this.played[playerID] = false;
             }
             this.round++;
         }
-
         return true;
     }
 }

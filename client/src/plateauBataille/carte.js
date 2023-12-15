@@ -1,18 +1,15 @@
-import socket from "../socket";
+import { useState } from "react";
+import socket, { account } from "../socket";
+const rectoCarte = `../../asset/RectoCarte.png`;
 
 function Carte(props) {
-    const lien = `../../asset/${props.valeur}De${props.type}.png`;
-    console.log(lien);
-
     function carteClick() {
-        socket.emit("reqCoup", props);
+        const temp = props.nom.split("De");
+        socket.emit("reqCoup", { "valeur": temp[0], "type": temp[1] });
     }
 
     return (
-        <div className="carte">
-            <img height={"100"} src={lien}></img>
-            {/* <label onClick={carteClick} className="carteLabel">{props.valeur} de {props.type}</label> */}
-        </div>
+        <img className="carte" height={"100"} onClick={carteClick} src={"../../asset/" + props.nom + ".png"}></img>
     );
 }
 export default Carte;

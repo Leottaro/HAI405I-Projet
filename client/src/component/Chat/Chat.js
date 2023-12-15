@@ -4,7 +4,7 @@ import './Chat.css';
 
 function Chat(){
     const [listeMsg, setListeMsg] = useState([]);
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const [input, setInput] = useState("");
 
     socket.on("resMsg", msg => {
