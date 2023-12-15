@@ -34,8 +34,6 @@ io.listen(3001, () => {
 const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
-setInterval(() => console.log(sockets), 10000);
-
 io.on("connection", function (socket) {
 
     // CONNECTION
@@ -53,10 +51,14 @@ io.on("connection", function (socket) {
             socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
             socket.emit("goTo", "/selectionJeux");
             socket.emit("resAccount", json.pseudo);
+            console.log(json);
         });
     });
 
     socket.on("reqLogIn", json => {
+        if (Object.values(sockets).some(socketInfo => socketInfo.compte === json.pseudo)) {
+            return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already connected !` });
+        }
         database.all(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`, (err, rows) => {
             if (err) throw err;
             if (!rows) throw new Error("Problem with the database");
@@ -68,6 +70,7 @@ io.on("connection", function (socket) {
             socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
             socket.emit("goTo", "/selectionJeux");
             socket.emit("resAccount", json.pseudo);
+            console.log(json);
         });
     });
 
@@ -111,6 +114,9 @@ io.on("connection", function (socket) {
         if (!parties[code]) {
             return socket.emit("resJoin", { success: false, message: "lien inexistant" });
         }
+        if (parties[code].started) {
+            return socket.emit("resJoin", { success: false, message: "" });
+        }
         parties[code].addPlayer(socket.id);
         sockets[socket.id]["partie"] = code;
 
@@ -130,10 +136,15 @@ io.on("connection", function (socket) {
 
     function resPlayers(code) {
         const jeux = parties[code];
-        io.in(code).fetchSockets().then(truc => truc.map(socket => socket.id)).then(socketsIDs => {
-            const final = socketsIDs.map(socketID => { return { "nom": sockets[socketID].compte, "paquet": jeux.paquets[socketID] }; })
-            console.log(final);
-            io.in(code).emit("resPlayers", final);
-        });
+        const socketsIDs = parties[code].playersIDs;
+        const final = socketsIDs.filter(socketID => sockets[socketID]).map(socketID => { return { "nom": sockets[socketID].compte, "paquet": jeux.paquets[socketID] }; })
+        io.in(code).emit("resPlayers", final);
     }
+
+    socket.on("reqStart", () => {
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        jeux.start();
+        resPlayers(code);
+    });
 });
