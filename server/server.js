@@ -31,10 +31,15 @@ io.listen(3001, () => {
     console.log("server running on port http://localhost:3001/");
 });
 
-const sockets = {}; // clef: socket.id              valeur: nom du compte
+const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
+setInterval(() => console.log(sockets), 10000);
+
 io.on("connection", function (socket) {
+
+    // CONNECTION
+
     socket.on("reqSignIn", json => {
         database.all(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`, (err, rows) => {
             if (err) throw err;
@@ -43,10 +48,11 @@ io.on("connection", function (socket) {
                 return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already taken !` });
             }
             database.run(`INSERT INTO account(pseudo, password) VALUES ("${json.pseudo}", "${json.password}")`);
-            sockets[socket.id] = json.pseudo;
-            console.log(`signed account ${JSON.stringify(json)}`);
+            sockets[socket.id] = { compte: json.pseudo };
+
             socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
             socket.emit("goTo", "/selectionJeux");
+            socket.emit("resAccount", json.pseudo);
         });
     });
 
@@ -57,19 +63,26 @@ io.on("connection", function (socket) {
             if (rows.length == 0 || json.password != rows[0].password) {
                 return socket.emit("resLogIn", { success: false, message: `wrong username or password !` });
             }
-            sockets[socket.id] = json.pseudo;
-            console.log(`account connected ${JSON.stringify(json)}`);
+            sockets[socket.id] = { compte: json.pseudo };
+
             socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
             socket.emit("goTo", "/selectionJeux");
+            socket.emit("resAccount", json.pseudo);
         });
     });
 
+    // AUTO DÉCONNECTION
+
     socket.on("reqLogOut", () => {
         if (sockets[socket.id]) {
-            console.log(`account ${sockets[socket.id]} disconnected: ${socket.id}`);
+            console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
+            socket.leave(sockets[socket.id].partie);
+            resPlayers(sockets[socket.id].partie);
             delete sockets[socket.id];
         }
     });
+
+    // CREER
 
     socket.on("reqCreate", json => {
         const nbrJoueur = json.nbrJoueur;
@@ -77,10 +90,21 @@ io.on("connection", function (socket) {
         if (nbrJoueur < jeux.playersRange[0] || nbrJoueur > jeux.playersRange[1] || !jeux) {
             return socket.emit("resCreate", { success: false, message: `nbrJoueurs hors limite ou jeux inconnu` });
         }
-        const lien = Math.floor(100000 + Math.random() * 899999).toString();
-        parties[lien] = new jeux(socket.id, lien, nbrJoueur);
+        const code = Math.floor(100000 + Math.random() * 899999).toString();
+        parties[code] = new jeux(socket.id, code, nbrJoueur);
+        sockets[socket.id]["partie"] = code;
+
+        socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
-        socket.emit("goTo", parties[lien].lien);
+        socket.emit("goTo", parties[code].url);
+        setTimeout(() => resPlayers(code), 100);
+    });
+
+    // REJOINDRE
+
+    socket.on("reqGames", jeux => {
+        const sendParties = Object.keys(parties).filter(lien => parties[lien].nomJeux === jeux).map(lien => { return { code: lien, nbrJoueurs: parties[lien].playersIDs.length }; });
+        socket.emit("resGames", sendParties);
     });
 
     socket.on("reqJoin", code => {
@@ -88,17 +112,22 @@ io.on("connection", function (socket) {
             return socket.emit("resJoin", { success: false, message: "lien inexistant" });
         }
         parties[code].addPlayer(socket.id);
+        sockets[socket.id]["partie"] = code;
+
+        socket.join(code);
         socket.emit("resJoin", { success: false, message: "ça a marché oui" });
-        socket.emit("goTo", parties[code].lien);
+        socket.emit("goTo", parties[code].url);
+        setTimeout(() => resPlayers(code), 100);
     });
 
-    socket.on("reqGames", jeux => {
-        let temp1 = Object.keys(parties);
-        console.log(temp1);
-        let temp2 = temp1.filter(lien => parties[lien].nomJeux === jeux);
-        console.log(temp2);
-        let temp3 = temp2.map(lien => { return { code: lien, nbrJoueurs: parties[lien].playersIDs.length }; });
-        console.log(temp3);
-        socket.emit("resGames", temp3);
-    });
+    // JEUX
+
+    function resPlayers(code) {
+        const jeux = parties[code];
+        io.in(code).fetchSockets().then(truc => truc.map(socket => socket.id)).then(socketsIDs => {
+            const final = socketsIDs.map(socketID => { return { "nom": sockets[socketID].compte, "paquet": jeux.paquets[socketID] }; })
+            console.log(final);
+            io.in(code).emit("resPlayers", final);
+        });
+    }
 });

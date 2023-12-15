@@ -20,6 +20,8 @@
 }
 
 #moi {
+    position: absolute;
+    bottom: 0;
     width: 100%;
     height: 140px;
     display: flex;
@@ -29,5 +31,9 @@
 #start {
     width: 100px;
     height: 30px;
+}
 
+#mesCartes {
+    overflow-x: hidden;
+    overflow-y: auto;
 }

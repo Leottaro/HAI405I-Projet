@@ -5,7 +5,7 @@ class Bataille {
 
     constructor(creatorID, lien, maxPlayers) {
         this.nomJeux = "bataille";
-        this.lien = "/plateauBataille" + "/" + lien;
+        this.url = "/plateauBataille" + "/" + lien;
         this.started = false;
 
         this.maxPlayers = maxPlayers;

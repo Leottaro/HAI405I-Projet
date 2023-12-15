@@ -21,7 +21,7 @@ function Rejoindre() {
     }
 
     function valider() {
-        socket.emit("reqJoin", lien);
+        socket.emit("reqJoin", lien.toString());
     }
 
     socket.on('resJoin', json => {

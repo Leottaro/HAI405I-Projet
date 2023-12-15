@@ -1,4 +1,4 @@
-#joueurBataille {
+.joueurBataille {
     width: 150px;
     height: 100px;
     background: linear-gradient(to bottom, #54787e, #8cdceb, #487579);
@@ -10,7 +10,16 @@
     flex-direction: column;
 }
 
-p {
-    margin-bottom: 10px;
+.carteJouée {
+    color: #fff;
+    font-size: 1em;
+    margin-top: 20px;
     width: 100%;
+}
+
+#listeJoueurs {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
