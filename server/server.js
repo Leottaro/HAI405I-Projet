@@ -120,6 +120,12 @@ io.on("connection", function (socket) {
         setTimeout(() => resPlayers(code), 100);
     });
 
+    // CHAT
+
+    socket.on("reqMsg", msg => {
+        io.in(sockets[socket.id].partie).emit("resMsg", msg);
+    })
+
     // JEUX
 
     function resPlayers(code) {
