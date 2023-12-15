@@ -4,8 +4,7 @@ import { useParams } from "react-router-dom";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../component/Chat/Chat";
 import Carte from "./carte";
-import './plateauBataille.css'
-import Chat from "../component/Chat/Chat"
+import './plateauBataille.css';
 
 function PlateauBataille() {
     const { code } = useParams();
@@ -14,7 +13,7 @@ function PlateauBataille() {
     const [estCreateur, setEstCreateur] = useState(false);
 
     socket.emit("reqPlayers");
-    socket.on("resPlayers", listJson => { // [{nom, paquet}, ..., {nom, paquet}]
+    socket.on("resPlayers", listJson => { // [{nom, paquet}, ..., {nom, paquet}]        paquet: [{valeur: "2" ou "As"}, ..., {valeur: "As"}]
         console.log(listJson);
         setAutresJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMonPaquet(listJson.find(joueur => joueur.nom === account).paquet);

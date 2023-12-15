@@ -18,7 +18,7 @@
     left:40%;
     bottom: 0;
     width: 15%;
-    height: 140px;
+    height: 200px;
     display: flex;
     justify-content: center;
 }
@@ -29,7 +29,13 @@
 }
 
 #mesCartes {
-    height: 100px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 130px;
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.carte {
+    height: 400px;
 }
