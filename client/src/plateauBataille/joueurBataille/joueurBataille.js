@@ -6,8 +6,8 @@ import Carte from '../carte';
 function JoueurBataille(props) { // nom de la carte
     return (
         <div className="joueurBataille">
-            <p>{props.pseudo}</p>
-            <p>{props.nbrCartes} Cartes</p>
+            <label className="labelJB">{props.pseudo}</label>
+            <label className="labelJB">{props.nbrCartes} Cartes</label>
             {!props.carte ? <div /> : <Carte visible={true} valeur={props.carte.valeur} type={props.carte.type} />}
         </div>
     );

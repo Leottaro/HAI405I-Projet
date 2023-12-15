@@ -19,7 +19,7 @@ function Carte(props) {
     }
 
     return (
-        <img className="carte" height={"100"} width={"auto"} onClick={carteClick} src={"../../asset/" + (visible ? nom : "RectoCarte") + ".png"}></img>
+        <img className="carte" height={"100"} width="70" onClick={carteClick} src={"../../asset/" + (visible ? nom : "RectoCarte") + ".png"}></img>
     );
 }
 export default Carte;

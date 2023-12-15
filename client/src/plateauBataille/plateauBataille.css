@@ -10,17 +10,29 @@
 
 #listeJoueurs {
     width: 100vw;
-    height: 140px;
+    height: 250px;
 }
 
 #moi {
     position: absolute;
-    left: 40%;
+    left: 25%;
     bottom: 0;
     width: 50%;
     height: 200px;
     display: flex;
     justify-content: center;
+}
+
+.joueurMoi {
+    width: 150px;
+    height: 250px;
+    background: linear-gradient(to bottom, #54787e, #8cdceb, #487579);
+    text-align: center;
+    margin: 20px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 #start {
@@ -29,7 +41,7 @@
 }
 
 #mesCartes {
-    height: 140px;
+    height: 120px;
     display: flex;
     flex-direction: row;
     overflow-y: hidden;

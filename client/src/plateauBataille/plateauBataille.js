@@ -29,7 +29,7 @@ function PlateauBataille() {
             <div id="listeJoueurs">
                 {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} key={"joueur" + index} />)}
             </div>
-            <div id="moi" className="joueurBataille">
+            <div id="moi" className="joueurMoi">
                 <p>{account}</p>
                 <div id="mesCartes">
                     {monPaquet.filter(carte => carte).map((carte, index) => <Carte valeur={carte.valeur} type={carte.type} visible={true} key={"carte" + index} />)}
