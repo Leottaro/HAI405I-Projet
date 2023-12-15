@@ -25,10 +25,6 @@ function PlateauBataille() {
         socket.emit("reqStart");
     }
 
-    function test() {
-        setEstFinDeTour(!estFinDeTour);
-    }
-
     return (
         <div id="plateauBataille">
             <Chat />
@@ -45,7 +41,6 @@ function PlateauBataille() {
                 </div>
                 <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
             </div>
-            <button id="test" onClick={test}>TEST</button>
         </div>
     );
 }
