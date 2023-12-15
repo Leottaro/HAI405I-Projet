@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import './plateauBataille.css'
+import Chat from "../component/Chat/Chat"
 
 function PlateauBataille() {
     const { code } = useParams();
@@ -18,6 +19,7 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
+            <Chat/>
             <div id="listeJoueurs">
                 {autresJoueurs.map(json => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} />)}
             </div>
