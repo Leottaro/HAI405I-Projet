@@ -8,7 +8,7 @@ function JoueurBataille(props) { // nom de la carte
         <div className="joueurBataille">
             <label className="labelJB">{props.pseudo}</label>
             <label className="labelJB">{props.nbrCartes} Cartes</label>
-            {!props.carte ? <div /> : <Carte visible={true} valeur={props.carte.valeur} type={props.carte.type} />}
+            {!props.carte ? <></> : <Carte visible={true} valeur={props.carte.valeur} type={props.carte.type} />}
         </div>
     );
 }

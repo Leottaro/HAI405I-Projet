@@ -40,7 +40,6 @@ function PlateauBataille() {
             </div>
             <div id="tapis">
                 {estSelect ? <Carte valeur={carteSelect.valeur} type={carteSelect.type} visible={true}/> : <></>}
-                
             </div>
             <div id="moi" className="joueurMoi">
                 <p>{account}</p>

@@ -58,17 +58,13 @@ class Bataille {
     }
 
     coup(playerID, carte) {
-        if (!this.paquets[playerID].some(carteJson => Carte.equals(carteJson, carte))) {
+        if (this.choosed[playerID] || !this.paquets[playerID].some(carteJson => Carte.equals(carteJson, carte))) {
             return false;
-        }
-        if(this.choosed[playerID]){
-            this.paquets[playerID].push(this.choosed[playerID]);
         }
         let i = 0;
         while (!Carte.equals(carte, this.paquets[playerID][i])) i++;
-        
-        this.paquets[playerID].splice(i, 1);
-        this.choosed[playerID] = carte;
+        this.choosed[playerID] = this.paquets[playerID].splice(i, 1);
+        console.log(this.choosed);
         return true;
     }
 

@@ -21,7 +21,8 @@
 
     display: flex;
     justify-content: center;
-    align-items: bottom;
+    flex-direction: row;
+    align-items: end;
 }
 
 #moi {
