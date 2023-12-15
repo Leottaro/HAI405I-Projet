@@ -9,7 +9,7 @@ function Carte(props) {
     }
 
     return (
-        <img className="carte" height={"100"} onClick={carteClick} src={"../../asset/" + props.nom + ".png"}></img>
+        <img className="carte" height={"100"} width={"auto"} onClick={carteClick} src={"../../asset/" + props.nom + ".png"}></img>
     );
 }
 export default Carte;

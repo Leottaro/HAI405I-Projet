@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import './joueurBataille.css';
 import Carte from '../carte';
 
-function joueurBataille(props) { //nom du joueur et nombre de cartes
-    console.log(props);
+function joueurBataille(props) { // nom de la carte
     return (
         <div className="joueurBataille">
             <p>{props.pseudo}</p>

@@ -61,15 +61,10 @@ class Bataille {
         if (this.choosed[playerID] || !this.paquets[playerID].some(carteJson => carteJson.valeur == carte.valeur && carteJson.type == carte.type)) {
             return false;
         }
+
         this.paquets[playerID].splice(this.paquets[playerID].indexOf(carte), 1);
         this.choosed[playerID] = carte;
 
-        if (this.playersIDs.every(playerID => this.choosed[playerID])) {
-            for (const playerID of this.playersIDs) {
-                this.played[playerID] = false;
-            }
-            this.round++;
-        }
         return true;
     }
 }
