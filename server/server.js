@@ -157,8 +157,11 @@ io.on("connection", function (socket) {
         if (!jeux.coup(socket.id, carte)) return;
         socket.emit("select", carte);
         resPlayers(code);
-        if (jeux.nextRound()) {
-           setTimeout(() => resPlayers(code), 500);
+        if (jeux.everyonePlayed()) {
+            setTimeout(() => {
+                if (jeux.nextRound())
+                    resPlayers(code);
+            }, 1000);
         }
     });
 });

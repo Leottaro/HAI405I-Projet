@@ -63,13 +63,16 @@ class Bataille {
         }
         let i = 0;
         while (!Carte.equals(carte, this.paquets[playerID][i])) i++;
-        this.choosed[playerID] = this.paquets[playerID].splice(i, 1);
-        console.log(this.choosed);
+        this.choosed[playerID] = this.paquets[playerID].splice(i, 1)[0];
         return true;
     }
 
+    everyonePlayed() {
+        return this.playersIDs.every(playerID => this.choosed[playerID]);
+    }
+
     nextRound() {
-        if (!this.playersIDs.every(playerID => this.choosed[playerID])) {
+        if (!this.everyonePlayed()) {
             return false;
         }
         this.choosed = {};
