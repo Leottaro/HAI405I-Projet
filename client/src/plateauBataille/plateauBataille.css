@@ -3,14 +3,25 @@
     height: 100vh;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 
+    
+}
+
+#listeJoueurs {
+    display: block;
+    width: 100vw;
+    height: 250px;
     display: flex;
     justify-content: center;
     align-items: top;
 }
 
-#listeJoueurs {
+#tapis {
     width: 100vw;
-    height: 250px;
+    height: 450px;
+
+    display: flex;
+    justify-content: center;
+    align-items: bottom;
 }
 
 #moi {

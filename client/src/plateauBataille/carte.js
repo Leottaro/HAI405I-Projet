@@ -10,7 +10,7 @@ function Carte(props) {
         else setNom("RectoCarte");
         if (props.visible) setVisible(true);
         else setVisible(false);
-    }, props);
+    });
 
     function carteClick() {
         if (!visible || nom === "RectoCarte") return;
