@@ -5,10 +5,11 @@ import './Chat.css';
 function Chat(){
     const [listeMsg, setListeMsg] = useState([]);
     const [open, setOpen] = useState(true);
+    const [input, setInput] = useState("");
 
     socket.on("resMsg", msg => {
         let temp=listeMsg;
-        temp=temp.concat(msg);
+        temp=msg.concat(temp);
         
         setListeMsg(temp);
         console.log("msg : ",msg)
@@ -16,7 +17,12 @@ function Chat(){
     })
 
     function envoyer(){
-        socket.emit("reqMsg",[{pseudo: account, msg: document.getElementById("inputMsg").value}]);
+        setInput("");
+        if(input.replaceAll(" ", "")===""){
+            return;
+        }
+        socket.emit("reqMsg",[{pseudo: account, msg: input}]);
+        
     }
 
 
@@ -37,7 +43,7 @@ function Chat(){
             
             
             </div>
-            <input id="inputMsg" type="text"></input>
+            <input id="inputMsg" type="text" value={input} onChange={(event) => { setInput(event.target.value) }}></input>
             <button id="envoyerMsg" onClick={envoyer}>Envoyer</button>
             <button id="maskChat"  onClick={maskChat}>{open ? ">" : "<"}</button>
         </div>
