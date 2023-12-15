@@ -4,3 +4,6 @@ client/node_modules
 # Server
 server/node_modules
 server/databases/*
+
+# MacOS files
+.DS_Store
