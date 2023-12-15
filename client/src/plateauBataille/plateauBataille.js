@@ -25,6 +25,10 @@ function PlateauBataille() {
         socket.emit("reqStart");
     }
 
+    function test() {
+        setEstFinDeTour(!estFinDeTour);
+    }
+
     return (
         <div id="plateauBataille">
             <Chat />
@@ -35,12 +39,13 @@ function PlateauBataille() {
                 {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
             </div>
             <div id="moi" className="joueurMoi">
-                <p>{account}</p>
+                <p id="monNom">{account}</p>
                 <div id="mesCartes">
                     {moi.paquet.filter(carte => carte).map((carte, index) => <Carte visible={true} valeur={carte.valeur} type={carte.type} key={"carte" + index} />)}
                 </div>
-                <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
+                
             </div>
+            <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
         </div>
     );
 }

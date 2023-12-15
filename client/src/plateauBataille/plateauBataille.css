@@ -25,19 +25,13 @@
     align-items: end;
 }
 
-#moi {
+.joueurMoi {
+    width: 50%;
+    height: 180px;
+    padding:0;
     position: absolute;
     left: 25%;
     bottom: 0;
-    width: 50%;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-}
-
-.joueurMoi {
-    width: 150px;
-    height: 250px;
     background: linear-gradient(to bottom, #54787e, #8cdceb, #487579);
     text-align: center;
     margin: 20px;
@@ -50,6 +44,14 @@
 #start {
     width: 100px;
     height: 30px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#monNom {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #mesCartes {
