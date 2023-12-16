@@ -25,6 +25,11 @@ function Chat(){
         
     }
 
+    function handleKeyDown(event) {
+        if (event.key === "Enter") {
+          envoyer();
+        }
+      }
 
     function maskChat(){
         setOpen(!open);
@@ -43,7 +48,13 @@ function Chat(){
             
             
             </div>
-            <input id="inputMsg" type="text" value={input} onChange={(event) => { setInput(event.target.value) }}></input>
+            <input
+                id="inputMsg"
+                type="text"
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                onKeyDown={handleKeyDown}>
+            </input>
             <button id="envoyerMsg" onClick={envoyer}>Envoyer</button>
             <button id="maskChat"  onClick={maskChat}>{open ? ">" : "<"}</button>
         </div>

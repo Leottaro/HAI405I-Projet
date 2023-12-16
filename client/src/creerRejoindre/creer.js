@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function Creer() {
     const { jeux } = useParams();
-    const [nbrJoueurs, setNbrJoueurs] = useState(1);
+    const [nbrJoueursMax, setNbrJoueursMax] = useState(1);
     
     const navigate = useNavigate();
     function rejoindre() {
@@ -13,7 +13,7 @@ function Creer() {
     }
 
     function valider() {
-        socket.emit("reqCreate", { nbrJoueurs: nbrJoueurs, jeux: jeux });
+        socket.emit("reqCreate", { nbrJoueursMax: nbrJoueursMax, jeux: jeux });
     }
 
     socket.on("resCreate", json => {
@@ -26,8 +26,8 @@ function Creer() {
                 <button id="creerButton">Creer</button>
                 <button id="rejoindreButton" onClick={rejoindre}>Rejoindre</button>
             </div>
-            <label className="label1">Nombre de joueurs dans la partie:</label>
-            <input className="nbrJoueursInput" defaultValue={2} type="number" min={2} max={10} onChange={(event) => { setNbrJoueurs(parseInt(event.target.value)) }}></input>
+            <label className="label1">Nombre de joueurs max dans la partie:</label>
+            <input className="nbrJoueursInput" defaultValue={2} type="number" min={2} max={10} onChange={(event) => { setNbrJoueursMax(parseInt(event.target.value)) }}></input>
             <button className='validerButton' onClick={valider}>Valider</button>
         </div>
     );
