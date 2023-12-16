@@ -10,6 +10,8 @@ class Bataille {
 
         this.maxPlayers = maxPlayers;
         this.playersIDs = [creatorID];
+        this.enLice = this.playersIDs;
+        this.tempCartes = [];
 
         this.paquets = {};
         this.paquets[creatorID] = [];
@@ -36,12 +38,6 @@ class Bataille {
             return false;
         }
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
-
-        for (let i = 0; i < this.paquets[playerID].length; i++) {
-            const receveur = this.playersIDs[i % this.playersIDs.length];
-            this.paquets[receveur].push(this.paquets[playerID][i]);
-        }
-
         delete this.paquets[playerID];
         return true;
     }
@@ -74,18 +70,38 @@ class Bataille {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID]);
+        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.enLice.includes(playerID));
     }
 
     nextRound() {
+        let winner;
         if (!this.everyonePlayed()) {
             return false;
         }
-        const sortedChoosed = Object.keys(this.choosed).sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
-        const winner = sortedChoosed[0];
-        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed));
+        let sortedChoosed = this.enLice.sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
+        let nbEgalite=1;
+        for(let i=1; i<sortedChoosed.length ; i++){
+            if(this.choosed[sortedChoosed[i]].valeur==this.choosed[sortedChoosed[0]].valeur){
+                this.tempCartes.push(this.choosed[sortedChoosed[i]]);
+                delete this.choosed[sortedChoosed[i]];
+                nbEgalite=i+1;
+            }
+        }
+        if(nbEgalite==1){
+            winner = sortedChoosed[0];
+        }
+        else{
+            this.tempCartes.push(this.choosed[sortedChoosed[0]]);
+            delete this.choosed[sortedChoosed[0]];
+            this.enLice=sortedChoosed.slice(0,nbEgalite);
+            return this.nextRound();
+        }
+        console.log("winner : ",winner);
+        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes));
+        this.tempCartes=[];
         this.choosed = {};
         this.round++;
+        this.enLice=this.playersIDs;
         return true;
     }
 }
