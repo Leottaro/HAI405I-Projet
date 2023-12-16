@@ -1,6 +1,6 @@
-import { lazy } from "react";
-import { useNavigate, Routes, Route } from "react-router-dom";
-import socket from "./socket";
+import { lazy, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import socket, { account } from "./socket";
 import './App.css';
 
 const Connection = lazy(() => import("./pages/connection/Connection"));
@@ -11,14 +11,20 @@ const PlateauBataille = lazy(() => import("./plateauBataille/plateauBataille"));
 
 function App() {
   const navigate = useNavigate();
-
   socket.on("goTo", page => {
     setTimeout(() => navigate(page), 10);
   });
 
+  const location = useLocation();
+  useEffect(() => {
+    console.log(location);
+    if (location.pathname !== "/Connection" && !account) {
+      setTimeout(() => navigate("/Connection"), 10);
+    }
+  }, [location]);
+
   return (
     <Routes>
-      <Route exact path="/" element={<Connection />} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
       <Route path="/creer/:jeux" element={<Creer />} />
