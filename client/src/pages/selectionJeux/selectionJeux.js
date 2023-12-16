@@ -30,7 +30,7 @@ function SelectionJeux() {
     return (
         <div id="selectionJeuxDiv">
             <button className="selectionJeuxButton" onClick={gauche}>❮</button>
-            <img src={listeJeux[i]} onClick={choisir} />
+            <img className="img" src={listeJeux[i]} onClick={choisir} />
             <button className="selectionJeuxButton" onClick={droite}>❯</button>
         </div>
     );
