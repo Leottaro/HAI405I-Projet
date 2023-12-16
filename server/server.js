@@ -79,8 +79,17 @@ io.on("connection", function (socket) {
     socket.on("reqLogOut", () => {
         if (sockets[socket.id]) {
             console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
-            socket.leave(sockets[socket.id].partie);
-            resPlayers(sockets[socket.id].partie);
+            if (sockets[socket.id].partie) {
+                const code = sockets[socket.id].partie;
+                const jeux = parties[code];
+                jeux.removePlayer(socket.id);
+                socket.leave(code);
+                if (jeux.playersIDs.length == 0) {
+                    delete parties[code];
+                } else {
+                    resPlayers(code);
+                }
+            }
             delete sockets[socket.id];
         }
     });

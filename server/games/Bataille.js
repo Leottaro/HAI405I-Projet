@@ -36,6 +36,12 @@ class Bataille {
             return false;
         }
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
+
+        for (let i = 0; i < this.paquets[playerID].length; i++) {
+            const receveur = this.playersIDs[i % this.playersIDs.length];
+            this.paquets[receveur].push(this.paquets[playerID][i]);
+        }
+
         delete this.paquets[playerID];
         return true;
     }
@@ -68,7 +74,7 @@ class Bataille {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(playerID => this.choosed[playerID]);
+        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID]);
     }
 
     nextRound() {
@@ -77,9 +83,7 @@ class Bataille {
         }
         const sortedChoosed = Object.keys(this.choosed).sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
         const winner = sortedChoosed[0];
-        console.log(this.paquets[winner]);
         this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed));
-        console.log(this.paquets[winner]);
         this.choosed = {};
         this.round++;
         return true;
