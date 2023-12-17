@@ -10,7 +10,7 @@ class Bataille {
 
         this.maxPlayers = maxPlayers;
         this.playersIDs = [creatorID];
-        this.enLice = this.playersIDs;
+        this.enLice = [creatorID];
         this.tempCartes = [];
 
         this.paquets = {};
@@ -30,6 +30,7 @@ class Bataille {
         }
         this.playersIDs.push(playerID);
         this.paquets[playerID] = [];
+        this.enLice.push(playerID);
         return true;
     }
 
@@ -37,10 +38,32 @@ class Bataille {
         if (!this.paquets[playerID]) {
             return false;
         }
+        // réintegre sa carthe choisir dans son paquet
+        if (this.choosed[playerID]) {
+            this.paquets[playerID].push(this.choosed[playerID]);
+            delete this.choosed[playerID];
+        }
+        // on le vire
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
+        if (this.playersIDs.length == 0) {
+            delete this.paquets[playerID];
+            return true;
+        }
+        // on répartit son paquet aux autres joueurs
         for (let i = 0; i < this.paquets[playerID].length; i++) {
             const receveur = this.playersIDs[i % this.playersIDs.length];
             this.paquets[receveur].push(this.paquets[playerID][i]);
+        }
+        // réstituer les tempCartes aux joueurs enLice
+        if (this.tempCartes.length > 0) {
+            if (this.enLice.includes(playerID)) {
+                this.enLice.splice(this.enLice.indexOf(playerID), 1);
+            }
+            for (let i = 0; i < this.tempCartes.length; i++) {
+                const receveur = this.enLice[i % this.enLice.length];
+                this.paquets[receveur].push(this.paquets[playerID][i]);
+            }
+            this.tempCartes = [];
         }
         delete this.paquets[playerID];
         return true;
