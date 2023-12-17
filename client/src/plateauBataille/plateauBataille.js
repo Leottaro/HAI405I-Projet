@@ -10,14 +10,14 @@ function PlateauBataille() {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
-    const [estCreateur, setEstCreateur] = useState(false);
+    const [afficheStart, setAfficheStart] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
 
     socket.emit("reqPlayers");
     socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
         setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMoi(listJson.find(joueur => joueur.nom === account));
-        setEstCreateur(listJson[0].nom === account);
+        setAfficheStart(listJson[0].paquet.length == 0 && listJson[0].nom === account && listJson.length >= 2);
         setEstFinDeTour(listJson.every(joueur => joueur.choisie));
     });
 
@@ -31,7 +31,6 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
-            <Chat />
             <div id="listeJoueurs">
                 {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
@@ -43,9 +42,10 @@ function PlateauBataille() {
                 <div id="mesCartes">
                     {moi.paquet.filter(carte => carte).map((carte, index) => <Carte visible={true} valeur={carte.valeur} type={carte.type} key={"carte" + index} />)}
                 </div>
-                
+                <label className="labelJB">{moi.paquet.length} Cartes</label>
             </div>
-            <button hidden={!estCreateur} id="start" onClick={start}>commencer</button>
+            <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
+            <Chat />
         </div>
     );
 }

@@ -155,8 +155,8 @@ io.on("connection", function (socket) {
         if (!sockets[socket.id]) return;
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        jeux.start();
-        resPlayers(code);
+        if (jeux.start())
+            resPlayers(code);
     });
 
     socket.on("reqCoup", carte => {
