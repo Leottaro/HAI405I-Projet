@@ -16,10 +16,12 @@ function Connection() {
     }
 
     socket.on("resSignIn", json => {
-        setMessage(json.message);
+        if (!json.success)
+            setMessage(json.message);
     });
     socket.on("resLogIn", json => {
-        setMessage(json.message);
+        if (!json.success)
+            setMessage(json.message);
     });
 
     return (

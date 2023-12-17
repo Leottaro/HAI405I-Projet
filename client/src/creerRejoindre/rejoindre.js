@@ -12,7 +12,8 @@ function Rejoindre() {
     }
 
     socket.on('resJoin', json => {
-        setMessage(json.message);
+        if (!json.success)
+            setMessage(json.message);
     });
 
     socket.on('resGames', liste => {

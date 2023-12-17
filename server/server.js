@@ -150,7 +150,7 @@ io.on("connection", function (socket) {
         sockets[socket.id]["partie"] = code;
 
         socket.join(code);
-        socket.emit("resJoin", { success: false, message: "ça a marché oui" });
+        socket.emit("resJoin", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", jeux.url);
         setTimeout(() => resPlayers(code), 100);
     });

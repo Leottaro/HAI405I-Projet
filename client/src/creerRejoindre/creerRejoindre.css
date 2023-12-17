@@ -84,9 +84,9 @@
 
 #message {
     color: #b00;
-    font-size: 1vh;
-    height: 1vh;
-    margin: 5px;
+    font-size: 2vh;
+    height: 1em;
+    margin-top: 1vh;
 }
 
 #listeParties {
