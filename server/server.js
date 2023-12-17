@@ -97,21 +97,20 @@ io.on("connection", function (socket) {
     // AUTO DÉCONNECTION
 
     socket.on("reqLogOut", () => {
-        if (sockets[socket.id]) {
-            console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
-            if (sockets[socket.id].partie) {
-                const code = sockets[socket.id].partie;
-                const jeux = parties[code];
-                jeux.removePlayer(socket.id);
-                socket.leave(code);
-                if (jeux.playersIDs.length == 0) {
-                    delete parties[code];
-                } else {
-                    resPlayers(code);
-                }
+        if (!sockets[socket.id]) return;
+        console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (code && jeux) {
+            jeux.removePlayer(socket.id);
+            socket.leave(code);
+            if (jeux.playersIDs.length == 0) {
+                delete parties[code];
+            } else {
+                resPlayers(code);
             }
-            delete sockets[socket.id];
         }
+        delete sockets[socket.id];
     });
 
     // CREER
@@ -119,6 +118,7 @@ io.on("connection", function (socket) {
     socket.on("reqCreate", json => {
         const nbrJoueursMax = json.nbrJoueursMax;
         const jeux = listeJeux[json.jeux];
+        if (!jeux) return;
         if (nbrJoueursMax < jeux.playersRange[0] || nbrJoueursMax > jeux.playersRange[1] || !jeux) {
             return socket.emit("resCreate", { success: false, message: `nbrJoueursMax hors limite ou jeux inconnu` });
         }
@@ -135,29 +135,30 @@ io.on("connection", function (socket) {
     // REJOINDRE
 
     socket.on("reqGames", jeux => {
-        const sendParties = Object.keys(parties).filter(lien => parties[lien].nomJeux === jeux).map(lien => { return { code: lien, nbrJoueurs: parties[lien].playersIDs.length }; });
+        const sendParties = Object.keys(parties).filter(code => parties[code].nomJeux === jeux).map(code => { return { code: code, nbrJoueurs: parties[code].playersIDs.length }; });
         socket.emit("resGames", sendParties);
     });
 
     socket.on("reqJoin", code => {
-        if (!parties[code]) {
-            return socket.emit("resJoin", { success: false, message: "lien inexistant" });
-        }
         const jeux = parties[code];
+        if (!jeux) {
+            return socket.emit("resJoin", { success: false, message: "code inexistant" });
+        }
         if (!jeux.addPlayer(socket.id)) {
-            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette partie à commencée": "cette partie est pleine") });
+            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette partie à commencée" : "cette partie est pleine") });
         }
         sockets[socket.id]["partie"] = code;
 
         socket.join(code);
         socket.emit("resJoin", { success: false, message: "ça a marché oui" });
-        socket.emit("goTo", parties[code].url);
+        socket.emit("goTo", jeux.url);
         setTimeout(() => resPlayers(code), 100);
     });
 
     // CHAT
 
     socket.on("reqMsg", msg => {
+        if (!socket[socket.id] || socket[socket.id].partie) return;
         io.in(sockets[socket.id].partie).emit("resMsg", msg);
     })
 
@@ -183,7 +184,7 @@ io.on("connection", function (socket) {
         if (!sockets[socket.id]) return;
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux.coup(socket.id, carte)) return;
+        if (!jeux || !jeux.coup(socket.id, carte)) return;
         socket.emit("select", carte);
         resPlayers(code);
         if (jeux.everyonePlayed()) {
