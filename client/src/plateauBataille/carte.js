@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket, { account } from "../socket";
+import socket from "../socket";
 
 function Carte(props) {
     const [nom, setNom] = useState("");
@@ -19,7 +19,7 @@ function Carte(props) {
     }
 
     return (
-        <img className="carte" height={"100"} width="70" onClick={carteClick} src={"../../asset/" + (visible ? nom : "RectoCarte") + ".png"}></img>
+        <img className="carte" height={"100"} width="70" onClick={carteClick} src={"../../asset/" + (visible ? nom : "RectoCarte") + ".png"} alt=""></img>
     );
 }
 export default Carte;

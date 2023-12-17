@@ -1,4 +1,3 @@
-import socket from "../../socket";
 import { useEffect, useState } from "react";
 import './joueurBataille.css';
 import Carte from '../carte';

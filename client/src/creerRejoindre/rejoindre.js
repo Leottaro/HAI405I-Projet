@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import socket from "../socket";
-import { useNavigate, useParams } from "react-router-dom";
 import Parties from "./parties";
 
 function Rejoindre() {
-    const { jeux } = useParams();
     const [lien, setLienPartie] = useState(1);
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);

@@ -19,13 +19,13 @@ function App() {
     if (location.pathname !== "/Connection" && !account) {
       setTimeout(() => navigate("/Connection"), 10);
     }
-  }, [location]);
+  }, [location, navigate]);
 
   return (
     <Routes>
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
-      <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer"/>} />
+      <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
       <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
     </Routes>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../socket";
 import "./creerRejoindre.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Creer from "./creer";
 import Rejoindre from "./rejoindre";
 
@@ -17,7 +17,7 @@ function CreerRejoindre(params) {
         } else {
             clearInterval(clock);
         }
-    }, [mode]);
+    }, [mode, jeux, clock]);
 
     function creer() {
         if (mode === "creer") return;

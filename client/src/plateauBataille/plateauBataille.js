@@ -1,13 +1,11 @@
 import socket, { account } from "../socket";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../component/Chat/Chat";
 import Carte from "./carte";
 import './plateauBataille.css'
 
 function PlateauBataille() {
-    const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
     const [afficheStart, setAfficheStart] = useState(false);
@@ -17,16 +15,12 @@ function PlateauBataille() {
     socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
         setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMoi(listJson.find(joueur => joueur.nom === account));
-        setAfficheStart(listJson[0].paquet.length == 0 && listJson[0].nom === account && listJson.length >= 2);
+        setAfficheStart(listJson[0].paquet.length === 0 && listJson[0].nom === account && listJson.length >= 2);
         setEstFinDeTour(listJson.every(joueur => joueur.choisie));
     });
 
     function start() {
         socket.emit("reqStart");
-    }
-
-    function test() {
-        setEstFinDeTour(!estFinDeTour);
     }
 
     return (
