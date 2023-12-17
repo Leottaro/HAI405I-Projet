@@ -17,7 +17,8 @@ function CreerRejoindre(params) {
         } else {
             clearInterval(clock);
         }
-    }, [mode, jeux, clock]);
+    // eslint-disable-next-line
+    }, [mode]);
 
     function creer() {
         if (mode === "creer") return;

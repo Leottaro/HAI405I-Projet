@@ -19,7 +19,8 @@ function App() {
     if (location.pathname !== "/Connection" && !account) {
       setTimeout(() => navigate("/Connection"), 10);
     }
-  }, [location, navigate]);
+    // eslint-disable-next-line
+  }, [location]);
 
   return (
     <Routes>
