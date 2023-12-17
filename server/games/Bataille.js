@@ -38,6 +38,10 @@ class Bataille {
             return false;
         }
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
+        for (let i = 0; i < this.paquets[playerID].length; i++) {
+            const receveur = this.playersIDs[i % this.playersIDs.length];
+            this.paquets[receveur].push(this.paquets[playerID][i]);
+        }
         delete this.paquets[playerID];
         return true;
     }
