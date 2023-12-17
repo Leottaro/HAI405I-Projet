@@ -12,13 +12,33 @@ const io = new Server(httpServer, {
     },
 });
 
+// create database directory
+const fs = require("fs");
+if (!fs.existsSync("./databases")) {
+    fs.mkdirSync("./databases");
+}
+
+// Create database
 const sqlite3 = require("sqlite3").verbose();
 const database = new sqlite3.Database("./databases/HAI405I.db", err => {
     if (err) throw err;
+    database.run(`
+        CREATE TABLE IF NOT EXISTS account (
+            pseudo TEXT, 
+            password TEXT NOT NULL,
+            PRIMARY KEY (pseudo)
+        );
+    `);
     console.log("Database started on ./databases/HAI405I.db");
-    // database.run("DROP TABLE IF EXISTS account");
-    database.run("CREATE TABLE IF NOT EXISTS account (pseudo VARCHAR(255) PRIMARY KEY, password VARCHAR(255) NOT NULL);");
 });
+
+async function sqlRequest(query, params) {
+    return new Promise((resolve, reject) => {
+        database.all(query, params, (err, rows) => {
+            resolve([err, rows]);
+        });
+    });
+}
 
 const Bataille = require("./games/Bataille");
 const listeJeux = { "bataille": Bataille };
@@ -35,43 +55,43 @@ const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
 io.on("connection", function (socket) {
-
+    
     // CONNECTION
 
-    socket.on("reqSignIn", json => {
-        database.all(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`, (err, rows) => {
-            if (err) throw err;
-            if (!rows) throw new Error("Problem with the database");
-            if (rows.length != 0) {
-                return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already taken !` });
-            }
-            database.run(`INSERT INTO account(pseudo, password) VALUES ("${json.pseudo}", "${json.password}")`);
-            sockets[socket.id] = { compte: json.pseudo };
+    socket.on("reqSignIn", async json => {
+        const [err, rows] = await sqlRequest(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`);
+        if (err) throw err;
+        if (!rows) throw new Error("Problem with the database");
 
-            socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
-            socket.emit("goTo", "/selectionJeux");
-            socket.emit("resAccount", json.pseudo);
-            console.log(json);
-        });
+        if (rows.length != 0) {
+            return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already taken !` });
+        }
+        database.run(`INSERT INTO account(pseudo, password) VALUES ("${json.pseudo}", "${json.password}")`);
+        sockets[socket.id] = { compte: json.pseudo };
+
+        socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
+        socket.emit("goTo", "/selectionJeux");
+        socket.emit("resAccount", json.pseudo);
+        console.log(json);
     });
 
-    socket.on("reqLogIn", json => {
+    socket.on("reqLogIn", async json => {
         if (Object.values(sockets).some(socketInfo => socketInfo.compte === json.pseudo)) {
             return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already connected !` });
         }
-        database.all(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`, (err, rows) => {
-            if (err) throw err;
-            if (!rows) throw new Error("Problem with the database");
-            if (rows.length == 0 || json.password != rows[0].password) {
-                return socket.emit("resLogIn", { success: false, message: `wrong username or password !` });
-            }
-            sockets[socket.id] = { compte: json.pseudo };
+        const [err, rows] = await sqlRequest(`SELECT * FROM account WHERE pseudo="${json.pseudo}"`);
+        if (err) throw err;
+        if (!rows) throw new Error("Problem with the database");
 
-            socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
-            socket.emit("goTo", "/selectionJeux");
-            socket.emit("resAccount", json.pseudo);
-            console.log(json);
-        });
+        if (rows.length == 0 || json.password != rows[0].password) {
+            return socket.emit("resLogIn", { success: false, message: `wrong username or password !` });
+        }
+        sockets[socket.id] = { compte: json.pseudo };
+
+        socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
+        socket.emit("goTo", "/selectionJeux");
+        socket.emit("resAccount", json.pseudo);
+        console.log(json);
     });
 
     // AUTO DÉCONNECTION
