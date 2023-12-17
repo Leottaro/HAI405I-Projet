@@ -10,10 +10,7 @@ function Chat() {
     socket.on("resMsg", msg => {
         let temp = listeMsg;
         temp = msg.concat(temp);
-
         setListeMsg(temp);
-        console.log("msg : ", msg)
-        console.log("temp : ", temp)
     })
 
     function envoyer() {
@@ -33,7 +30,6 @@ function Chat() {
 
     function maskChat() {
         setOpen(!open);
-
     }
 
     return (

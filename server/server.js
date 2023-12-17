@@ -158,7 +158,7 @@ io.on("connection", function (socket) {
     // CHAT
 
     socket.on("reqMsg", msg => {
-        if (!socket[socket.id] || socket[socket.id].partie) return;
+        if (!sockets[socket.id] || !sockets[socket.id].partie) return;
         io.in(sockets[socket.id].partie).emit("resMsg", msg);
     })
 
