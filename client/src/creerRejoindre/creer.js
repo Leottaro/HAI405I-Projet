@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 function Creer() {
     const { jeux } = useParams();
-    const [nbrJoueursMax, setNbrJoueursMax] = useState(1);
+    const [nbrJoueursMax, setNbrJoueursMax] = useState(2);
 
     function valider() {
         socket.emit("reqCreate", { nbrJoueursMax: nbrJoueursMax, jeux: jeux });

@@ -70,7 +70,7 @@ class Bataille {
     }
 
     start() {
-        if (this.started || this.playersIDs.length < 2) {
+        if (this.started || this.playersIDs.length < this.playersRange[0]) {
             return false;
         }
         const paquet = Carte.creerPaquet();

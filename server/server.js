@@ -55,7 +55,7 @@ const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
 io.on("connection", function (socket) {
-    
+
     // CONNECTION
 
     socket.on("reqSignIn", async json => {
@@ -117,13 +117,13 @@ io.on("connection", function (socket) {
     // CREER
 
     socket.on("reqCreate", json => {
-        const nbrJoueur = json.nbrJoueur;
+        const nbrJoueursMax = json.nbrJoueursMax;
         const jeux = listeJeux[json.jeux];
-        if (nbrJoueur < jeux.playersRange[0] || nbrJoueur > jeux.playersRange[1] || !jeux) {
-            return socket.emit("resCreate", { success: false, message: `nbrJoueurs hors limite ou jeux inconnu` });
+        if (nbrJoueursMax < jeux.playersRange[0] || nbrJoueursMax > jeux.playersRange[1] || !jeux) {
+            return socket.emit("resCreate", { success: false, message: `nbrJoueursMax hors limite ou jeux inconnu` });
         }
         const code = Math.floor(100000 + Math.random() * 899999).toString();
-        parties[code] = new jeux(socket.id, code, nbrJoueur);
+        parties[code] = new jeux(socket.id, code, nbrJoueursMax);
         sockets[socket.id]["partie"] = code;
 
         socket.join(code);
@@ -143,10 +143,10 @@ io.on("connection", function (socket) {
         if (!parties[code]) {
             return socket.emit("resJoin", { success: false, message: "lien inexistant" });
         }
-        if (parties[code].started) {
-            return socket.emit("resJoin", { success: false, message: "" });
+        const jeux = parties[code];
+        if (!jeux.addPlayer(socket.id)) {
+            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette partie à commencée": "cette partie est pleine") });
         }
-        parties[code].addPlayer(socket.id);
         sockets[socket.id]["partie"] = code;
 
         socket.join(code);
