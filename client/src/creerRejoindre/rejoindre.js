@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import socket from "../socket";
-import "./rejoindre.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Parties from "./parties";
 
@@ -9,16 +8,6 @@ function Rejoindre() {
     const [lien, setLienPartie] = useState(1);
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        let interval=setInterval(buttonAfficheListPartie,1000);
-        buttonAfficheListPartie();
-    }, []);
-
-    function creer() {
-        setTimeout(() => navigate("/creer/" + jeux), 10);
-    }
 
     function valider() {
         socket.emit("reqJoin", lien.toString());
@@ -28,27 +17,19 @@ function Rejoindre() {
         setMessage(json.message);
     });
 
-    socket.on('resGames', json => {
-        if (json) {
-            setListPartie(json);
+    socket.on('resGames', liste => {
+        if (liste) {
+            setListPartie(liste);
         }
     });
 
-    function buttonAfficheListPartie() {
-        socket.emit("reqGames", jeux);
-    }
-
     return (
-        <div id="rejoindreDiv">
-            <div id="creerRejoindre">
-                <button id="creerBut" onClick={creer}>Creer</button>
-                <button id="rejoindreBut">Rejoindre</button>
-            </div>
-            <label className="labelChris">entrez un lien de partie</label>
-            <input className="lienInput" type="number" max={9999999} onChange={(event) => { setLienPartie(parseInt(event.target.value)) }} />
-            <button className="submitButton" onClick={valider}>submit</button>
+        <div id="CRContent">
+            <label className="CRtitle">entrez un lien de partie</label>
+            <input className="CRinput" type="number" max={9999999} onChange={(event) => { setLienPartie(parseInt(event.target.value)) }} />
+            <button className="CRButton CRvalider" onClick={valider}>Valider</button>
             <label id="message">{message}</label>
-            <label id="partiesEnCours">Parties en cours:</label>
+            <label className="CRtitle">Parties en cours:</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
                     <Parties key={index} nbrJoueurs={partie.nbrJoueurs} code={partie.code} />

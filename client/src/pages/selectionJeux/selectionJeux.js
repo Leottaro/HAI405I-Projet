@@ -24,7 +24,7 @@ function SelectionJeux() {
 
     const navigate = useNavigate();
     function choisir() {
-        setTimeout(() => navigate("/creer/" + listeNomJeux[i]), 10);
+        setTimeout(() => navigate("/creerRejoindre/" + listeNomJeux[i]), 10);
     }
 
     return (

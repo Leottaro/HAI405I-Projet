@@ -1,0 +1,133 @@
+#root {
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#CRDiv {
+    height: 50vh;
+    aspect-ratio: 1/1;
+
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#CRbuttonDiv {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #211735;
+}
+
+.CRButton {
+    width: 45%;
+    height: 40px;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background: #573b8a;
+}
+
+.CRButton:disabled {
+    background: #211735;
+}
+
+#CRContent {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.CRtitle {
+    color: #fff;
+    font-size: 2.6vh;
+    font-weight: bold;
+
+    margin-top: 2.6vh;
+}
+
+.CRinput {
+    width: 25vh;
+    height: 2vh;
+
+    background: #e0dede;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+
+    text-align: center;
+    font-size: 100%;
+    font-weight: bold;
+
+    margin-top: 2.6vh;
+    margin-bottom: 2.6vh;
+}
+
+.CRvalider:hover {
+    background: #6d44b8;
+}
+
+#message {
+    color: #b00;
+    font-size: 1vh;
+    height: 1vh;
+    margin: 5px;
+}
+
+#listeParties {
+    height: 33%;
+    margin: 10px 5px auto 5px;
+
+    display: block;
+
+    overflow-y: auto;
+}
+
+.divPartie {
+    width: 25vh;
+    height: 3vh;
+
+    background-color: #dedede;
+    border-radius: 5px;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    
+    margin: 10px;
+}
+
+.labelPartie {
+    width: 10vh;
+    padding-left: 1vh;
+    font-size: 2vh;
+    font-weight: normal;
+}
+
+.buttonPartie {
+    width: 10vh;
+    height: auto;
+    
+    padding: 0.33vh 0.5vh 0.33vh 0.5vh;
+    font-size: 1.33vh;
+    border: none;
+    border-radius: 5px;
+    color: #dedede;
+    background: #444;
+}

@@ -5,8 +5,7 @@ import './App.css';
 
 const Connection = lazy(() => import("./pages/connection/Connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
-const Creer = lazy(() => import("./creerRejoindre/creer"));
-const Rejoindre = lazy(() => import("./creerRejoindre/rejoindre"));
+const CreerRejoindre = lazy(() => import("./creerRejoindre/creerRejoindre"));
 const PlateauBataille = lazy(() => import("./plateauBataille/plateauBataille"));
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
 
   const location = useLocation();
   useEffect(() => {
-    console.log(location);
     if (location.pathname !== "/Connection" && !account) {
       setTimeout(() => navigate("/Connection"), 10);
     }
@@ -27,8 +25,7 @@ function App() {
     <Routes>
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
-      <Route path="/creer/:jeux" element={<Creer />} />
-      <Route path="/rejoindre/:jeux" element={<Rejoindre />} />
+      <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer"/>} />
       <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
     </Routes>
   );
