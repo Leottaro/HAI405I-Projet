@@ -3,7 +3,12 @@
     height: 100vh;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
-
+#code {
+    position: absolute;
+    color: white;
+    left: 50px;
+    bottom: 50px;
+}
 #listeJoueurs {
     display: block;
     width: 100vw;

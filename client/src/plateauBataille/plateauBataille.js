@@ -4,8 +4,10 @@ import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../component/Chat/Chat";
 import Carte from "./carte";
 import './plateauBataille.css'
+import { useParams } from "react-router-dom";
 
 function PlateauBataille() {
+    const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
     const [afficheStart, setAfficheStart] = useState(false);
@@ -38,7 +40,9 @@ function PlateauBataille() {
                 </div>
                 <label className="labelJB">{moi.paquet.length} Cartes</label>
             </div>
+            <h2 id="code">code de la partie: {code}</h2>
             <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
+            
             <Chat />
         </div>
     );
