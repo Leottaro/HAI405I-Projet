@@ -100,6 +100,13 @@ class Bataille {
         return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.enLice.includes(playerID));
     }
 
+    unJoueurRestant(){
+        if(this.playersIDs.filter(playerID => this.paquets[playerID].length > 0).length==1){
+            return this.playersIDs.filter(playerID => this.paquets[playerID].length > 0)[0];
+        }
+        return false;
+    }
+
     nextRound() {
         let winner;
         if (!this.everyonePlayed()) {
