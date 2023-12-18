@@ -3,12 +3,7 @@
     height: 100vh;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
 }
-#code {
-    position: absolute;
-    color: white;
-    left: 50px;
-    bottom: 50px;
-}
+
 #listeJoueurs {
     display: block;
     width: 100vw;
@@ -20,13 +15,11 @@
 
 #tapis {
     width: 100vw;
-    height: 450px;
+    height: calc(100vh - 470px);
 
     display: flex;
     justify-content: center;
-    flex-direction: center;
-
-
+    align-items:end;
 }
 
 .joueurMoi {
@@ -68,4 +61,21 @@
 
 .carte:hover {
     border: 1px solid black;
+}
+
+#winner {
+    width: 300px;
+    height: 30px;
+    position: absolute;
+    color: white;
+    text-align: center;
+    left: calc(50vw - 150px);
+    top: calc(50vh - 15px);
+}
+
+#code {
+    position: absolute;
+    color: white;
+    left: 50px;
+    bottom: 50px;
 }

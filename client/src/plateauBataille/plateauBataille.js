@@ -3,7 +3,7 @@ import { useState } from "react";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../component/Chat/Chat";
 import Carte from "./carte";
-import './plateauBataille.css'
+import './plateauBataille.css';
 import { useParams } from "react-router-dom";
 
 function PlateauBataille() {
@@ -12,6 +12,7 @@ function PlateauBataille() {
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
     const [afficheStart, setAfficheStart] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
+    const [winner, setWinner] = useState("");
 
     socket.emit("reqPlayers");
     socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
@@ -21,12 +22,22 @@ function PlateauBataille() {
         setEstFinDeTour(listJson.every(joueur => joueur.choisie));
     });
 
+    socket.on("Victoire", data => {
+        if(data == account){
+            setWinner("Vous avez Gagné !");
+        }
+        else{
+            setWinner(data+" a gagné...");
+        }
+    })
+
     function start() {
         socket.emit("reqStart");
     }
 
     return (
         <div id="plateauBataille">
+            <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
@@ -42,7 +53,6 @@ function PlateauBataille() {
             </div>
             <h2 id="code">code de la partie: {code}</h2>
             <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
-            
             <Chat />
         </div>
     );
