@@ -26,7 +26,7 @@ function Rejoindre() {
         <div id="CRContent">
             <label className="CRtitle">entrez un lien de partie</label>
             <input className="CRinput" type="number" max={9999999} onChange={(event) => { setLienPartie(parseInt(event.target.value)) }} />
-            <button className="CRButton CRvalider" onClick={valider}>Valider</button>
+            <button className="CRButton CRvalider" onClick={valider}>Rejoindre</button>
             <label id="message">{message}</label>
             <label className="CRtitle">Parties en cours:</label>
             <div id="listeParties">

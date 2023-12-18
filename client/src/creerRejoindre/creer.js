@@ -14,7 +14,7 @@ function Creer() {
         <div id="CRContent">
             <label className="CRtitle">Nombre de joueurs max dans la partie:</label>
             <input className="CRinput" defaultValue={2} type="number" min={2} max={10} onChange={(event) => { setNbrJoueursMax(parseInt(event.target.value)) }} />
-            <button className="CRButton CRvalider" onClick={valider}>Valider</button>
+            <button className="CRButton CRvalider" onClick={valider}>Creer</button>
         </div>
     );
 }

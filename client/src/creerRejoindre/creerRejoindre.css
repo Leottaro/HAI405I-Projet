@@ -28,7 +28,7 @@
 }
 
 .CRButton {
-    width: 45%;
+    width: 50%;
     height: 40px;
     color: #fff;
     font-size: 1em;
@@ -47,6 +47,7 @@
     width: 100%;
 
     display: flex;
+    text-align: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
