@@ -135,7 +135,7 @@ class Bataille {
         this.tempCartes = [];
         this.choosed = {};
         this.round++;
-        this.enLice = this.playersIDs;
+        this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
         return true;
     }
 }
