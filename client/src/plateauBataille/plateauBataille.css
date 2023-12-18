@@ -24,8 +24,9 @@
 
     display: flex;
     justify-content: center;
-    flex-direction: row;
-    align-items: flex-end;
+    flex-direction: center;
+
+
 }
 
 .joueurMoi {
