@@ -5,10 +5,14 @@ function Parties(props) {
         socket.emit('reqJoin', props.code);
     }
 
+    function recommencer() {
+        socket.emit('reqRestart', props.code);
+    }
+
     return (
         <div className="divPartie">
             <label className="labelPartie">{props.nbrJoueurs} joueurs</label>
-            <button className="buttonPartie" onClick={rejoindre}>rejoindre</button>
+            <button className="buttonPartie" onClick={props.mesParties ? recommencer : rejoindre}>{props.mesParties ? "recommencer" : "rejoindre"}</button>
         </div>
     );
 }

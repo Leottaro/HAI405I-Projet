@@ -11,6 +11,7 @@ function PlateauBataille() {
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
     const [afficheStart, setAfficheStart] = useState(false);
+    const [afficheSave, setAfficheSave] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [winner, setWinner] = useState("");
 
@@ -19,6 +20,7 @@ function PlateauBataille() {
         setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
         setMoi(listJson.find(joueur => joueur.nom === account));
         setAfficheStart(listJson[0].paquet.length === 0 && listJson[0].nom === account && listJson.length >= 2);
+        setAfficheSave(listJson[0].nom === account);
         setEstFinDeTour(listJson.every(joueur => joueur.choisie));
     });
 
@@ -33,6 +35,10 @@ function PlateauBataille() {
 
     function start() {
         socket.emit("reqStart");
+    }
+
+    function save() {
+        socket.emit("reqSave");
     }
 
     return (
@@ -53,6 +59,7 @@ function PlateauBataille() {
             </div>
             <h2 id="code">code de la partie: {code}</h2>
             <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
+            <button hidden={!afficheSave} id="save" onClick={save}>save</button>
             <Chat />
         </div>
     );

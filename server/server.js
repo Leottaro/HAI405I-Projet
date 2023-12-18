@@ -20,13 +20,23 @@ if (!fs.existsSync("./databases")) {
 
 // Create database
 const sqlite3 = require("sqlite3").verbose();
-const database = new sqlite3.Database("./databases/HAI405I.db", err => {
+const database = new sqlite3.Database("./databases/HAI405I.db", async err => {
     if (err) throw err;
     database.run(`
         CREATE TABLE IF NOT EXISTS account (
-            pseudo TEXT, 
+            pseudo TEXT NOT NULL, 
             password TEXT NOT NULL,
             PRIMARY KEY (pseudo)
+        );
+    `);
+    database.run(`
+        CREATE TABLE IF NOT EXISTS partie (
+            code TEXT NOT NULL, 
+            createur TEXT NOT NULL,
+            nomJeux TEXT NOT NULL,
+            jeux TEXT NOT NULL,
+            PRIMARY KEY (code),
+            FOREIGN KEY(createur) REFERENCES account(pseudo)
         );
     `);
     console.log("Database started on ./databases/HAI405I.db");
@@ -115,14 +125,19 @@ io.on("connection", function (socket) {
 
     // CREER
 
-    socket.on("reqCreate", json => {
+    socket.on("reqCreate", async json => {
         const nbrJoueursMax = json.nbrJoueursMax;
         const jeux = listeJeux[json.jeux];
         if (!jeux) return;
         if (nbrJoueursMax < jeux.playersRange[0] || nbrJoueursMax > jeux.playersRange[1] || !jeux) {
             return socket.emit("resCreate", { success: false, message: `nbrJoueursMax hors limite ou jeux inconnu` });
         }
-        const code = Math.floor(100000 + Math.random() * 899999).toString();
+        let code, err, rows;
+        do {
+            code = Math.floor(100000 + Math.random() * 899999).toString();
+            [err, rows] = await sqlRequest(`SELECT * FROM partie where code="${code}"`);
+        } while (parties[json.code] || err || rows.length > 0);
+
         parties[code] = new jeux(socket.id, code, nbrJoueursMax);
         sockets[socket.id]["partie"] = code;
 
@@ -135,24 +150,33 @@ io.on("connection", function (socket) {
     // REJOINDRE
 
     socket.on("reqGames", jeux => {
-        const sendParties = Object.keys(parties).filter(code => parties[code].nomJeux === jeux).map(code => { return { code: code, nbrJoueurs: parties[code].playersIDs.length }; });
+        const sendParties = Object.keys(parties).filter(code => parties[code] && parties[code].nomJeux === jeux).map(code => { return { code: code, nbrJoueurs: parties[code].playersIDs.length }; });
         socket.emit("resGames", sendParties);
     });
 
     socket.on("reqJoin", code => {
+        if (!sockets[socket.id]) return;
         const jeux = parties[code];
         if (!jeux) {
             return socket.emit("resJoin", { success: false, message: "code inexistant" });
         }
         if (!jeux.addPlayer(socket.id)) {
-            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette partie à commencée" : "cette partie est pleine") });
+            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette pax@rtie à commencée" : "cette partie est pleine") });
         }
         sockets[socket.id]["partie"] = code;
 
         socket.join(code);
         socket.emit("resJoin", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", jeux.url);
-        setTimeout(() => resPlayers(code), 100);
+        setTimeout(() => resPlayers(code), 250);
+    });
+
+    // MY GAMES
+
+    socket.on("reqMyGames", async jeux => {
+        if (!sockets[socket.id]) return;
+        const [err, rows] = await sqlRequest(`SELECT * FROM partie WHERE createur="${sockets[socket.id].compte}" AND nomJeux="${jeux}"`);
+        socket.emit("resMyGames", rows.map(partie => { return { code: partie.code, createur: partie.createur, jeux: JSON.parse(partie.jeux.replaceAll("\'", "\"")) }; }));
     });
 
     // CHAT
@@ -192,6 +216,22 @@ io.on("connection", function (socket) {
                 if (jeux.nextRound())
                     resPlayers(code);
             }, 1000);
+        }
+    });
+
+    socket.on("reqSave", () => {
+        if (!sockets[socket.id] || !sockets[socket.id].partie) return;
+        const code = sockets[socket.id].partie;
+        const createur = sockets[socket.id].compte;
+        const jeux = parties[code];
+        if (!jeux) return;
+
+        database.run(`INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${createur}", "${jeux.nomJeux}", "${JSON.stringify(jeux).replaceAll("\"", "\'")}")`);
+
+        io.in(code).emit("goTo", "/creerRejoindre/" + jeux.nomJeux);
+        for (const playerID of jeux.playersIDs) {
+            io.sockets.sockets.get(playerID).leave(code);
+            jeux.removePlayer(playerID);
         }
     });
 });
