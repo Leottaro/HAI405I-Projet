@@ -107,7 +107,9 @@ io.on("connection", function (socket) {
     // AUTO DÉCONNECTION
 
     socket.on("reqLogOut", () => {
-        if (!sockets[socket.id]) return;
+        if (!sockets[socket.id]) {
+            return;
+        }
         console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
@@ -128,7 +130,9 @@ io.on("connection", function (socket) {
     socket.on("reqCreate", async json => {
         const nbrJoueursMax = json.nbrJoueursMax;
         const jeux = listeJeux[json.jeux];
-        if (!jeux) return;
+        if (!jeux) {
+            return;
+        }
         if (nbrJoueursMax < jeux.playersRange[0] || nbrJoueursMax > jeux.playersRange[1] || !jeux) {
             return socket.emit("resCreate", { success: false, message: `nbrJoueursMax hors limite ou jeux inconnu` });
         }
@@ -155,7 +159,9 @@ io.on("connection", function (socket) {
     });
 
     socket.on("reqJoin", code => {
-        if (!sockets[socket.id]) return;
+        if (!sockets[socket.id]) {
+            return;
+        }
         const jeux = parties[code];
         if (!jeux) {
             return socket.emit("resJoin", { success: false, message: "code inexistant" });
@@ -174,7 +180,9 @@ io.on("connection", function (socket) {
     // MY GAMES
 
     socket.on("reqMyGames", async jeux => {
-        if (!sockets[socket.id]) return;
+        if (!sockets[socket.id]) {
+            return;
+        }
         const [err, rows] = await sqlRequest(`SELECT * FROM partie WHERE createur="${sockets[socket.id].compte}" AND nomJeux="${jeux}"`);
         socket.emit("resMyGames", rows.map(partie => { return { code: partie.code, createur: partie.createur, jeux: JSON.parse(partie.jeux.replaceAll("\'", "\"")) }; }));
     });
@@ -182,7 +190,9 @@ io.on("connection", function (socket) {
     // CHAT
 
     socket.on("reqMsg", msg => {
-        if (!sockets[socket.id] || !sockets[socket.id].partie) return;
+        if (!sockets[socket.id] || !sockets[socket.id].partie) {
+            return;
+        }
         io.in(sockets[socket.id].partie).emit("resMsg", msg);
     })
 
@@ -197,7 +207,9 @@ io.on("connection", function (socket) {
     }
 
     socket.on("reqStart", () => {
-        if (!sockets[socket.id]) return;
+        if (!sockets[socket.id]) {
+            return;
+        }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
         if (jeux.start())
@@ -205,26 +217,38 @@ io.on("connection", function (socket) {
     });
 
     socket.on("reqCoup", carte => {
-        if (!sockets[socket.id]) return;
+        if (!sockets[socket.id]) {
+            return;
+        }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux || !jeux.coup(socket.id, carte)) return;
+        if (!jeux || !jeux.coup(socket.id, carte)) {
+            return;
+        }
         socket.emit("select", carte);
         resPlayers(code);
         if (jeux.everyonePlayed()) {
             setTimeout(() => {
-                if (jeux.nextRound())
+                if (jeux.nextRound()) {
                     resPlayers(code);
+                    if (jeux.ended) {
+                        io.in(code).emit("Victoire", sockets[jeux.enLice[0]].compte);
+                    }
+                }
             }, 1000);
         }
     });
 
     socket.on("reqSave", () => {
-        if (!sockets[socket.id] || !sockets[socket.id].partie) return;
+        if (!sockets[socket.id] || !sockets[socket.id].partie) {
+            return;
+        }
         const code = sockets[socket.id].partie;
         const createur = sockets[socket.id].compte;
         const jeux = parties[code];
-        if (!jeux) return;
+        if (!jeux) {
+            return;
+        }
 
         database.run(`INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${createur}", "${jeux.nomJeux}", "${JSON.stringify(jeux).replaceAll("\"", "\'")}")`);
 
