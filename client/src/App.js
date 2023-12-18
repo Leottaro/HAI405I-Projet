@@ -5,8 +5,8 @@ import './App.css';
 
 const Connection = lazy(() => import("./pages/connection/Connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
-const CreerRejoindre = lazy(() => import("./creerRejoindre/creerRejoindre"));
-const PlateauBataille = lazy(() => import("./plateauBataille/plateauBataille"));
+const CreerRejoindre = lazy(() => import("./pages/creerRejoindre/creerRejoindre"));
+const PlateauBataille = lazy(() => import("./pages/plateauBataille/plateauBataille"));
 
 function App() {
   const navigate = useNavigate();

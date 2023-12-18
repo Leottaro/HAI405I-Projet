@@ -1,5 +1,5 @@
 import { useState } from "react";
-import socket from "../socket";
+import socket from "../../socket";
 import Parties from "./parties";
 
 function MesParties() {
