@@ -25,11 +25,11 @@ function PlateauBataille() {
     });
 
     socket.on("Victoire", data => {
-        if(data == account){
+        if (data === account) {
             setWinner("Vous avez Gagné !");
         }
-        else{
-            setWinner(data+" a gagné...");
+        else {
+            setWinner(data + " a gagné...");
         }
     })
 
