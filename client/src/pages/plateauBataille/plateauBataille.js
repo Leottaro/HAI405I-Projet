@@ -52,9 +52,12 @@ function PlateauBataille() {
                 {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
             </div>
             <MonJeux paquet={moi.paquet}/>
-            <h2 id="code">code de la partie: {code}</h2>
-            <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
-            <button hidden={!afficheSave} id="save" onClick={save}>save</button>
+            <div id="divStart">
+                <h2 className="code">code de la partie:</h2>
+                <h2 className="code">{code}</h2>
+                <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
+                <button hidden={!afficheSave} id="save" onClick={save}>save</button>
+            </div>
             <Chat />
         </div>
     );
