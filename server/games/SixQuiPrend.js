@@ -141,6 +141,16 @@ class SixQuiPrend {
             this.plateau[biggest.ligne].push(choosed);
             delete this.choosed[playerID];
         }
+
+        if (this.playersIDs.map(id => this.paquets[id]).some(paquet => paquet.length == 0)) {
+            this.started = false;
+            this.plateau = [[], [], [], []];
+            this.start();
+        }
+
+        if (this.playersIDs.map(id => this.scores[id]).some(score => score >= 66)) {
+            this.ended = true;
+        }
         return true;
     }
 
