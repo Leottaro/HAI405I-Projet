@@ -1,5 +1,5 @@
 import socket, { account } from "../../socket";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MonJeux from "../../component/MonJeux/MonJeux";
 import JoueurSix from "./joueurSix/joueurSix";
 import Chat from "../../component/Chat/Chat";
@@ -17,12 +17,17 @@ function PlateauSix() {
     const [winner, setWinner] = useState("");
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
 
-    socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
-        setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
-        setMoi(listJson.find(joueur => joueur.nom === account));
-        setAfficheStart(listJson[0].paquet.length === 0 && listJson[0].nom === account && listJson.length >= 2);
-        setAfficheSave(listJson[0].nom === account);
-        setEstFinDeTour(listJson.every(joueur => joueur.choisie));
+    socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
+        setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
+            if (player !== account) {
+                filtered[player] = json[player];
+            }
+            return filtered;
+        }, {}));
+        setMoi(json[account]);
+        setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
+        setAfficheSave(json[account].isCreator);
+        setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
     });
     socket.on("resPlateau", listJson => { // [ [{valeur:"n", type:""}, ...], 4 fois]
         setListePlateau(listJson);
@@ -49,7 +54,7 @@ function PlateauSix() {
         <div id="plateauSix">
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurSix pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
+                {Object.keys(listeJoueurs).map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
                 {
@@ -62,9 +67,9 @@ function PlateauSix() {
                 <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
                 <button hidden={!afficheSave} id="save" onClick={save}>save</button>
             </div>
-            <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} />
+            <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} texte={moi.score + " têtes de boeuf"} />
             <div id="choisie">
-                {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesSix/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
+                {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesSix/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
             </div>
             <Chat />
         </div>

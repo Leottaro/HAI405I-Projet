@@ -10,15 +10,16 @@ class SixQuiPrend {
         this.ended = false;
 
         this.maxPlayers = maxPlayers;
-        this.playersIDs = [creatorID];
+        this.playersIDs = [];
 
         this.paquets = {};
-        this.paquets[creatorID] = [];
 
         this.choosed = {};
         this.plateau = [[], [], [], []];
         this.scores = {};
         this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+
+        this.addPlayer(creatorID);
     }
 
     hasStarted() {
@@ -50,6 +51,13 @@ class SixQuiPrend {
         delete this.paquets[playerID];
         delete this.scores[playerID];
         return true;
+    }
+
+    playerData(playerID) {
+        if (this.playersIDs[playerID]) {
+            return false;
+        }
+        return { isCreator: this.playersIDs[0] === playerID, paquet: this.paquets[playerID], choosed: this.choosed[playerID], score: this.scores[playerID] };
     }
 
     start() {

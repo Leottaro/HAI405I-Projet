@@ -1,5 +1,5 @@
 import socket, { account } from "../../socket";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MonJeux from "../../component/MonJeux/MonJeux";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../../component/Chat/Chat";
@@ -16,13 +16,17 @@ function PlateauBataille() {
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [winner, setWinner] = useState("");
 
-    socket.emit("reqPlayers");
-    socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
-        setListeJoueurs(listJson.filter(joueur => joueur.nom !== account));
-        setMoi(listJson.find(joueur => joueur.nom === account));
-        setAfficheStart(listJson[0].paquet.length === 0 && listJson[0].nom === account && listJson.length >= 2);
-        setAfficheSave(listJson[0].nom === account);
-        setEstFinDeTour(listJson.every(joueur => joueur.choisie));
+    socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
+        setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
+            if (player !== account) {
+                filtered[player] = json[player];
+            }
+            return filtered;
+        }, {}));
+        setMoi(json[account]);
+        setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
+        setAfficheSave(json[account].isCreator);
+        setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
     });
 
     socket.on("Victoire", data => {
@@ -46,12 +50,12 @@ function PlateauBataille() {
         <div id="plateauBataille">
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
+                {Object.keys(listeJoueurs).map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
-                {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesBataille/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
+                {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
             </div>
-            <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} />
+            <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />
             <div id="divStart">
                 <h2 className="code">code de la partie:</h2>
                 <h2 className="code">{code}</h2>

@@ -8,8 +8,9 @@ function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.
     const [type, setType] = useState("");
 
     useEffect(() => {
-        if (props.chemin) setChemin(props.chemin);
-        else setChemin("FaceCachee.png");
+        // if (props.chemin) 
+        setChemin(props.chemin);
+        // else setChemin("FaceCachee.png");
         setVisible(props.visible ? true : false);
         if (props.valeur) setValeur(props.valeur);
         else setValeur("");

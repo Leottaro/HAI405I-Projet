@@ -10,15 +10,16 @@ class Bataille {
         this.ended = false;
 
         this.maxPlayers = maxPlayers;
-        this.playersIDs = [creatorID];
-        this.enLice = [creatorID];
+        this.playersIDs = [];
+        this.enLice = [];
         this.tempCartes = [];
 
         this.paquets = {};
-        this.paquets[creatorID] = [];
 
         this.round = 0;
         this.choosed = {};
+
+        this.addPlayer(creatorID);
     }
 
     hasStarted() {
@@ -68,6 +69,13 @@ class Bataille {
         }
         delete this.paquets[playerID];
         return true;
+    }
+
+    playerData(playerID) {
+        if (this.playersIDs[playerID]) {
+            return false;
+        }
+        return { isCreator: this.playersIDs[0] === playerID, paquet: this.paquets[playerID], choosed: this.choosed[playerID] };
     }
 
     start() {

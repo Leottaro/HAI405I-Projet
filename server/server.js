@@ -62,7 +62,7 @@ io.listen(3001, () => {
     console.log("server running on port http://localhost:3001/");
 });
 
-const sockets = {}; // clef: socket.id              valeur: {compte, partie}
+const sockets = {}; // clef: socket.id              valeur: {compte, code}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
 io.on("connection", function (socket) {
@@ -83,7 +83,6 @@ io.on("connection", function (socket) {
         socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
         socket.emit("goTo", "/selectionJeux");
         socket.emit("resAccount", json.pseudo);
-        console.log(json);
     });
 
     socket.on("reqLogIn", async json => {
@@ -102,7 +101,6 @@ io.on("connection", function (socket) {
         socket.emit("resLogIn", { success: true, message: `Successfully connected user "${json.pseudo}" with socket ${socket.id}` });
         socket.emit("goTo", "/selectionJeux");
         socket.emit("resAccount", json.pseudo);
-        console.log(json);
     });
 
     // AUTO DÉCONNECTION
@@ -111,7 +109,6 @@ io.on("connection", function (socket) {
         if (!sockets[socket.id]) {
             return;
         }
-        console.log(`account ${sockets[socket.id]["compte"]} disconnected: ${socket.id}`);
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
         if (code && jeux) {
@@ -144,7 +141,7 @@ io.on("connection", function (socket) {
         } while (parties[json.code] || err || rows.length > 0);
 
         parties[code] = new jeux(socket.id, code, nbrJoueursMax);
-        sockets[socket.id]["partie"] = code;
+        sockets[socket.id].partie = code;
 
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
@@ -203,7 +200,10 @@ io.on("connection", function (socket) {
         if (!parties[code]) return;
         const jeux = parties[code];
         const socketsIDs = parties[code].playersIDs;
-        const final = socketsIDs.filter(socketID => sockets[socketID]).map(socketID => { return { "nom": sockets[socketID].compte, "paquet": jeux.paquets[socketID], "choisie": jeux.choosed[socketID] }; })
+        const final = {};
+        for (const playerID of socketsIDs.filter(socketID => sockets[socketID])) {
+            final[sockets[playerID].compte] = jeux.playerData(playerID);
+        }
         io.in(code).emit("resPlayers", final);
     }
 
