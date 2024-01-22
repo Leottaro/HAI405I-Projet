@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 
-function Carte(props) {
-    const [nom, setNom] = useState("");
+function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
+    const [chemin, setChemin] = useState("");
     const [visible, setVisible] = useState(false);
+    const [valeur, setValeur] = useState("");
+    const [type, setType] = useState("");
 
     useEffect(() => {
-        if (props.valeur && props.type) setNom(props.valeur + "De" + props.type);
-        else setNom("RectoCarte");
-        if (props.visible) setVisible(true);
-        else setVisible(false);
+        if (props.chemin) setChemin(props.chemin);
+        else setChemin("FaceCachee.png");
+        setVisible(props.visible ? true : false);
+        if (props.valeur) setValeur(props.valeur);
+        else setValeur("");
+        if (props.type) setType(props.type);
+        else setType("");
     }, [props]);
 
     function carteClick() {
-        if (!visible || nom === "RectoCarte") return;
-        const temp = nom.split("De");
-        socket.emit("reqCoup", { "valeur": temp[0], "type": temp[1] });
+        socket.emit("reqCoup", { "valeur": valeur, "type": type });
     }
 
     return (
-        <img className="carte" height={"100"} width={"70"} onClick={carteClick} src={"../../Assets/" + (visible ? "CartesBataille/" + nom : "FaceCachee") + ".png"} alt=""></img>
+        <img className="carte" height={"100"} width={"70"} onClick={carteClick} src={"../../Assets/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
     );
 }
 export default Carte;

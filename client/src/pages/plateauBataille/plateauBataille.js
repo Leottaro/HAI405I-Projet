@@ -49,9 +49,9 @@ function PlateauBataille() {
                 {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
-                {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
+                {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesBataille/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
             </div>
-            <MonJeux paquet={moi.paquet}/>
+            <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} />
             <div id="divStart">
                 <h2 className="code">code de la partie:</h2>
                 <h2 className="code">{code}</h2>

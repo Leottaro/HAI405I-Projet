@@ -2,7 +2,7 @@ class SixQuiPrend {
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers) {
-        this.nomJeux = "six";
+        this.nomJeux = "sixQuiPrend";
         this.url = "/plateauSix" + "/" + lien;
         this.started = false;
         this.ended = false;
@@ -17,6 +17,7 @@ class SixQuiPrend {
 
         this.round = 0;
         this.choosed = {};
+        this.plateau = [[], [], [], []];
     }
 
     hasStarted() {
@@ -50,22 +51,26 @@ class SixQuiPrend {
     }
 
     start() {
-        if (this.ended || this.started || this.playersIDs.length < Bataille.playersRange[0]) {
+        if (this.ended || this.started || this.playersIDs.length < SixQuiPrend.playersRange[0]) {
             return false;
         }
         // créer le paquet de carte et le mélanger
-        const paquet = [...Array(104).keys()].map(n => { return { valeur: n + 1, type: "" } });
-        for (let i = 0; i < paquet.length; i++) {
-            for (let j = i; j < paquet.length; j++) {
-                [paquet[i], paquet[j]] = [paquet[j], paquet[i]];
+        const Cartes = [...Array(104).keys()].map(n => { return { valeur: n + 1, type: "" } });
+        for (let i = 0; i < Cartes.length; i++) {
+            for (let j = i; j < Cartes.length; j++) {
+                [Cartes[i], Cartes[j]] = [Cartes[j], Cartes[i]];
             }
         }
         // distribuer 10 cartes
         let n = 0;
         for (const playerID of this.playersIDs) {
             for (let i = 0; i < 10; i++) {
-                this.paquets[playerID].push(paquet[n]);
+                this.paquets[playerID].push(Cartes[n]);
             }
+            n++;
+        }
+        for (const paquet of this.plateau) {
+            paquet.push(Cartes[n]);
             n++;
         }
         // supprimer les cartes choisies au cas où

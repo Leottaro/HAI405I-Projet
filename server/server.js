@@ -207,14 +207,23 @@ io.on("connection", function (socket) {
         io.in(code).emit("resPlayers", final);
     }
 
+    function resPlateau(code) {
+        if (!parties[code]) return;
+        const jeux = parties[code];
+        const final = jeux.plateau;
+        io.in(code).emit("resPlateau", final);
+    }
+
     socket.on("reqStart", () => {
         if (!sockets[socket.id]) {
             return;
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (jeux.start())
+        if (jeux.start()) {
             resPlayers(code);
+            resPlateau(code);
+        }
     });
 
     socket.on("reqCoup", carte => {
@@ -228,10 +237,12 @@ io.on("connection", function (socket) {
         }
         socket.emit("select", carte);
         resPlayers(code);
+        resPlateau(code);
         if (jeux.everyonePlayed()) {
             setTimeout(() => {
                 if (jeux.nextRound()) {
                     resPlayers(code);
+                    resPlateau(code);
                     if (jeux.ended) {
                         io.in(code).emit("Victoire", sockets[jeux.enLice[0]].compte);
                     }
