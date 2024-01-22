@@ -89,3 +89,9 @@
     color: white;
     margin: 8px;
 }
+
+#choisie {
+    position: absolute;
+    right: 10vw;
+    bottom: 5vh;
+}

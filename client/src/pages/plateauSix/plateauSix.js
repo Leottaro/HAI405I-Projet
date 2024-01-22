@@ -64,14 +64,16 @@ function PlateauSix() {
                 <div className="ligne">
                     {listePlateau[3].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
                 </div>
-                {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesSix/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
             </div>
-            <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} />
             <div id="divStart">
                 <h2 className="code">code de la partie:</h2>
                 <h2 className="code">{code}</h2>
                 <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
                 <button hidden={!afficheSave} id="save" onClick={save}>save</button>
+            </div>
+            <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} />
+            <div id="choisie">
+                {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesSix/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
             </div>
             <Chat />
         </div>
