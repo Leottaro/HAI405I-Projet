@@ -1,0 +1,116 @@
+#profil {
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+    width: 50vw;
+    height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: white;
+}
+
+#profil #nom {
+    width: calc(100% - 20px);
+    height: 50px;
+    font-size: 2.3em;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+}
+
+#pasLeNom {
+    width: 100%;
+    height: calc(100% - 70px);
+    display: flex;
+    flex-direction: row;
+}
+
+#profilJeux{
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 210px);
+}
+
+.profilJeux {
+    width: calc(100% - 20px);
+    height: 180px;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#nomBataille {
+    font-weight: bold;
+    margin: 10px;
+}
+
+#nomSix {
+    font-weight: bold;
+    margin: 10px;
+}
+
+.labelProfil {
+    margin: 10px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 200px);
+}
+
+#historique{
+    margin: 10px;
+    height: calc(100% - 20px);
+    width: 200px;
+    background: #573b8a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#labelHistorique {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+}
+
+#scrollHistorique{
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.partie {
+    width: 100%;
+    height: 50px;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.mode {
+    width: 100%;
+    height: 20px;
+}
+
+.resultat {
+    width: 100%;
+    height: 20px;
+}
