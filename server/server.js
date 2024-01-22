@@ -51,7 +51,8 @@ async function sqlRequest(query, params) {
 }
 
 const Bataille = require("./games/Bataille");
-const listeJeux = { "bataille": Bataille };
+const SixQuiPrend = require("./games/SixQuiPrend");
+const listeJeux = { "bataille": Bataille, "sixQuiPrend": SixQuiPrend };
 
 app.get("/", (req, res) => {
     res.send("<h1>voici le serveur</h1>");

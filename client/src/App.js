@@ -7,6 +7,7 @@ const Connection = lazy(() => import("./pages/connection/Connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
 const CreerRejoindre = lazy(() => import("./pages/creerRejoindre/creerRejoindre"));
 const PlateauBataille = lazy(() => import("./pages/plateauBataille/plateauBataille"));
+const PlateauSix = lazy(() => import("./pages/plateauSix/plateauSix"));
 
 function App() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function App() {
       <Route path="/selectionJeux" element={<SelectionJeux />} />
       <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
       <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
+      <Route path="/plateauSix/:code" element={<PlateauSix />} />
     </Routes>
   );
 }
