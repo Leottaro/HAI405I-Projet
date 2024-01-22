@@ -15,6 +15,7 @@ function PlateauSix() {
     const [afficheSave, setAfficheSave] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [winner, setWinner] = useState("");
+    const [listePlateau, setListePlateau] = useState([]);
 
     socket.emit("reqPlayers");
     socket.on("resPlayers", listJson => { // [{nom, paquet, choisie}, ..., {nom, paquet, choisie}]
@@ -23,6 +24,9 @@ function PlateauSix() {
         setAfficheStart(listJson[0].paquet.length === 0 && listJson[0].nom === account && listJson.length >= 2);
         setAfficheSave(listJson[0].nom === account);
         setEstFinDeTour(listJson.every(joueur => joueur.choisie));
+    });
+    socket.on("resPlateau", listJson => { // [ [{valeur:"n", type:""}, ...], 4 fois]
+        setListePlateau(listJson);
     });
 
     socket.on("Victoire", data => {
@@ -46,9 +50,21 @@ function PlateauSix() {
         <div id="plateauSix">
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
-                {listeJoueurs.map((json, index) => <JoueurBataille pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
+                {listeJoueurs.map((json, index) => <JoueurSix pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
+                <div>
+                    {listePlateau[0].map((json, index) => <Carte visible={true} valeur={json.valeur} type={json.type}/>)}
+                </div>
+                <div>
+                    {listePlateau[1].map((json, index) => <Carte visible={true} valeur={json.valeur} type={json.type}/>)}
+                </div>
+                <div>
+                    {listePlateau[2].map((json, index) => <Carte visible={true} valeur={json.valeur} type={json.type}/>)}
+                </div>
+                <div>
+                    {listePlateau[3].map((json, index) => <Carte visible={true} valeur={json.valeur} type={json.type}/>)}
+                </div>
                 {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
             </div>
             <MonJeux paquet={moi.paquet}/>
