@@ -2,7 +2,7 @@ import socket, { account } from "../../socket";
 import { useState } from "react";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../../component/Chat/Chat";
-import Carte from "./carte";
+import Carte from "../../component/Carte/Carte";
 import './plateauBataille.css';
 import { useParams } from "react-router-dom";
 

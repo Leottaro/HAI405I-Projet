@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import './joueurBataille.css';
-import Carte from '../carte';
+import Carte from '../../../component/Carte/Carte';
 
 function JoueurBataille(props) { // nom de la carte
     const [carte, setCarte] = useState({});
