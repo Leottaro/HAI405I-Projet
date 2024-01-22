@@ -28,7 +28,7 @@
     flex-direction: row;
 }
 
-.carte {
+.ligne .carte {
     margin-right: 20px;
 }
 
