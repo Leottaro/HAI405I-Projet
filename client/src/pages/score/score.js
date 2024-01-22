@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 function Score() {
     const [gagnant, setGagnant] = useState();
     const [listeJoueurs, setListeJoueurs] = useState([]);
-    const [score, setScore] = useState({ nom: "", score : });
+    const [score, setScore] = useState({ nom: "", score : 0});
     socket.on("resGagnant", nom => {
         setGagnant(nom);
     });

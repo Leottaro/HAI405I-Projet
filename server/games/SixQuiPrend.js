@@ -11,15 +11,13 @@ class SixQuiPrend {
 
         this.maxPlayers = maxPlayers;
         this.playersIDs = [creatorID];
-        this.enLice = [creatorID];
-        this.tempCartes = [];
 
         this.paquets = {};
         this.paquets[creatorID] = [];
 
-        this.round = 0;
         this.choosed = {};
         this.plateau = [[], [], [], []];
+        this.scores = {};
     }
 
     hasStarted() {
@@ -32,7 +30,7 @@ class SixQuiPrend {
         }
         this.playersIDs.push(playerID);
         this.paquets[playerID] = [];
-        this.enLice.push(playerID);
+        this.scores[playerID] = 0;
         return true;
     }
 
@@ -49,6 +47,7 @@ class SixQuiPrend {
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
         // on supprime son paquet
         delete this.paquets[playerID];
+        delete this.scores[playerID];
         return true;
     }
 
@@ -93,15 +92,51 @@ class SixQuiPrend {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.enLice.includes(playerID));
+        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.playersIDs.includes(playerID));
+    }
+
+    carteScore(carte) {
+        let score = 1;
+        if (carte.valeur % 5 == 0) {
+            score += 1;
+        }
+        if (carte.valeur % 10 == 0) {
+            score += 1;
+        }
+        if (carte.valeur % 11 == 0) {
+            score += 4;
+        }
+        return score;
     }
 
     nextRound() {
         if (this.ended || !this.everyonePlayed()) {
             return false;
         }
-        const choosed = Object.values(this.choosed).sort((a, b) => a.valeur - b.valeur);
-        console.log(choosed);
+        const players = this.playersIDs.sort((id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur);
+        for (const playerID of players) {
+            const choosed = this.choosed[playerID];
+            let biggest = { ligne: 0, carte: { valeur: -1, type: "" } };
+            for (const ligne in this.plateau) {
+                const carte = this.plateau[ligne].at(-1);
+                if (carte.valeur < choosed.valeur && carte.valeur > biggest.carte.valeur) {
+                    biggest = { ligne, carte };
+                }
+            }
+            if (!biggest.ligne) {
+                // TODO: handle this case
+                continue;
+            }
+            if (this.plateau[biggest.ligne].length == 5) {
+                for (const carte of this.plateau[biggest.ligne]) {
+                    this.scores[playerID] += this.carteScore(carte);
+                }
+                this.plateau[biggest.ligne] = [];
+            }
+            this.plateau[biggest.ligne].push(choosed);
+            delete this.choosed[playerID];
+        }
+        return true;
     }
 }
 module.exports = SixQuiPrend;
