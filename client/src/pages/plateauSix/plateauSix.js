@@ -52,17 +52,17 @@ function PlateauSix() {
                 {listeJoueurs.map((json, index) => <JoueurSix pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
-                <div>
-                    {listePlateau[0].map((json, index) => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}
+                <div className="ligne">
+                    {listePlateau[0].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
                 </div>
-                <div>
-                    {listePlateau[1].map((json, index) => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}
+                <div className="ligne">
+                    {listePlateau[1].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
                 </div>
-                <div>
-                    {listePlateau[2].map((json, index) => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}
+                <div className="ligne">
+                    {listePlateau[2].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
                 </div>
-                <div>
-                    {listePlateau[3].map((json, index) => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}
+                <div className="ligne">
+                    {listePlateau[3].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
                 </div>
                 {moi.choisie ? <Carte visible valeur={moi.choisie.valeur} type={moi.choisie.type} chemin={"CartesSix/" + moi.choisie.valeur + moi.choisie.type + ".png"} /> : <></>}
             </div>

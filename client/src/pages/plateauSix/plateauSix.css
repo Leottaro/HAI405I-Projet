@@ -16,10 +16,20 @@
 #tapis {
     width: 100vw;
     height: calc(100vh - 470px);
+    padding-left: 37vw;
 
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.ligne {
+    display: flex;
+    flex-direction: row;
+}
+
+.carte {
+    margin-right: 20px;
 }
 
 #start {
