@@ -270,4 +270,19 @@ io.on("connection", function (socket) {
             jeux.removePlayer(playerID);
         }
     });
+
+    // Six qui prend
+
+    socket.on("reqSixPrends", index => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (!jeux || !jeux.prends(socket.id, index)) {
+            return;
+        }
+        resPlayers(code);
+        resPlateau(code);
+    });
 });

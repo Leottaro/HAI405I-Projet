@@ -18,6 +18,7 @@ class SixQuiPrend {
         this.choosed = {};
         this.plateau = [[], [], [], []];
         this.scores = {};
+        this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
     }
 
     hasStarted() {
@@ -92,7 +93,7 @@ class SixQuiPrend {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.playersIDs.includes(playerID));
+        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID]);
     }
 
     carteScore(carte) {
@@ -110,7 +111,7 @@ class SixQuiPrend {
     }
 
     nextRound() {
-        if (this.ended || !this.everyonePlayed()) {
+        if (this.ended || !this.everyonePlayed() || this.leJoueurQuiAMisUneCarteTropPetiteAvantLà) {
             return false;
         }
         const players = this.playersIDs.sort((id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur);
@@ -118,14 +119,18 @@ class SixQuiPrend {
             const choosed = this.choosed[playerID];
             let biggest = { ligne: 0, carte: { valeur: -1, type: "" } };
             for (const ligne in this.plateau) {
+                if (this.plateau[ligne].length == 0) {
+                    biggest = { ligne, carte: { valeur: -1, type: "" } };
+                    break;
+                }
                 const carte = this.plateau[ligne].at(-1);
                 if (carte.valeur < choosed.valeur && carte.valeur > biggest.carte.valeur) {
                     biggest = { ligne, carte };
                 }
             }
             if (!biggest.ligne) {
-                // TODO: handle this case
-                continue;
+                this.leJoueurQuiAMisUneCarteTropPetiteAvantLà = playerID;
+                return;
             }
             if (this.plateau[biggest.ligne].length == 5) {
                 for (const carte of this.plateau[biggest.ligne]) {
@@ -136,6 +141,19 @@ class SixQuiPrend {
             this.plateau[biggest.ligne].push(choosed);
             delete this.choosed[playerID];
         }
+        return true;
+    }
+
+    prends(playerID, ligne) {
+        if (this.leJoueurQuiAMisUneCarteTropPetiteAvantLà !== playerID || ligne < 0 || ligne > 3) {
+            return false;
+        }
+        for (const carte of this.plateau[ligne]) {
+            this.scores[playerID] += this.carteScore(carte);
+        }
+        this.plateau[ligne] = [];
+        delete this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+        this.nextRound();
         return true;
     }
 }

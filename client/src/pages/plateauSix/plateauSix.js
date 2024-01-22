@@ -52,18 +52,9 @@ function PlateauSix() {
                 {listeJoueurs.map((json, index) => <JoueurSix pseudo={json.nom} nbrCartes={json.paquet.length} carte={json.choisie} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
-                <div className="ligne">
-                    {listePlateau[0].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
-                </div>
-                <div className="ligne">
-                    {listePlateau[1].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
-                </div>
-                <div className="ligne">
-                    {listePlateau[2].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
-                </div>
-                <div className="ligne">
-                    {listePlateau[3].map((json, index) => <div className="carte"><Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} /></div>)}
-                </div>
+                {
+                    listePlateau.map((liste, index) => <div className="ligne" onClick={() => socket.emit("reqSixPrends", index)}>{liste.map(json => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}</div>)
+                }
             </div>
             <div id="divStart">
                 <h2 className="code">code de la partie:</h2>
