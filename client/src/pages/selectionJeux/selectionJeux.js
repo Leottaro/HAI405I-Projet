@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './selectionJeux.css';
-import belote from './belote.png'
+import sixQuiPrend from './sixQuiPrend.jpg'
 import bataille from './bataille.png'
 
 function SelectionJeux() {
     const [i, setI] = useState(0);
-    const listeJeux = [bataille, belote];
-    const listeNomJeux = ["bataille", "belote"];
+    const listeJeux = [bataille, sixQuiPrend];
+    const listeNomJeux = ["bataille", "sixQuiPrend"];
 
     function gauche() {
         if (i > 0) {

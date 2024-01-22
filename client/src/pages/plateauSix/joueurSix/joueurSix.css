@@ -1,0 +1,33 @@
+.joueurSix {
+    width: 150px;
+    height: 200px;
+    background: linear-gradient(to bottom,  	#9C2542,  	#c5677e,  	#9C2542);
+    text-align: center;
+    margin: 20px;
+    align-items: center;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.labelJS {
+    height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.carteJouée {
+    color: #fff;
+    font-size: 1em;
+    margin-top: 20px;
+    width: 100%;
+}
+
+#listeJoueurs {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
