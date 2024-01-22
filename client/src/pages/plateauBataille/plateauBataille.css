@@ -22,45 +22,12 @@
     align-items: flex-end;
 }
 
-.joueurMoi {
-    width: 50%;
-    height: 180px;
-    padding:0;
-    position: absolute;
-    left: 25%;
-    bottom: 0;
-    background: linear-gradient(to bottom,  	#9C2542,  	#c5677e,  	#9C2542);
-    text-align: center;
-    margin: 20px;
-    border-radius: 10px;
-
-    display: flex;
-    flex-direction: column;
-}
-
 #start {
     width: 100px;
     height: 30px;
     position: absolute;
     left: 0;
     bottom: 0;
-}
-
-#monNom {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-#mesCartes {
-    height: 120px;
-    display: flex;
-    flex-direction: row;
-    overflow-y: hidden;
-    overflow-x: auto;
-}
-
-.carte:hover {
-    border: 1px solid black;
 }
 
 #winner {

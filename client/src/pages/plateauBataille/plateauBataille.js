@@ -1,5 +1,6 @@
 import socket, { account } from "../../socket";
 import { useState } from "react";
+import MonJeux from "../../component/MonJeux/MonJeux";
 import JoueurBataille from "./joueurBataille/joueurBataille";
 import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
@@ -50,13 +51,7 @@ function PlateauBataille() {
             <div id="tapis">
                 {moi.choisie ? <Carte visible={true} valeur={moi.choisie.valeur} type={moi.choisie.type} /> : <></>}
             </div>
-            <div id="moi" className="joueurMoi">
-                <p id="monNom">{account}</p>
-                <div id="mesCartes">
-                    {moi.paquet.filter(carte => carte).map((carte, index) => <Carte visible={true} valeur={carte.valeur} type={carte.type} key={"carte" + index} />)}
-                </div>
-                <label className="labelJB">{moi.paquet.length} Cartes</label>
-            </div>
+            <MonJeux paquet={moi.paquet}/>
             <h2 id="code">code de la partie: {code}</h2>
             <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
             <button hidden={!afficheSave} id="save" onClick={save}>save</button>

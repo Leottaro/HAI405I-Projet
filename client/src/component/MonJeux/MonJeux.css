@@ -1,0 +1,39 @@
+.monJeux {
+    width: 50%;
+    height: 180px;
+    padding: 0;
+    position: absolute;
+    left: 25%;
+    bottom: 0;
+    background: linear-gradient(to bottom, #9C2542, #c5677e, #9C2542);
+    text-align: center;
+    margin: 20px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.monNom {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mesCartes {
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.monLabel {
+    height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.mesCartes .carte:hover {
+    border: 1px solid black;
+}
