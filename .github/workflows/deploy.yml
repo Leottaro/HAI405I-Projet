@@ -1,0 +1,25 @@
+name: Deploy to Breadberry Pi
+
+on:
+    push:
+        branches:
+            - main
+
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+
+    deploy:
+        runs-on: self-hosted
+        needs: build
+
+        steps:
+            - name: Stop client & server
+              run: echo TODO
+
+            - name: Start client & server
+              run: echo TODO
