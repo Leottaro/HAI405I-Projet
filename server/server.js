@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 
 const port = process.env.HAI405I_PORT || 3001;
 
-io.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`server running on port http://localhost:${port}/`);
 });
 
