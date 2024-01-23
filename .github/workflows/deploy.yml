@@ -27,4 +27,4 @@ jobs:
             - name: Start client & server
               run: |
                   pm2 start HAI405I-BACK
-                  cd client && pnpm run serve
+                  cd client && pnpm run serve &
