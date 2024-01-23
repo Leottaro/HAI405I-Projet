@@ -110,7 +110,7 @@
 }
 
 #Messages {
-    width: 100%;
+    width: 90%;
     margin-top: 1rem;
 
     overflow-y: scroll;
@@ -121,12 +121,12 @@
 }
 
 .Msg {
-    width: 95%;
-    margin: 0rem 0rem 1rem 0rem;
-    padding: 0.25rem;
+    width: 75%;
+    margin: 0rem auto 1rem 0rem;
+    padding: 0.5rem;
 
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 0.5rem;
+    background-color: #ddd;
 
     display: flex;
     flex-direction: column;
@@ -135,9 +135,24 @@
 .Msg .auteur {
     font-size: 1.25rem;
     font-weight: bold;
+    color: #222;
 }
 
 .Msg .contenu {
     font-size: 1rem;
     word-wrap: break-word;
+    color: #222;
+}
+
+.Msg.mien {
+    margin: 0rem 0rem 1rem auto;
+    background-color: #6d44b8;
+}
+
+.Msg.mien .auteur {
+    color: #EEE;
+}
+
+.Msg.mien .contenu {
+    color: #EEE;
 }

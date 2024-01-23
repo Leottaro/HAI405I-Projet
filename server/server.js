@@ -223,10 +223,34 @@ io.on("connection", function (socket) {
         if (jeux.start()) {
             resPlayers(code);
             resPlateau(code);
+            if (jeux.nomJeux == "sixQuiPrend") {
+                // définit la fonction exécutée quand le round prends trop de temps
+                jeux.setRoundCallback(() => {
+                    for (const playerID of jeux.playersIDs) {
+                        if (!jeux.choosed[playerID]) {
+                            const i = Math.floor(Math.random() * jeux.paquets[playerID].length);
+                            jeux.coup(playerID, jeux.paquets[playerID][i]);
+                        }
+                    }
+                    jeux.nextRound();
+                    resPlayers(code);
+                    resPlateau(code);
+                    jeux.playChoiceTimeout(SixQuiPrend.choiceDelay)
+                });
+                jeux.playRoundInterval(SixQuiPrend.roundDelay);
+
+                // supprimer puis recréer le timeout du choix des cartes
+                jeux.setChoiceCallback(() => {
+                    jeux.playRoundInterval(SixQuiPrend.roundDelay);
+                    jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
+                    resPlayers(code);
+                    resPlateau(code);
+                });
+            }
         }
     });
 
-    socket.on("reqCoup", carte => {
+    socket.on("reqCoup", async carte => {
         if (!sockets[socket.id]) {
             return;
         }
@@ -239,15 +263,23 @@ io.on("connection", function (socket) {
         resPlayers(code);
         resPlateau(code);
         if (jeux.everyonePlayed()) {
-            setTimeout(() => {
-                if (jeux.nextRound()) {
-                    resPlayers(code);
-                    resPlateau(code);
-                    if (jeux.ended) {
-                        io.in(code).emit("Victoire", sockets[jeux.enLice[0]].compte);
-                    }
+            await new Promise(r => setTimeout(r, 1000));
+            let res = jeux.nextRound();
+            if (res == 1) {
+                resPlayers(code);
+                resPlateau(code);
+                if (jeux.ended) {
+                    io.in(code).emit("Victoire", sockets[jeux.enLice[0]].compte);
                 }
-            }, 1000);
+            } else if (res == 2) {
+                if (jeux.nomJeux == "sixQuiPrend" && res == 1) {
+                    jeux.playChoiceTimeout(SixQuiPrend.choiceDelay);
+                }
+            }
+            
+            if (jeux.nomJeux == "sixQuiPrend") {
+                jeux.playRoundInterval(SixQuiPrend.roundDelay);
+            }
         }
     });
 

@@ -1,6 +1,8 @@
 const Carte = require("./Carte");
 
 class SixQuiPrend {
+    static choiceDelay = 3000;
+    static roundDelay = 30000;
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers) {
@@ -18,9 +20,34 @@ class SixQuiPrend {
         this.plateau = [[], [], [], []];
         this.scores = {};
         this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+        this.roundInterval;
+        this.roundCallback;
+        this.choiceTimeout;
+        this.choiceCallback;
 
         this.addPlayer(creatorID);
     }
+
+    setRoundCallback(callback) {
+        this.roundCallback = callback;
+    }
+    playRoundInterval(delay) {
+        clearInterval(this.roundInterval);
+        this.roundInterval = setInterval(this.roundCallback, delay);
+    }
+
+    setChoiceCallback(callback) {
+        this.choiceCallback = callback;
+    }
+    playChoiceTimeout(delay) {
+        clearTimeout(this.choiceTimeout);
+        this.choiceTimeout = setTimeout(this.choiceCallback, delay);
+    }
+
+    // setChoiceTimeout(callback, delay) {
+    //     clearTimeout(this.choiceTimeout);
+    //     this.choiceTimeout = setTimeout(callback, delay);
+    // }
 
     hasStarted() {
         return this.started;
@@ -118,9 +145,9 @@ class SixQuiPrend {
         return score;
     }
 
-    nextRound() {
+    nextRound() { // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
         if (this.ended || !this.everyonePlayed() || this.leJoueurQuiAMisUneCarteTropPetiteAvantLà) {
-            return false;
+            return 0;
         }
         const players = this.playersIDs.sort((id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur);
         for (const playerID of players) {
@@ -138,7 +165,7 @@ class SixQuiPrend {
             }
             if (!biggest.ligne) {
                 this.leJoueurQuiAMisUneCarteTropPetiteAvantLà = playerID;
-                return;
+                return 2;
             }
             if (this.plateau[biggest.ligne].length == 5) {
                 for (const carte of this.plateau[biggest.ligne]) {
@@ -159,11 +186,11 @@ class SixQuiPrend {
         if (this.playersIDs.map(id => this.scores[id]).some(score => score >= 66)) {
             this.ended = true;
         }
-        return true;
+        return 1;
     }
 
     prends(playerID, ligne) {
-        if (this.leJoueurQuiAMisUneCarteTropPetiteAvantLà !== playerID || ligne < 0 || ligne > 3) {
+        if (!this.leJoueurQuiAMisUneCarteTropPetiteAvantLà || this.leJoueurQuiAMisUneCarteTropPetiteAvantLà !== playerID || ligne < 0 || ligne > 3) {
             return false;
         }
         for (const carte of this.plateau[ligne]) {
