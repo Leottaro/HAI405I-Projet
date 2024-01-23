@@ -26,5 +26,5 @@ jobs:
         steps:
             - name: Start client & server
               run: |
-                  cd client && serve -s build -l 9090
                   pm2 start HAI405I-BACK
+                  cd client && serve -s build -l 9090
