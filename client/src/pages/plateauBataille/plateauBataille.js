@@ -6,6 +6,7 @@ import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import './plateauBataille.css';
 import { useParams } from "react-router-dom";
+import NavProfil from "../../component/NavProfil/NavProfil";
 
 function PlateauBataille() {
     const { code } = useParams();
@@ -48,6 +49,7 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
+            <NavProfil></NavProfil>
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}

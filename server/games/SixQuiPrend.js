@@ -1,8 +1,8 @@
 const Carte = require("./Carte");
 
 class SixQuiPrend {
-    static choiceDelay = 3000;
-    static roundDelay = 30000;
+    static choiceDelay = 1000;
+    static roundDelay = 10000000;
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers) {
@@ -10,13 +10,12 @@ class SixQuiPrend {
         this.url = "/plateauSix" + "/" + lien;
         this.started = false;
         this.ended = false;
-
+        this.winner;
         this.maxPlayers = maxPlayers;
         this.playersIDs = [];
-
         this.paquets = {};
-
         this.choosed = {};
+
         this.plateau = [[], [], [], []];
         this.scores = {};
         this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
@@ -43,11 +42,6 @@ class SixQuiPrend {
         clearTimeout(this.choiceTimeout);
         this.choiceTimeout = setTimeout(this.choiceCallback, delay);
     }
-
-    // setChoiceTimeout(callback, delay) {
-    //     clearTimeout(this.choiceTimeout);
-    //     this.choiceTimeout = setTimeout(callback, delay);
-    // }
 
     hasStarted() {
         return this.started;
@@ -183,8 +177,12 @@ class SixQuiPrend {
             this.start();
         }
 
-        if (this.playersIDs.map(id => this.scores[id]).some(score => score >= 66)) {
+        if (this.playersIDs.some(id => this.scores[id] >= 66)) {
             this.ended = true;
+            this.winner = this.playersIDs.sort((id1, id2) => this.scores[id1] - this.scores[id2])[0];
+            this.paquets = this.paquets.map(p => []);
+            this.choosed = {};
+            this.plateau = [[], [], [], []];
         }
         return 1;
     }

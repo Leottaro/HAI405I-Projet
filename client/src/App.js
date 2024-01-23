@@ -3,7 +3,8 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import socket, { account } from "./socket";
 import './App.css';
 
-const Connection = lazy(() => import("./pages/connection/Connection"));
+const Profil = lazy(() => import("./pages/profil/profil"));
+const Connection = lazy(() => import("./pages/connection/connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
 const CreerRejoindre = lazy(() => import("./pages/creerRejoindre/creerRejoindre"));
 const PlateauBataille = lazy(() => import("./pages/plateauBataille/plateauBataille"));
@@ -25,6 +26,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/profil" element={<Profil/>} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
       <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
