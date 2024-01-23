@@ -29,4 +29,4 @@ jobs:
                   export HAI405I_HOST=http://bottle.laboulangerie.net:4242
                   export HAI405I_PORT=4242
                   pm2 start HAI405I-BACK
-                  cd client && npm run serve &
+                  cd client && RUNNER_TRACKING_ID="" && npm run serve &
