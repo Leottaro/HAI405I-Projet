@@ -26,7 +26,6 @@ function CreerRejoindre(params) {
             clearInterval(rejoindreClock);
             clearInterval(mesPartiesClock);
         }
-        // eslint-disable-next-line
     }, [mode]);
 
     function creer() {

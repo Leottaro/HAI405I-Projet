@@ -54,15 +54,15 @@ function PlateauBataille() {
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
-            <div id="tapis">
-                {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
-            </div>
-            <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />
             <div id="divStart">
                 <h2 className="code">code de la partie:</h2>
                 <h2 className="code">{code}</h2>
                 <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
                 <button hidden={!afficheSave} id="save" onClick={save}>save</button>
+            </div>
+            <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />
+            <div id="choisie">
+                {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
             </div>
             <Chat />
         </div>

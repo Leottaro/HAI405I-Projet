@@ -22,7 +22,6 @@ function App() {
       setTimeout(() => navigate("/Connection"), 10);
     }
     document.title = location.pathname.split('/')[1];
-    // eslint-disable-next-line
   }, [location]);
 
   return (
