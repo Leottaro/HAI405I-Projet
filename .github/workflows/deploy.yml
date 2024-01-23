@@ -15,9 +15,9 @@ jobs:
             - name: Build client & server
               run: | # CI=false to ignore warnings and not fail the build
                   export CI=false 
-                  cd client && npm install && npm run build
+                  cd client && pnpm install && pnpm run build
                   cd ..
-                  cd server && npm install
+                  cd server && pnpm install
                   cd ..
 
     deploy:
@@ -26,7 +26,5 @@ jobs:
         steps:
             - name: Start client & server
               run: |
-                  export HAI405I_HOST=http://bottle.laboulangerie.net:4242
-                  export HAI405I_PORT=4242
                   pm2 start HAI405I-BACK
-                  cd client && RUNNER_TRACKING_ID="" && npm run serve &
+                  cd client && RUNNER_TRACKING_ID="" && pnpm run serve
