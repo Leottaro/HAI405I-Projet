@@ -10,7 +10,8 @@ function NavProfil(){
     }
     return (
     <div id="navProfil">
-        <button onClick={goToProfil}>Profil</button>
+        <button id="buttonProfil" onClick={goToProfil}>Profil</button>
+        <img src="../../../public/Assets/FaceCachee.png"></img>
     </div>
 )
 } 

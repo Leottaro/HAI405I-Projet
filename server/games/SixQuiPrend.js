@@ -181,7 +181,7 @@ class SixQuiPrend {
         if (this.playersIDs.some(id => this.scores[id] >= 66)) {
             this.ended = true;
             this.winner = this.playersIDs.sort((id1, id2) => this.scores[id1] - this.scores[id2])[0];
-            this.paquets = this.paquets.map(p => []);
+            Object.keys(this.paquets).forEach(playerID => this.paquets[playerID] = []);
             this.choosed = {};
             this.plateau = [[], [], [], []];
         }
