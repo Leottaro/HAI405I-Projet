@@ -98,6 +98,7 @@ class SixQuiPrend {
                 this.paquets[playerID].push(Cartes[n]);
                 n++;
             }
+            this.paquets[playerID] = this.paquets[playerID].sort((carteA, carteB) => carteA.valeur - carteB.valeur);
         }
         for (const paquet of this.plateau) {
             paquet.push(Cartes[n]);
