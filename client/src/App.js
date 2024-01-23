@@ -4,7 +4,7 @@ import socket, { account } from "./socket";
 import './App.css';
 
 const Profil = lazy(() => import("./pages/profil/profil"));
-const Connection = lazy(() => import("./pages/connection/Connection"));
+const Connection = lazy(() => import("./pages/connection/connection"));
 const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
 const CreerRejoindre = lazy(() => import("./pages/creerRejoindre/creerRejoindre"));
 const PlateauBataille = lazy(() => import("./pages/plateauBataille/plateauBataille"));
@@ -41,5 +41,3 @@ window.addEventListener("beforeunload", function () {
 });
 
 export default App;
-
-//oaehfiuabepjaeB¨BH  EPFB

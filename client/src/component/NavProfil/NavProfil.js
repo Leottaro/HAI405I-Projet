@@ -1,4 +1,4 @@
-import './navProfil.css';
+import './NavProfil.css';
 import { useNavigate } from "react-router-dom";
 
 function NavProfil(){

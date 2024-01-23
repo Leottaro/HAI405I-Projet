@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Creer from "./creer";
 import Rejoindre from "./rejoindre";
 import MesParties from "./mesParties";
-import NavProfil from "../../component/navProfil/navProfil";
+import NavProfil from "../../component/NavProfil/NavProfil";
 
 function CreerRejoindre(params) {
     const { jeux } = useParams();

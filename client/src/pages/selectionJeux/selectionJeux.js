@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './selectionJeux.css';
 import sixQuiPrend from './sixQuiPrend.jpg'
 import bataille from './bataille.png'
-import NavProfil from "../../component/navProfil/navProfil";
+import NavProfil from "../../component/NavProfil/NavProfil";
 
 function SelectionJeux() {
     const [i, setI] = useState(0);

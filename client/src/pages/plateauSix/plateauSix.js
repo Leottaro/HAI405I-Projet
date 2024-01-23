@@ -6,7 +6,7 @@ import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import './plateauSix.css';
 import { useParams } from "react-router-dom";
-import NavProfil from "../../component/navProfil/navProfil";
+import NavProfil from "../../component/NavProfil/NavProfil";
 
 function PlateauSix() {
     const { code } = useParams();

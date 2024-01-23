@@ -1,4 +1,4 @@
-import "./Connection.css";
+import "./connection.css";
 import { useState } from "react";
 import socket from "../../socket";
 
