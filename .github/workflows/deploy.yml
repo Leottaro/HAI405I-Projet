@@ -27,4 +27,4 @@ jobs:
             - name: Start client & server
               run: |
                   pm2 start HAI405I-BACK
-                  cd client && serve -s build -l 9090
+                  cd client && pnpm run serve
