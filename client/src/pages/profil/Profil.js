@@ -1,5 +1,5 @@
 import socket, { account } from "../../socket";
-import "./Profil.css";
+import "./profil.css";
 import { useEffect, useState } from "react";
 
 function Profil(){
