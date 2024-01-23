@@ -269,14 +269,14 @@ io.on("connection", function (socket) {
                 resPlayers(code);
                 resPlateau(code);
                 if (jeux.ended) {
-                    io.in(code).emit("Victoire", sockets[jeux.enLice[0]].compte);
+                    io.in(code).emit("Victoire", sockets[jeux.winner].compte);
                 }
             } else if (res == 2) {
-                if (jeux.nomJeux == "sixQuiPrend" && res == 1) {
+                if (jeux.nomJeux == "sixQuiPrend") {
                     jeux.playChoiceTimeout(SixQuiPrend.choiceDelay);
                 }
             }
-            
+
             if (jeux.nomJeux == "sixQuiPrend") {
                 jeux.playRoundInterval(SixQuiPrend.roundDelay);
             }
@@ -316,5 +316,8 @@ io.on("connection", function (socket) {
         }
         resPlayers(code);
         resPlateau(code);
+        if (jeux.ended) {
+            io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+        }
     });
 });

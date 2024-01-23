@@ -8,16 +8,14 @@ class Bataille {
         this.url = "/plateauBataille" + "/" + lien;
         this.started = false;
         this.ended = false;
-
+        this.winner;
         this.maxPlayers = maxPlayers;
         this.playersIDs = [];
+        this.paquets = {};
+        this.choosed = {};
+
         this.enLice = [];
         this.tempCartes = [];
-
-        this.paquets = {};
-
-        this.round = 0;
-        this.choosed = {};
 
         this.addPlayer(creatorID);
     }
@@ -132,12 +130,12 @@ class Bataille {
             this.enLice = sortedChoosed.slice(0, nbEgalite);
             return this.nextRound();
         }
+        this.ended = this.enLice.length <= 1;
+        this.winner = this.enLice[0];
+        this.choosed = {};
         this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes));
         this.tempCartes = [];
-        this.choosed = {};
-        this.round++;
         this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
-        this.ended = this.enLice.length <= 1;
         return 1;
     }
 }
