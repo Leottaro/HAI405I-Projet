@@ -1,12 +1,26 @@
 #selectionJeuxDiv {
-    display:flex;
     height: 95vh;
-    justify-content: center;
-    align-items: center;
 }
+
+#img{
+    transition: all 250ms;
+}
+#droite{
+    position: absolute;
+    bottom: calc(50vh - 15px);
+    right: calc(50vw - 200px);
+}
+
+#gauche{
+    position: absolute;
+    bottom: calc(50vh - 15px);
+    left: calc(50vw - 200px);
+}
+
 
 .selectionJeuxButton {
     width: 30px;
+    height: 30px;
     font-size: larger;
     text-align: center;
     background-color: #0b082e;
@@ -17,7 +31,32 @@
     padding-bottom: 7px;
     margin: 10px;
 }
-.img {
+.center {
     width: 300px;
     height: 300px;
+    border-radius: 20px;
+    position: absolute;
+    right: calc(50vw - 150px);
+    top: calc(50vh - 150px);
+    opacity: 1;
+}
+
+.droite {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    position: absolute;
+    opacity: 0;
+    top: calc(50vh - 150px);
+    right: calc(40vw - 150px);
+}
+
+.gauche {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    position: absolute;
+    opacity: 0;
+    top: calc(50vh - 150px);
+    right: calc(60vw - 150px);
 }
