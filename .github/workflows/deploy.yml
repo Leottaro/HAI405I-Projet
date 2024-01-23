@@ -1,0 +1,30 @@
+name: Deploy to Breadberry Pi
+
+on:
+    push:
+        branches:
+            - main
+    # You can deploy on any branch if needed in the Actions tab
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v3
+            - name: Build client & server
+              run: | # CI=false to ignore warnings and not fail the build
+                  export CI=false 
+                  cd client && pnpm install && pnpm run build
+                  cd ..
+                  cd server && pnpm install
+                  cd ..
+
+    deploy:
+        runs-on: self-hosted
+        needs: build
+        steps:
+            - name: Start client & server
+              run: |
+                  pm2 start HAI405I-BACK
+                  cd client && serve -s build -l 9090
