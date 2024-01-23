@@ -109,9 +109,9 @@ class Bataille {
         return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.enLice.includes(playerID));
     }
 
-    nextRound() {
+    nextRound() { // return 0 si il y a un problème, 1 si tout va bien
         if (this.ended || !this.everyonePlayed()) {
-            return false;
+            return 0;
         }
         let winner;
         let sortedChoosed = this.enLice.sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
@@ -138,7 +138,7 @@ class Bataille {
         this.round++;
         this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
         this.ended = this.enLice.length <= 1;
-        return true;
+        return 1;
     }
 }
 module.exports = Bataille;

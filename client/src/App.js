@@ -20,6 +20,7 @@ function App() {
     if (location.pathname !== "/Connection" && !account) {
       setTimeout(() => navigate("/Connection"), 10);
     }
+    document.title = location.pathname.split('/')[1];
     // eslint-disable-next-line
   }, [location]);
 

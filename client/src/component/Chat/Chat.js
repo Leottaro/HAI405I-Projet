@@ -51,7 +51,7 @@ function Chat() {
                 </div>
                 <div id="Messages" ref={MessagesRef}>
                     {listeMsg.map((msg, index) => (
-                        <div className="Msg" key={index}>
+                        <div className={"Msg" + (msg.pseudo === account ? " mien" : "")} key={index}>
                             <label className="auteur">{msg.pseudo + " :"}</label>
                             <label className="contenu">{msg.msg}</label>
                         </div>
