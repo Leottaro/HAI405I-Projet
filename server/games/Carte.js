@@ -29,8 +29,8 @@ class Carte {
     }
 
     static sort(carte1, carte2, AsFort) { // adFort est un boolean qui placera le roi à la fin ou au début
-        const valeur1 = Carte.valeurs.indexOf(carte1.valeur);
-        const valeur2 = Carte.valeurs.indexOf(carte2.valeur);
+        const valeur1 = Carte.valeurs.indexOf(carte1.valeur) + Carte.types.indexOf(carte1.type) / 10;
+        const valeur2 = Carte.valeurs.indexOf(carte2.valeur) + Carte.types.indexOf(carte2.type) / 10;
         return AsFort ? valeur2 - valeur1 : (valeur2 + 1) % Carte.valeurs.length - (valeur1 + 1) % Carte.valeurs.length;
     }
 }
