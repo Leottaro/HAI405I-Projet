@@ -58,8 +58,10 @@ app.get("/", (req, res) => {
     res.send("<h1>voici le serveur</h1>");
 });
 
-io.listen(3001, () => {
-    console.log("server running on port http://localhost:3001/");
+const port = process.env.HAI405I_PORT || 3001;
+
+io.listen(port, () => {
+    console.log(`server running on port http://localhost:${port}/`);
 });
 
 const sockets = {}; // clef: socket.id              valeur: {compte, code}

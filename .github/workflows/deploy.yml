@@ -27,5 +27,6 @@ jobs:
             - name: Start client & server
               run: |
                   export HAI405I_HOST=http://bottle.laboulangerie.net:4242
+                  export HAI405I_PORT=4242
                   pm2 start HAI405I-BACK
                   cd client && pnpm run serve &
