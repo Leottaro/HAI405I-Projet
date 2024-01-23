@@ -13,15 +13,6 @@
     align-items: top;
 }
 
-#tapis {
-    width: 100vw;
-    height: calc(100vh - 470px);
-
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
-
 #start {
     width: 100px;
     height: 30px;
@@ -78,4 +69,10 @@
 .code {
     color: white;
     margin: 8px;
+}
+
+#choisie {
+    position: absolute;
+    right: 10vw;
+    bottom: 5vh;
 }
