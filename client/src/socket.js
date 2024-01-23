@@ -1,8 +1,8 @@
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect(process.env.HAI405I_HOST || "http://localhost:3001");
 export default socket;
 
 export let account;
-socket.on("resAccount", pseudo => {
+socket.on("resAccount", (pseudo) => {
     account = pseudo;
 });
