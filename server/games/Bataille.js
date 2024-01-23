@@ -89,6 +89,7 @@ class Bataille {
         this.started = true;
         for (const playerID of this.playersIDs) {
             delete this.choosed[playerID];
+            this.paquets[playerID] = this.paquets[playerID].sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
         }
         return true;
     }
@@ -131,9 +132,12 @@ class Bataille {
             return this.nextRound();
         }
         this.ended = this.enLice.length <= 1;
-        this.winner = this.enLice[0];
+        if (this.ended) {
+            this.winner = winner;
+        }
+        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes))
+            .sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
         this.choosed = {};
-        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes));
         this.tempCartes = [];
         this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
         return 1;
