@@ -1,8 +1,8 @@
 const Carte = require("./Carte");
 
 class SixQuiPrend {
-    static choiceDelay = 1000;
-    static roundDelay = 10000000;
+    static choiceDelay = 5000;
+    static roundDelay = 30000;
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers) {
