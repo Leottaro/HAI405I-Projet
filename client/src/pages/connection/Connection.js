@@ -25,13 +25,13 @@ function Connection() {
     });
 
     return (
-        <div id="connectionDiv">
-            <label id="connectionLabel" aria-hidden="true">Bienvenue</label>
+        <div id="Div">
+            <label id="Title" aria-hidden="true">Bienvenue</label>
             <label id="message">{message}</label>
-            <input className="connectionInput" placeholder="Entrez un nom" type="text" onChange={(event) => { setPseudo(event.target.value) }}></input>
-            <input className="connectionInput" placeholder="Entrez le mot de passe" type="password" onChange={(event) => { setPassword(event.target.value) }}></input>
-            <button className="connectionButton" onClick={connect}>Se connecter</button>
-            <button className="connectionButton" onClick={signIn}>S'inscrire</button>
+            <input className="Input" placeholder="Entrez un nom" type="text" onChange={(event) => { setPseudo(event.target.value) }}></input>
+            <input className="Input" placeholder="Entrez le mot de passe" type="password" onChange={(event) => { setPassword(event.target.value) }}></input>
+            <button className="Button" onClick={connect}>Se connecter</button>
+            <button className="Button" onClick={signIn}>S'inscrire</button>
         </div>
     );
 }

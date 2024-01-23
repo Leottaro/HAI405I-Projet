@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-#connectionDiv {
+#Div {
     width: 350px;
     height: 500px;
     border-radius: 10px;
@@ -19,7 +19,7 @@
     align-items: center;
 }
 
-#connectionLabel {
+#Title {
     color: #fff;
     font-size: 2.3em;
     padding: 0px 0px 30px 0px;
@@ -33,29 +33,28 @@
     margin: 5px;
 }
 
-.connectionInput {
+.Input,
+.Button {
     width: 60%;
-    height: 20px;
-    background: #e0dede;
-    margin: 5px auto 15px auto;
-    padding: 10px;
-    border: none;
+    height: 2.5rem;
+    margin: 0.5rem auto 1rem auto;
     outline: none;
+    border: none;
     border-radius: 5px;
+    padding: 10px;
 }
 
-.connectionButton {
-    width: 60%;
-    height: 40px;
-    margin: 5px auto 15px auto;
-    color: #fff;
+.Input {
+    background: #e0dede;
+}
+
+.Button {
     background: #573b8a;
+    color: #fff;
     font-size: 1em;
     font-weight: bold;
-    border: none;
-    border-radius: 5px;
 }
 
-.connectionButton:hover {
+.Button:hover {
     background: #6d44b8;
 }
