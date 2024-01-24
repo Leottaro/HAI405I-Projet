@@ -146,6 +146,9 @@ io.on("connection", function (socket) {
     // CREER
 
     socket.on("reqCreate", async json => {
+        if(!sockets[socket.id]){
+            return;
+        }
         const nbrJoueursMax = json.nbrJoueursMax;
         const jeux = listeJeux[json.jeux];
         if (!jeux) {
@@ -357,4 +360,17 @@ io.on("connection", function (socket) {
             }
         });
     }
+
+    // Profil
+
+    socket.on("reqProfilStat", async () => {
+        if(!sockets[socket.id]){
+            return;
+        }
+        const [err, rows] = await sqlRequest(`SELECT nomJeux, place FROM aJoue, partieFinie 
+        WHERE codeR=code
+        AND nom="${sockets[socket.id].compte}"`);
+        console.log("rows : ", rows);
+        socket.emit("resProfilStat", rows);
+    })
 });
