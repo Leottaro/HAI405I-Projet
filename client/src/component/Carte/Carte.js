@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
+import './Carte.css';
 
 function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
     const [chemin, setChemin] = useState("");
@@ -23,7 +24,7 @@ function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.
     }
 
     return (
-        <img className="carte" height={"100"} width={"70"} onClick={carteClick} src={"../../Assets/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
+        <img className="carte" onClick={carteClick} src={"../../Assets/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
     );
 }
 export default Carte;
