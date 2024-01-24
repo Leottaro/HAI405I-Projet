@@ -1,11 +1,11 @@
 const Carte = require("./Carte");
 
 class SixQuiPrend {
-    static choiceDelay = 5000;
-    static roundDelay = 30000;
+    static roundDelays = { min: 5, default: 30, max: 60 };
+    static choiceDelays = { min: 1, default: 5, max: 10 };
     static playersRange = [2, 10];
 
-    constructor(creatorID, lien, maxPlayers) {
+    constructor(creatorID, lien, maxPlayers, options) {
         this.nomJeux = "sixQuiPrend";
         this.url = "/plateauSix" + "/" + lien;
         this.started = false;
@@ -19,8 +19,10 @@ class SixQuiPrend {
         this.plateau = [[], [], [], []];
         this.scores = {};
         this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+        this.roundDelay = options ? options.roundDelay * 1000 : undefined;
         this.roundInterval;
         this.roundCallback;
+        this.choiceDelay = options ? options.choiceDelay * 1000 : undefined;
         this.choiceTimeout;
         this.choiceCallback;
 
@@ -30,17 +32,21 @@ class SixQuiPrend {
     setRoundCallback(callback) {
         this.roundCallback = callback;
     }
-    playRoundInterval(delay) {
+    playRoundInterval() {
         clearInterval(this.roundInterval);
-        this.roundInterval = setInterval(this.roundCallback, delay);
+        if (this.roundDelay) {
+            this.roundInterval = setInterval(this.roundCallback, this.roundDelay);
+        }
     }
 
     setChoiceCallback(callback) {
         this.choiceCallback = callback;
     }
-    playChoiceTimeout(delay) {
+    playChoiceTimeout() {
         clearTimeout(this.choiceTimeout);
-        this.choiceTimeout = setTimeout(this.choiceCallback, delay);
+        if (this.choiceDelay) {
+            this.choiceTimeout = setTimeout(this.choiceCallback, this.choiceDelay);
+        }
     }
 
     hasStarted() {

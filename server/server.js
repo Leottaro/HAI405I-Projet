@@ -163,7 +163,7 @@ io.on("connection", function (socket) {
             [err, rows] = await sqlRequest(`SELECT * FROM partie where code="${code}"`);
         } while (parties[json.code] || err || rows.length > 0);
 
-        parties[code] = new jeux(socket.id, code, nbrJoueursMax);
+        parties[code] = new jeux(socket.id, code, nbrJoueursMax, json.options);
         sockets[socket.id].partie = code;
 
         socket.join(code);
@@ -219,6 +219,12 @@ io.on("connection", function (socket) {
 
     // JEUX
 
+    socket.on("reqGamesInfos", jeux => {
+        if (jeux === "sixQuiPrend") {
+            socket.emit("resGamesInfos", { roundDelays: SixQuiPrend.roundDelays, choiceDelays: SixQuiPrend.choiceDelays });
+        }
+    });
+
     function resPlayers(code) {
         if (!parties[code]) return;
         const jeux = parties[code];
@@ -258,13 +264,13 @@ io.on("connection", function (socket) {
                     jeux.nextRound();
                     resPlayers(code);
                     resPlateau(code);
-                    jeux.playChoiceTimeout(SixQuiPrend.choiceDelay)
+                    jeux.playChoiceTimeout()
                 });
-                jeux.playRoundInterval(SixQuiPrend.roundDelay);
+                jeux.playRoundInterval();
 
                 // supprimer puis recréer le timeout du choix des cartes
                 jeux.setChoiceCallback(() => {
-                    jeux.playRoundInterval(SixQuiPrend.roundDelay);
+                    jeux.playRoundInterval(jeux.roundDelay);
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);

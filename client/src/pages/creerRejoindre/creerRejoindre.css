@@ -29,9 +29,9 @@
 
 .CRButton {
     width: 50%;
-    height: 40px;
+    height: 5vh;
     color: #fff;
-    font-size: 1em;
+    font-size: 2vh;
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -131,4 +131,14 @@
     border-radius: 5px;
     color: #dedede;
     background: #444;
+}
+
+#ParametersDiv {
+    width: 90%;
+    height: 10vh;
+    margin: 2vh auto 2vh auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
