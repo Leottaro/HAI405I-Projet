@@ -7,6 +7,7 @@ import Carte from "../../component/Carte/Carte";
 import './plateauBataille.css';
 import { useParams } from "react-router-dom";
 import NavProfil from "../../component/NavProfil/NavProfil";
+import Start from "../../component/Start/Start";
 
 function PlateauBataille() {
     const { code } = useParams();
@@ -49,22 +50,17 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
-            <NavProfil></NavProfil>
+            <NavProfil/>
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
-            <div id="divStart">
-                <h2 className="code">code de la partie:</h2>
-                <h2 className="code">{code}</h2>
-                <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
-                <button hidden={!afficheSave} id="save" onClick={save}>save</button>
-            </div>
+            <Start afficheStart={afficheStart} afficheSave={afficheSave} code={code} start={start} save={save} />
             <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
             </div>
-            <Chat />
+            <Chat/>
         </div>
     );
 }

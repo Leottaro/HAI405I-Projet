@@ -7,6 +7,7 @@ import Carte from "../../component/Carte/Carte";
 import './plateauSix.css';
 import { useParams } from "react-router-dom";
 import NavProfil from "../../component/NavProfil/NavProfil";
+import Start from "../../component/Start/Start";
 
 function PlateauSix() {
     const { code } = useParams();
@@ -63,12 +64,7 @@ function PlateauSix() {
                     listePlateau.map((liste, index) => <div className="ligne" onClick={() => socket.emit("reqSixPrends", index)}>{liste.map(json => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}</div>)
                 }
             </div>
-            <div id="divStart">
-                <h2 className="code">code de la partie:</h2>
-                <h2 className="code">{code}</h2>
-                <button hidden={!afficheStart} id="start" onClick={start}>commencer</button>
-                <button hidden={!afficheSave} id="save" onClick={save}>save</button>
-            </div>
+            <Start afficheStart={afficheStart} afficheSave={afficheSave} code={code} start={start} save={save} />
             <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} texte={moi.score + " têtes de boeuf"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesSix/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
