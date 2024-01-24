@@ -11,7 +11,7 @@ function NavProfil(){
     return (
     <div id="navProfil">
         <button id="buttonProfil" onClick={goToProfil}>Profil</button>
-        <img src="../../../public/Assets/FaceCachee.png"></img>
+        {/*<img className="imgProfil" src="Assets/FaceCachee.png"></img>*/}
     </div>
 )
 } 
