@@ -39,6 +39,23 @@ const database = new sqlite3.Database("./databases/HAI405I.db", async err => {
             FOREIGN KEY(createur) REFERENCES account(pseudo)
         );
     `);
+    database.run(`
+        CREATE TABLE IF NOT EXISTS partieFinie (
+            code TEXT NOT NULL, 
+            nomJeux TEXT NOT NULL,
+            PRIMARY KEY (code)
+        );
+    `);
+    database.run(`
+        CREATE TABLE IF NOT EXISTS aJoue (
+            codeR TEXT NOT NULL, 
+            nom TEXT NOT NULL,
+            place INT NOT NULL,
+            PRIMARY KEY (codeR,nom),
+            FOREIGN KEY(nom) REFERENCES account(pseudo),
+            FOREIGN KEY(codeR) REFERENCES partieFinie(code)
+        );
+    `);
     console.log("Database started on ./databases/HAI405I.db");
 });
 
@@ -272,7 +289,7 @@ io.on("connection", function (socket) {
                 resPlayers(code);
                 resPlateau(code);
                 if (jeux.ended) {
-                    io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+                    finJeux();
                 }
             } else if (res == 2) {
                 if (jeux.nomJeux == "sixQuiPrend") {
@@ -320,7 +337,24 @@ io.on("connection", function (socket) {
         resPlayers(code);
         resPlateau(code);
         if (jeux.ended) {
-            io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+            finJeux();
         }
     });
+
+    // Fin
+
+    async function finJeux(){
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+        database.run(`INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`);
+        jeux.playersIDs.forEach(id => {
+            if(id==jeux.winner){
+                database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`);
+            }
+            else{
+                database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`);
+            }
+        });
+    }
 });
