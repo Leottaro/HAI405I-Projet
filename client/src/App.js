@@ -26,7 +26,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/profil" element={<Profil/>} />
+      <Route path="/profil" element={<Profil />} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />
       <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
@@ -35,9 +35,5 @@ function App() {
     </Routes>
   );
 }
-
-window.addEventListener("beforeunload", function () {
-  socket.emit("reqLogOut");
-});
 
 export default App;

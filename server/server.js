@@ -52,6 +52,7 @@ async function sqlRequest(query, params) {
 
 const Bataille = require("./games/Bataille");
 const SixQuiPrend = require("./games/SixQuiPrend");
+const { log } = require("console");
 const listeJeux = { "bataille": Bataille, "sixQuiPrend": SixQuiPrend };
 
 app.get("/", (req, res) => {
@@ -107,7 +108,7 @@ io.on("connection", function (socket) {
 
     // AUTO DÉCONNECTION
 
-    socket.on("reqLogOut", () => {
+    socket.on("disconnect", () => {
         if (!sockets[socket.id]) {
             return;
         }
