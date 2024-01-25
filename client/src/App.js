@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import socket, { account } from "./socket";
 import './App.css';
 
@@ -22,9 +22,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (location.pathname !== "/Connection" && !account) {
-      navigate("/Connection");
-    }
     document.title = location.pathname.split('/')[1] || "Home";
   }, [location]);
 
@@ -36,6 +33,7 @@ function App() {
       <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
       <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
       <Route path="/plateauSix/:code" element={<PlateauSix />} />
+      <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
     </Routes>
   );
 }
