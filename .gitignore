@@ -4,6 +4,6 @@ client/build
 
 # Server
 server/node_modules
-*.db
+server/databases
 
 .DS_Store

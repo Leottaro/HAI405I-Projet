@@ -1,4 +1,5 @@
 require("dotenv").config();
+const CryptoJS = require("crypto-js");
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -13,10 +14,28 @@ const io = new Server(httpServer, {
     },
 });
 
+// Utility functions
+async function sqlRequest(query, params) {
+    return new Promise((resolve, reject) => {
+        database.all(query, params, (err, rows) => {
+            resolve([err, rows]);
+        });
+    });
+}
+function randomString(length, minCharCode, maxCharCode) {
+    const range = maxCharCode - minCharCode + 1;
+    return [...Array(length)].map(_ => String.fromCharCode(Math.floor(minCharCode + Math.random() * range))).join("");
+}
+
 // create database directory
 const fs = require("fs");
 if (!fs.existsSync("./databases")) {
     fs.mkdirSync("./databases");
+}
+
+// Create crypted key
+if (!fs.existsSync("./databases/.key")) {
+    fs.writeFileSync("./databases/.key", randomString(128, 33, 127));
 }
 
 // Create database
@@ -60,17 +79,8 @@ const database = new sqlite3.Database("./databases/HAI405I.db", async err => {
     console.log("Database started on ./databases/HAI405I.db");
 });
 
-async function sqlRequest(query, params) {
-    return new Promise((resolve, reject) => {
-        database.all(query, params, (err, rows) => {
-            resolve([err, rows]);
-        });
-    });
-}
-
 const Bataille = require("./games/Bataille");
 const SixQuiPrend = require("./games/SixQuiPrend");
-const { log } = require("console");
 const listeJeux = { "bataille": Bataille, "sixQuiPrend": SixQuiPrend };
 
 app.get("/", (req, res) => {
@@ -99,7 +109,9 @@ io.on("connection", function (socket) {
         if (rows.length != 0) {
             return socket.emit("resSignIn", { success: false, message: `${json.pseudo} is already taken !` });
         }
-        database.run(`INSERT INTO account(pseudo, password) VALUES ("${json.pseudo}", "${json.password}")`);
+        const cryptedPassword = CryptoJS.AES.encrypt(json.password, fs.readFileSync("./databases/.key").toString());
+
+        database.run(`INSERT INTO account(pseudo, password) VALUES ("${json.pseudo}", "${cryptedPassword}")`);
         sockets[socket.id] = { compte: json.pseudo };
 
         socket.emit("resSignIn", { success: true, message: `Successfully signIned user "${json.pseudo}" with socket ${socket.id}` });
@@ -115,7 +127,11 @@ io.on("connection", function (socket) {
         if (err) throw err;
         if (!rows) throw new Error("Problem with the database");
 
-        if (rows.length == 0 || json.password != rows[0].password) {
+        if (rows.length == 0) {
+            return socket.emit("resLogIn", { success: false, message: `wrong username or password !` });
+        }
+        const decryptedPassword = CryptoJS.AES.decrypt(rows[0].password, fs.readFileSync("./databases/.key").toString()).toString(CryptoJS.enc.Utf8);
+        if (json.password != decryptedPassword) {
             return socket.emit("resLogIn", { success: false, message: `wrong username or password !` });
         }
         sockets[socket.id] = { compte: json.pseudo };
@@ -128,7 +144,7 @@ io.on("connection", function (socket) {
     // AUTO DÉCONNECTION
 
     socket.on("disconnect", () => {
-        if (!sockets[socket.id]) { // TODO:
+        if (!sockets[socket.id]) {
             return;
         }
         const code = sockets[socket.id].partie;
@@ -161,7 +177,7 @@ io.on("connection", function (socket) {
         }
         let code, err, rows;
         do {
-            code = Math.floor(100000 + Math.random() * 899999).toString();
+            code = randomString(6, 48, 57);
             [err, rows] = await sqlRequest(`SELECT * FROM partie where code="${code}"`);
         } while (parties[json.code] || err || rows.length > 0);
 
