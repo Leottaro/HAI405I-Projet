@@ -59,7 +59,7 @@ class SixQuiPrend {
         }
         this.playersIDs.push(playerID);
         this.paquets[playerID] = [];
-        this.scores[playerID] = 0;
+        this.scores[playerID] = 65;
         return true;
     }
 
@@ -206,5 +206,7 @@ class SixQuiPrend {
         this.nextRound();
         return true;
     }
+
+    
 }
 module.exports = SixQuiPrend;

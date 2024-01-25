@@ -36,6 +36,7 @@ function PlateauSix() {
     });
 
     socket.on("Victoire", data => {
+        socket.emit("winSix",data);
         if (data === account) {
             setWinner("Vous avez Gagné !");
         }

@@ -380,5 +380,26 @@ io.on("connection", function (socket) {
         AND nom="${sockets[socket.id].compte}"`);
         console.log("rows : ", rows);
         socket.emit("resProfilStat", rows);
-    })
+    });
+
+    // scoreboard
+
+    socket.on("winSix",data => {
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        socket.emit("resGagnant",data);
+        socket.emit("listJoueur",jeux.playersIDs.map(id => sockets[id].compte));
+        socket.emit("scorePartie",Object.keys(jeux.scores).reduce((newScores, id) => {
+            newScores[sockets[id].compte] = jeux.scores[id];
+            return newScores;
+        }, {}));
+        socket.emit("goTo","/Score");
+    });
+
+    // rejouer
+
+    socket.on("restart",data => {
+        if (data==1){
+            socket.emit("goTo","/selectionJeux");
+        }});
 });

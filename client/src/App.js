@@ -9,6 +9,7 @@ import SelectionJeux from "./pages/selectionJeux/selectionJeux";
 import CreerRejoindre from "./pages/creerRejoindre/creerRejoindre";
 import PlateauBataille from "./pages/plateauBataille/plateauBataille";
 import PlateauSix from "./pages/plateauSix/plateauSix";
+import Score from "./pages/score/score";
 
 function App() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ function App() {
       <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
       <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
       <Route path="/plateauSix/:code" element={<PlateauSix />} />
+      <Route path="/Score" element={<Score />} />
       <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
     </Routes>
   );
