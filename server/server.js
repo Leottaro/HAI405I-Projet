@@ -85,7 +85,9 @@ httpServer.listen(port, () => {
 const sockets = {}; // clef: socket.id              valeur: {compte, code}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
+io.emit("goTo", "/")
 io.on("connection", function (socket) {
+    socket.emit("goTo", "/");
 
     // CONNECTION
 
@@ -126,7 +128,7 @@ io.on("connection", function (socket) {
     // AUTO DÉCONNECTION
 
     socket.on("disconnect", () => {
-        if (!sockets[socket.id]) {
+        if (!sockets[socket.id]) { // TODO:
             return;
         }
         const code = sockets[socket.id].partie;
@@ -134,7 +136,7 @@ io.on("connection", function (socket) {
         if (code && jeux) {
             jeux.removePlayer(socket.id);
             socket.leave(code);
-            if (jeux.playersIDs.length == 0) {
+            if (jeux.playersIDs.length < 2) {
                 delete parties[code];
             } else {
                 resPlayers(code);
