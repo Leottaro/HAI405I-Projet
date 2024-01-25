@@ -95,7 +95,7 @@ httpServer.listen(port, () => {
 const sockets = {}; // clef: socket.id              valeur: {compte, code}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
-io.emit("goTo", "/")
+io.emit("goTo", "/");
 io.on("connection", function (socket) {
     socket.emit("goTo", "/");
 
@@ -216,6 +216,23 @@ io.on("connection", function (socket) {
         setTimeout(() => resPlayers(code), 250);
     });
 
+    // LEAVE 
+
+    socket.on("reqLeave", () => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (!jeux) {
+            return;
+        }
+        jeux.removePlayer(socket.id);
+        if (jeux.playersIDs.length < 2) {
+            delete parties[code];
+        }
+    });
+
     // MY GAMES
 
     socket.on("reqMyGames", async jeux => {
@@ -292,8 +309,7 @@ io.on("connection", function (socket) {
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);
-                    if (jeux.ended && sockets[socket.id]){
-
+                    if (jeux.ended && sockets[socket.id]) {
                         const code = sockets[socket.id].partie;
                         const jeux = parties[code];
                         io.in(code).emit("Victoire", sockets[jeux.winner].compte);
@@ -405,27 +421,20 @@ io.on("connection", function (socket) {
 
     // scoreboard
 
-    socket.on("winSix",data => {
+    socket.on("winSix", data => {
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        socket.emit("resGagnant",data);
-        socket.emit("listJoueur",jeux.playersIDs.map(id => sockets[id].compte));
-        socket.emit("scorePartie",Object.keys(jeux.scores).reduce((newScores, id) => {
+        socket.emit("resGagnant", data);
+        socket.emit("listJoueur", jeux.playersIDs.map(id => sockets[id].compte));
+        socket.emit("scorePartie", Object.keys(jeux.scores).reduce((newScores, id) => {
             newScores[sockets[id].compte] = jeux.scores[id];
             return newScores;
         }, {}));
-        socket.emit("goTo","/Score");
+        socket.emit("goTo", "/Score");
     });
 
-    // rejouer
-
-    socket.on("restart",data => {
-        if (data==1){
-            socket.emit("goTo","/selectionJeux");
-    }});
-
     // leaderboard
-    
+
     socket.on("reqLeaderboard", async () => {
         if (!sockets[socket.id]) {
             return;
@@ -453,7 +462,7 @@ io.on("connection", function (socket) {
             GROUP BY nom
             ORDER BY nbWin DESC`
         );
-        
+
         console.log("six qui prends :", six);
         console.log("bataille :", bataille);
         socket.emit("resLeaderboard", [general, bataille, six]);

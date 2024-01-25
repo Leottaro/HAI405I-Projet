@@ -17,8 +17,9 @@ function Score() {
         setScore(liScore);
     });
 
+    const navigate = useNavigate();
     function rejouer(){
-        socket.emit("restart",1);
+        navigate("/selectionJeux");
     }
 
     return (

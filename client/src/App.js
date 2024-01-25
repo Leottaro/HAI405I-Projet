@@ -16,14 +16,17 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    socket.off("goTo");
     socket.on("goTo", page => {
       navigate(page);
     });
+    return () => socket.off("goTo");
   }, [])
 
   useEffect(() => {
     document.title = location.pathname.split('/')[1] || "Home";
+    if (!location.pathname.startsWith("/plateau")) {
+      socket.emit("reqLeave");
+    }
   }, [location]);
 
   return (
