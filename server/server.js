@@ -206,7 +206,7 @@ io.on("connection", function (socket) {
             return socket.emit("resJoin", { success: false, message: "code inexistant" });
         }
         if (!jeux.addPlayer(socket.id)) {
-            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette pax@rtie à commencée" : "cette partie est pleine") });
+            return socket.emit("resJoin", { success: false, message: (jeux.started ? "cette partie à commencée" : "cette partie est pleine") });
         }
         sockets[socket.id]["partie"] = code;
 
@@ -312,7 +312,7 @@ io.on("connection", function (socket) {
                     if (jeux.ended && sockets[socket.id]) {
                         const code = sockets[socket.id].partie;
                         const jeux = parties[code];
-                        io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+                        io.in(code).emit("Victoire", sockets[jeux.winner].compte); // TODO: le serv a crash ici
                     }
                 });
             }

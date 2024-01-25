@@ -55,7 +55,7 @@ function PlateauBataille() {
             <Audio/>
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
-                {Object.keys(listeJoueurs).map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
+                {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
             <Start afficheStart={afficheStart} afficheSave={afficheSave} code={code} start={start} save={save} />
             <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />

@@ -37,7 +37,7 @@ function PlateauSix() {
     });
 
     socket.on("Victoire", data => {
-        socket.emit("winSix",data);
+        socket.emit("winSix", data);
         if (data === account) {
             setWinner("Vous avez Gagné !");
         }
@@ -57,10 +57,10 @@ function PlateauSix() {
     return (
         <div id="plateauSix">
             <NavProfil></NavProfil>
-            <Audio/>
+            <Audio />
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
-                {Object.keys(listeJoueurs).map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
+                {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
             </div>
             <div id="tapis">
                 {
