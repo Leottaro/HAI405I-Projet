@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -77,7 +78,6 @@ app.get("/", (req, res) => {
 });
 
 const port = process.env.HAI405I_PORT || 3001;
-
 httpServer.listen(port, () => {
     console.log(`server running on port http://localhost:${port}/`);
 });
@@ -146,7 +146,7 @@ io.on("connection", function (socket) {
     // CREER
 
     socket.on("reqCreate", async json => {
-        if(!sockets[socket.id]){
+        if (!sockets[socket.id]) {
             return;
         }
         const nbrJoueursMax = json.nbrJoueursMax;
@@ -352,16 +352,16 @@ io.on("connection", function (socket) {
 
     // Fin
 
-    async function finJeux(){
+    async function finJeux() {
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
         io.in(code).emit("Victoire", sockets[jeux.winner].compte);
         database.run(`INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`);
         jeux.playersIDs.forEach(id => {
-            if(id==jeux.winner){
+            if (id == jeux.winner) {
                 database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`);
             }
-            else{
+            else {
                 database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`);
             }
         });
@@ -370,7 +370,7 @@ io.on("connection", function (socket) {
     // Profil
 
     socket.on("reqProfilStat", async () => {
-        if(!sockets[socket.id]){
+        if (!sockets[socket.id]) {
             return;
         }
         const [err, rows] = await sqlRequest(`SELECT nomJeux, place FROM aJoue, partieFinie 
