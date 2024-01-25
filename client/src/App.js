@@ -25,7 +25,7 @@ function App() {
     if (location.pathname !== "/Connection" && !account) {
       navigate("/Connection");
     }
-    document.title = location.pathname.split('/')[1];
+    document.title = location.pathname.split('/')[1] || "Home";
   }, [location]);
 
   return (

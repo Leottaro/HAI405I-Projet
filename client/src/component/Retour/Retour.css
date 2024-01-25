@@ -1,15 +1,18 @@
-#retour{
+button#retour {
     position: absolute;
-    top: 20vh;
-    left: 2vw;
-    width: 4vw;
+    
     height: 2vw;
+    width: 4vw;
+    padding: 0.5vw;
+
     outline: none;
     border: none;
-    border-radius: 5px;
-    padding: 10px;
-    background: #573b8a;
+
     color: #fff;
-    font-size: 1em;
+    background: #573b8a;
+    border-radius: 5px;
+
+    font-size: 1vw;
     font-weight: bold;
+    text-align: center;
 }

@@ -6,6 +6,7 @@ import Creer from "./creer";
 import Rejoindre from "./rejoindre";
 import MesParties from "./mesParties";
 import NavProfil from "../../component/NavProfil/NavProfil";
+import Retour from "../../component/Retour/Retour";
 
 function CreerRejoindre(params) {
     const { jeux } = useParams();
@@ -44,15 +45,18 @@ function CreerRejoindre(params) {
     }
 
     return (
-        <div id="CRDiv">
-            <NavProfil></NavProfil>
-            <div id="CRbuttonDiv">
-                <button className="CRButton" onClick={creer} disabled={mode === "creer"}>Creer</button>
-                <button className="CRButton" onClick={rejoindre} disabled={mode === "rejoindre"}>Rejoindre</button>
-                <button className="CRButton" onClick={mesParties} disabled={mode === "mesParties"}>Mes parties</button>
+        <>
+            <div id="CRDiv">
+                <NavProfil></NavProfil>
+                <div id="CRbuttonDiv">
+                    <button className="CRButton" onClick={creer} disabled={mode === "creer"}>Creer</button>
+                    <button className="CRButton" onClick={rejoindre} disabled={mode === "rejoindre"}>Rejoindre</button>
+                    <button className="CRButton" onClick={mesParties} disabled={mode === "mesParties"}>Mes parties</button>
+                </div>
+                {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
             </div>
-            {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
-        </div>
+            <Retour left="8rem" top="2rem"/>
+        </>
     );
 }
 export default CreerRejoindre;

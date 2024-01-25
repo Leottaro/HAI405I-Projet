@@ -1,17 +1,8 @@
 import './Retour.css';
-import { useNavigate } from "react-router-dom";
 
-function Retour() {
-    const navigate = useNavigate();
-
-    function goBack() {
-        //en attente
-    }
-
+function Retour(props) { // styling props
     return (
-        <div id="retour">
-            <button id="back" onClick={goBack}>Retour</button>
-        </div>
+        <button style={{...props}} id="retour" onClick={() => window.history.back()}>Retour</button>
     );
 }
 export default Retour;

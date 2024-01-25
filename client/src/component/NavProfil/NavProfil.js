@@ -9,10 +9,7 @@ function NavProfil() {
     }
 
     return (
-        <div id="navProfil">
-            <button id="buttonProfil" onClick={goToProfil}>Profil</button>
-            {/*<img className="imgProfil" src="Assets/FaceCachee.png"></img>*/}
-        </div>
+        <button id="navProfil" onClick={goToProfil}>Profil</button>
     );
 }
 export default NavProfil;
