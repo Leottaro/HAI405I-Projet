@@ -55,7 +55,7 @@ function CreerRejoindre(params) {
                 </div>
                 {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
             </div>
-            <Retour left="8rem" top="2rem"/>
+            <Retour left="7vw" top="2.5vw"/>
         </>
     );
 }
