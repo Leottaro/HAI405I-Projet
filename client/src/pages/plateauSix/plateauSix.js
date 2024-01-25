@@ -8,6 +8,7 @@ import './plateauSix.css';
 import { useParams } from "react-router-dom";
 import NavProfil from "../../component/NavProfil/NavProfil";
 import Start from "../../component/Start/Start";
+import Audio from "../../component/Audio/Audio";
 
 function PlateauSix() {
     const { code } = useParams();
@@ -56,6 +57,7 @@ function PlateauSix() {
     return (
         <div id="plateauSix">
             <NavProfil></NavProfil>
+            <Audio/>
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
