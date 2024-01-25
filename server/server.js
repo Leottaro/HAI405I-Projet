@@ -270,7 +270,7 @@ io.on("connection", function (socket) {
 
                 // supprimer puis recréer le timeout du choix des cartes
                 jeux.setChoiceCallback(() => {
-                    jeux.playRoundInterval(jeux.roundDelay);
+                    jeux.playRoundInterval();
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);
@@ -302,12 +302,12 @@ io.on("connection", function (socket) {
                 }
             } else if (res == 2) {
                 if (jeux.nomJeux == "sixQuiPrend") {
-                    jeux.playChoiceTimeout(SixQuiPrend.choiceDelay);
+                    jeux.playChoiceTimeout();
                 }
             }
 
             if (jeux.nomJeux == "sixQuiPrend") {
-                jeux.playRoundInterval(SixQuiPrend.roundDelay);
+                jeux.playRoundInterval();
             }
         }
     });
