@@ -276,7 +276,8 @@ io.on("connection", function (socket) {
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);
-                    if (jeux.ended){
+                    if (jeux.ended && sockets[socket.id]){
+
                         const code = sockets[socket.id].partie;
                         const jeux = parties[code];
                         io.in(code).emit("Victoire", sockets[jeux.winner].compte);
@@ -383,7 +384,6 @@ io.on("connection", function (socket) {
         const [err, rows] = await sqlRequest(`SELECT nomJeux, place FROM aJoue, partieFinie 
         WHERE codeR=code
         AND nom="${sockets[socket.id].compte}"`);
-        console.log("rows : ", rows);
         socket.emit("resProfilStat", rows);
     });
 
@@ -406,5 +406,22 @@ io.on("connection", function (socket) {
     socket.on("restart",data => {
         if (data==1){
             socket.emit("goTo","/selectionJeux");
-        }});
+    }});
+
+    // leaderboard
+    
+    socket.on("reqLeaderboard", async () => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const [err, general] = await sqlRequest(
+            `SELECT nom, COUNT(*) as win FROM aJoue, partieFinie 
+            WHERE codeR=code
+            AND place=1
+            GROUP BY nom
+            ORDER BY win DESC`
+        );
+
+        console.log("general :", general);
+    })
 });
