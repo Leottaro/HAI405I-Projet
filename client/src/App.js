@@ -1,25 +1,29 @@
-import { lazy, useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import socket, { account } from "./socket";
 import './App.css';
 
-const Profil = lazy(() => import("./pages/profil/profil"));
-const Connection = lazy(() => import("./pages/connection/connection"));
-const SelectionJeux = lazy(() => import("./pages/selectionJeux/selectionJeux"));
-const CreerRejoindre = lazy(() => import("./pages/creerRejoindre/creerRejoindre"));
-const PlateauBataille = lazy(() => import("./pages/plateauBataille/plateauBataille"));
-const PlateauSix = lazy(() => import("./pages/plateauSix/plateauSix"));
+import Profil from "./pages/profil/profil";
+import Connection from "./pages/connection/connection";
+import SelectionJeux from "./pages/selectionJeux/selectionJeux";
+import CreerRejoindre from "./pages/creerRejoindre/creerRejoindre";
+import PlateauBataille from "./pages/plateauBataille/plateauBataille";
+import PlateauSix from "./pages/plateauSix/plateauSix";
 
 function App() {
   const navigate = useNavigate();
-  socket.on("goTo", page => {
-    setTimeout(() => navigate(page), 10);
-  });
-
   const location = useLocation();
+
+  useEffect(() => {
+    socket.off("goTo");
+    socket.on("goTo", page => {
+      navigate(page);
+    });
+  }, [])
+
   useEffect(() => {
     if (location.pathname !== "/Connection" && !account) {
-      setTimeout(() => navigate("/Connection"), 10);
+      navigate("/Connection");
     }
     document.title = location.pathname.split('/')[1];
   }, [location]);

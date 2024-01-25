@@ -1,18 +1,18 @@
 import './NavProfil.css';
 import { useNavigate } from "react-router-dom";
 
-function NavProfil(){
-
+function NavProfil() {
     const navigate = useNavigate();
 
-    function goToProfil(){
-        setTimeout(() => navigate("/profil/"), 10);
+    function goToProfil() {
+        navigate("/profil/");
     }
+
     return (
-    <div id="navProfil">
-        <button id="buttonProfil" onClick={goToProfil}>Profil</button>
-        {/*<img className="imgProfil" src="Assets/FaceCachee.png"></img>*/}
-    </div>
-)
-} 
+        <div id="navProfil">
+            <button id="buttonProfil" onClick={goToProfil}>Profil</button>
+            {/*<img className="imgProfil" src="Assets/FaceCachee.png"></img>*/}
+        </div>
+    );
+}
 export default NavProfil;

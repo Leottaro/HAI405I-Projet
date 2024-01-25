@@ -12,7 +12,7 @@ function SelectionJeux() {
     const listeNomJeux = ["bataille", "sixQuiPrend"];
 
     function gauche() {
-        
+
         setPlacement("gauche");
         setTimeout(() => {
             setPlacement("droite");
@@ -25,11 +25,11 @@ function SelectionJeux() {
             }
             setPlacement("center");
         }, 500);
-        
+
     }
 
     function droite() {
-        
+
         setPlacement("droite");
         setTimeout(() => {
             setPlacement("gauche");
@@ -42,14 +42,14 @@ function SelectionJeux() {
 
     const navigate = useNavigate();
     function choisir() {
-        setTimeout(() => navigate("/creerRejoindre/" + listeNomJeux[i]), 10);
+        navigate("/creerRejoindre/" + listeNomJeux[i]);
     }
 
     return (
         <div id="selectionJeuxDiv">
             <NavProfil></NavProfil>
             <button id="gauche" className="selectionJeuxButton" onClick={gauche}>❮</button>
-            <img id="img" className={placement} src={listeJeux[i]} onClick={choisir} alt=""/>
+            <img id="img" className={placement} src={listeJeux[i]} onClick={choisir} alt="" />
             <button id="droite" className="selectionJeuxButton" onClick={droite}>❯</button>
         </div>
     );
