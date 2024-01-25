@@ -431,13 +431,31 @@ io.on("connection", function (socket) {
             return;
         }
         const [err, general] = await sqlRequest(
-            `SELECT nom, COUNT(*) as win FROM aJoue, partieFinie 
+            `SELECT nom, COUNT(*) as nbWin FROM aJoue, partieFinie 
             WHERE codeR=code
             AND place=1
             GROUP BY nom
-            ORDER BY win DESC`
+            ORDER BY nbWin DESC`
         );
-
-        console.log("general :", general);
+        const [errBataille, bataille] = await sqlRequest(
+            `SELECT nom, COUNT(*) as nbWin FROM aJoue, partieFinie 
+            WHERE codeR=code
+            AND place=1
+            AND nomJeux="bataille"
+            GROUP BY nom
+            ORDER BY nbWin DESC`
+        );
+        const [errSix, six] = await sqlRequest(
+            `SELECT nom, COUNT(*) as nbWin FROM aJoue, partieFinie 
+            WHERE codeR=code
+            AND place=1
+            AND nomJeux="sixQuiPrend"
+            GROUP BY nom
+            ORDER BY nbWin DESC`
+        );
+        
+        console.log("six qui prends :", six);
+        console.log("bataille :", bataille);
+        socket.emit("resLeaderboard", [general, bataille, six]);
     })
 });
