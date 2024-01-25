@@ -276,6 +276,11 @@ io.on("connection", function (socket) {
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);
+                    if (jeux.ended){
+                        const code = sockets[socket.id].partie;
+                        const jeux = parties[code];
+                        io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+                    }
                 });
             }
         }
