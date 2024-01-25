@@ -25,26 +25,22 @@ function Score() {
     return (
         <div id="scoreDiv">
             <label id="messageFin">{gagnant} a gagné la partie !</label>
-            <div id="scoreBoard">
-                <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Tableau des scores</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listeJoueurs.map(id =>
-                    <tr>
-                        <td>{id}</td>
-                        <td>{score[id]}</td>
-                    </tr>
-                    )}
-                </tbody>
+                <table id="customers">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Tableau des scores</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listeJoueurs.map(id =>
+                        <tr>
+                            <td>{id}</td>
+                            <td>{score[id]}</td>
+                        </tr>
+                        )}
+                    </tbody>
                 </table>
-            </div>
-            <div id="buttonRestart">
-                <button className="button" onClick={rejouer}>Rejouer</button>
-            </div>
+            <button id="buttonScore" onClick={rejouer}>Rejouer</button>
         </div>
     );
 }
