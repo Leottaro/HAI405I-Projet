@@ -1,6 +1,5 @@
 import io from "socket.io-client";
-require("dotenv").config();
-const socket = io.connect(process.env.HAI405I_HOST || "http://localhost:3001/");
+const socket = io.connect(process.env.REACT_APP_HAI405I_HOST || "http://localhost:3001/");
 export default socket;
 
 export let account;
