@@ -71,6 +71,7 @@ const database = new sqlite3.Database("./databases/HAI405I.db", async err => {
             codeR TEXT NOT NULL, 
             nom TEXT NOT NULL,
             place INT NOT NULL,
+            points INT,
             PRIMARY KEY (codeR,nom),
             FOREIGN KEY(nom) REFERENCES account(pseudo),
             FOREIGN KEY(codeR) REFERENCES partieFinie(code)
@@ -312,9 +313,10 @@ io.on("connection", function (socket) {
                     if (jeux.ended && sockets[socket.id]) {
                         const code = sockets[socket.id].partie;
                         const jeux = parties[code];
-                        io.in(code).emit("Victoire", sockets[jeux.winner].compte); // TODO: le serv a crash ici
+                        //io.in(code).emit("Victoire", sockets[jeux.winner].compte); // TODO: le serv a crash ici
                     }
                 });
+
             }
         }
     });
@@ -397,14 +399,28 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         io.in(code).emit("Victoire", sockets[jeux.winner].compte);
         database.run(`INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`);
-        jeux.playersIDs.forEach(id => {
-            if (id == jeux.winner) {
-                database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`);
-            }
-            else {
-                database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`);
-            }
-        });
+        if(jeux.nomJeux==="bataille"){
+            jeux.playersIDs.forEach(id => {
+                if (id == jeux.winner) {
+                    database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`);
+                }
+                else {
+                    database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`);
+                }
+                console.log("cé la bataye");
+            });
+        }
+        else if(jeux.nomJeux==="sixQuiPrend"){
+            jeux.playersIDs.forEach(id => {
+                if (id == jeux.winner) {
+                    database.run(`INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`);
+                }
+                else {
+                    database.run(`INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`);
+                }
+            });
+        }
+        
     }
 
     // Profil
@@ -413,9 +429,10 @@ io.on("connection", function (socket) {
         if (!sockets[socket.id]) {
             return;
         }
-        const [err, rows] = await sqlRequest(`SELECT nomJeux, place FROM aJoue, partieFinie 
+        const [err, rows] = await sqlRequest(`SELECT nomJeux, place, points FROM aJoue, partieFinie 
         WHERE codeR=code
         AND nom="${sockets[socket.id].compte}"`);
+        console.log("rows : ",rows);
         socket.emit("resProfilStat", rows);
     });
 
@@ -462,9 +479,7 @@ io.on("connection", function (socket) {
             GROUP BY nom
             ORDER BY nbWin DESC`
         );
-
-        console.log("six qui prends :", six);
-        console.log("bataille :", bataille);
         socket.emit("resLeaderboard", [general, bataille, six]);
+    
     })
 });
