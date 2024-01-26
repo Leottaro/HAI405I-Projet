@@ -9,9 +9,12 @@ function Chat() {
     const [input, setInput] = useState("");
     const MessagesRef = useRef(null);
 
-    socket.on("resMsg", msg => {
-        setListeMsg(listeMsg.concat(msg));
-        setNotifShown(!isChatShown)
+    useEffect(() => {
+        socket.on("resMsg", msg => {
+            setListeMsg(listeMsg.concat(msg));
+            setNotifShown(!isChatShown)
+        });
+        return () => socket.off("resMsg");
     });
 
     useEffect(() => {

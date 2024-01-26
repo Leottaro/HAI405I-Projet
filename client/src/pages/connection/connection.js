@@ -1,5 +1,5 @@
 import "./connection.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 
 function Connection() {
@@ -15,13 +15,19 @@ function Connection() {
         socket.emit("reqLogIn", { "pseudo": pseudo, "password": password });
     }
 
-    socket.on("resSignIn", json => {
-        if (!json.success)
-            setMessage(json.message);
-    });
-    socket.on("resLogIn", json => {
-        if (!json.success)
-            setMessage(json.message);
+    useEffect(() => {
+        socket.on("resSignIn", json => {
+            if (!json.success)
+                setMessage(json.message);
+        });
+        socket.on("resLogIn", json => {
+            if (!json.success)
+                setMessage(json.message);
+        });
+        return () => {
+            socket.off("resSignIn");
+            socket.off("resLogIn");
+        };
     });
 
     return (

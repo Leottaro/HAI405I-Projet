@@ -20,11 +20,12 @@ function App() {
       navigate(page);
     });
     return () => socket.off("goTo");
-  }, [])
+  });
 
   useEffect(() => {
-    document.title = location.pathname.split('/')[1] || "Home";
-    if (!location.pathname.startsWith("/plateau")) {
+    const locationTitle = location.pathname.split('/')[1];
+    document.title = locationTitle || "Home";
+    if (!locationTitle.startsWith("plateau") && locationTitle !== "profil") {
       socket.emit("reqLeave");
     }
   }, [location]);

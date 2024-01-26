@@ -4,7 +4,7 @@ import socket, { account } from "../../socket";
 import "./profil.css";
 import { useEffect, useState } from "react";
 
-function Profil(){
+function Profil() {
     const [parties, setParties] = useState([]);
     const [nbSix, setNbSix] = useState(0);
     const [nbBataille, setNbBataille] = useState(0);
@@ -14,48 +14,46 @@ function Profil(){
     const [winrateBataille, setWinrateBataille] = useState(0);
     const [tetes, setTetes] = useState(0);
     useEffect(() => {
+        socket.on("resProfilStat", data => {
+            setParties(data);
+            let tempNbSix = 0;
+            let tempNbBataille = 0;
+            let tempWinSix = 0;
+            let tempWinBataille = 0;
+            let tempPlaceSix = 0;
+            let tempPlaceBataille = 0;
+            let tempTetes = 0;
+            parties.forEach(partie => {
+                switch (partie.nomJeux) {
+                    case "sixQuiPrend":
+                        tempNbSix += 1;
+                        if (partie.place == 1) {
+                            tempWinSix += 1;
+                        }
+                        tempPlaceSix += partie.place;
+                        tempTetes += partie.points;
+                        break;
+                    case "bataille":
+                        tempNbBataille += 1;
+                        if (partie.place == 1) {
+                            tempWinBataille += 1;
+                        }
+                        tempPlaceBataille += partie.place;
+                        break;
+                    default:
+                        break;
+                }
+            })
+            setNbSix(tempNbSix);
+            setNbBataille(tempNbBataille);
+            setWinSix(tempWinSix);
+            setWinBataille(tempWinBataille);
+            setWinrateSix(tempPlaceSix / tempNbSix);
+            setWinrateBataille(tempPlaceBataille / tempNbBataille);
+            setTetes(tempTetes / tempNbSix);
+        });
         socket.emit("reqProfilStat");
-    }, []);
-
-    socket.on("resProfilStat", data => {
-        setParties(data);
-        let tempNbSix=0;
-        let tempNbBataille=0;
-        let tempWinSix=0;
-        let tempWinBataille=0;
-        let tempPlaceSix=0;
-        let tempPlaceBataille=0;
-        let tempTetes=0;
-        parties.forEach(partie => {
-            console.log("tetes",partie.points);
-            switch (partie.nomJeux){
-                case "sixQuiPrend":
-                    tempNbSix+=1;
-                    if(partie.place==1){
-                        tempWinSix+=1;
-                    }
-                    tempPlaceSix+=partie.place;
-                    tempTetes+=partie.points;
-                    break;
-                case "bataille":
-                    tempNbBataille+=1;
-                    if(partie.place==1){
-                        tempWinBataille+=1;
-                    }
-                    tempPlaceBataille+=partie.place;
-                    break;
-                default:
-                    break;
-            }
-        })
-        setNbSix(tempNbSix);
-        setNbBataille(tempNbBataille);
-        setWinSix(tempWinSix);
-        setWinBataille(tempWinBataille);
-        setWinrateSix(tempPlaceSix/tempNbSix);
-        setWinrateBataille(tempPlaceBataille/tempNbBataille);
-        setTetes(tempTetes/tempNbSix);
-        console.log("temp tetes", tempTetes);
+        return () => socket.off("resProfilStat");
     });
 
 
@@ -87,8 +85,8 @@ function Profil(){
                     <div id="historique">
                         <label id="labelHistorique">Historique</label>
                         <div id="scrollHistorique">
-                            {parties.map(json => 
-                                <div className={json.place==1 ? "victoire" : "defaite"}>
+                            {parties.map(json =>
+                                <div className={json.place == 1 ? "victoire" : "defaite"}>
                                     <label className="mode">{json.nomJeux}</label>
                                     <label className="resultat">{json.place}</label>
                                 </div>
@@ -97,7 +95,7 @@ function Profil(){
                     </div>
                 </div>
             </div>
-            <Retour left="2vw" top="2vh"/>
+            <Retour left="2vw" top="2vh" />
         </>
     )
 }

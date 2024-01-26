@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 import Parties from "./parties";
 
@@ -6,15 +6,20 @@ function MesParties() {
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);
 
-    socket.on('resJoin', json => {
-        if (!json.success)
-            setMessage(json.message);
-    });
-
-    socket.on('resMyGames', liste => {
-        if (liste) {
-            setListPartie(liste);
-        }
+    useEffect(() => {
+        socket.on('resJoin', json => {
+            if (!json.success)
+                setMessage(json.message);
+        });
+        socket.on('resMyGames', liste => {
+            if (liste) {
+                setListPartie(liste);
+            }
+        });
+        return () => {
+            socket.off('resJoin');
+            socket.off('resMyGames');
+        };
     });
 
     return (

@@ -19,27 +19,35 @@ function PlateauBataille() {
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [winner, setWinner] = useState("");
 
-    socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
-        setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
-            if (player !== account) {
-                filtered[player] = json[player];
+    useEffect(() => {
+        socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
+            setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
+                if (player !== account) {
+                    filtered[player] = json[player];
+                }
+                return filtered;
+            }, {}));
+            setMoi(json[account]);
+            setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
+            setAfficheSave(json[account].isCreator);
+            setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
+        });
+        socket.emit("reqPlayers");
+    
+        socket.on("Gagnant", pseudo => {
+            if (pseudo === account) {
+                setWinner("Vous avez Gagné !");
             }
-            return filtered;
-        }, {}));
-        setMoi(json[account]);
-        setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
-        setAfficheSave(json[account].isCreator);
-        setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
+            else {
+                setWinner(pseudo + " a gagné...");
+            }
+        })
+        
+        return () => {
+            socket.off("resPlayers");
+            socket.off("Gagnant");
+        };
     });
-
-    socket.on("Gagnant", pseudo => {
-        if (pseudo === account) {
-            setWinner("Vous avez Gagné !");
-        }
-        else {
-            setWinner(pseudo + " a gagné...");
-        }
-    })
 
     function start() {
         socket.emit("reqStart");

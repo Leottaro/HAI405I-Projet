@@ -8,10 +8,13 @@ function Score() {
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [scores, setScores] = useState({});
 
-    socket.on("winSix", json => {
-        setGagnant(json.gagnant);
-        setListeJoueurs(json.joueurs);
-        setScores(json.scores);
+    useEffect(() => {
+        socket.on("winSix", json => {
+            setGagnant(json.gagnant);
+            setListeJoueurs(json.joueurs);
+            setScores(json.scores);
+        });
+        return () => socket.off("winSix");
     });
 
     const navigate = useNavigate();

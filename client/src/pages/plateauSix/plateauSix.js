@@ -20,20 +20,30 @@ function PlateauSix() {
     const [winner, setWinner] = useState("");
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
 
-    socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
-        setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
-            if (player !== account) {
-                filtered[player] = json[player];
-            }
-            return filtered;
-        }, {}));
-        setMoi(json[account]);
-        setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
-        setAfficheSave(json[account].isCreator && afficheStart);
-        setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
-    });
-    socket.on("resPlateau", listJson => { // [ [{valeur:"n", type:""}, ...], 4 fois]
-        setListePlateau(listJson);
+    useEffect(() => {
+        socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
+            setListeJoueurs(Object.keys(json).reduce((filtered, player) => {
+                if (player !== account) {
+                    filtered[player] = json[player];
+                }
+                return filtered;
+            }, {}));
+            setMoi(json[account]);
+            setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
+            setAfficheSave(json[account].isCreator && afficheStart);
+            setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
+        });
+        socket.emit("reqPlayers");
+
+        socket.on("resPlateau", listJson => { // [ [{valeur:"n", type:""}, ...], 4 fois]
+            setListePlateau(listJson);
+        });
+        socket.emit("reqPlateau");
+
+        return () => {
+            socket.off("resPlayers");
+            socket.off("resPlateau");
+        };
     });
 
     function start() {

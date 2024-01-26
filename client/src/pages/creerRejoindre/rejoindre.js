@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 import Parties from "./parties";
 
@@ -11,16 +11,22 @@ function Rejoindre() {
         socket.emit("reqJoin", lien.toString());
     }
 
-    socket.on('resJoin', json => {
-        if (!json.success)
-            setMessage(json.message);
-    });
-
-    socket.on('resGames', liste => {
-        if (liste) {
-            setListPartie(liste);
+    useEffect(() => {
+        socket.on('resJoin', json => {
+            if (!json.success)
+                setMessage(json.message);
+        });
+    
+        socket.on('resGames', liste => {
+            if (liste) {
+                setListPartie(liste);
+            }
+        });
+        return () => {
+            socket.off("resJoin");
+            socket.off("resGames");
         }
-    });
+    })
 
     return (
         <div id="CRContent">
