@@ -10,6 +10,7 @@ import CreerRejoindre from "./pages/creerRejoindre/creerRejoindre";
 import PlateauBataille from "./pages/plateauBataille/plateauBataille";
 import PlateauSix from "./pages/plateauSix/plateauSix";
 import Score from "./pages/score/score";
+import Leaderboard from "./pages/leaderboard/leaderboard";
 
 function App() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/leaderboard" element={<Leaderboard />} />
       <Route path="/profil" element={<Profil />} />
       <Route path="/Connection" element={<Connection />} />
       <Route path="/selectionJeux" element={<SelectionJeux />} />

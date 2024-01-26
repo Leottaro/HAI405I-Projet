@@ -1,8 +1,7 @@
 #navProfil {
     height: 5vw;
     width: 5vw;
-    top: 1vw;
-    left: 1vw;
+    margin-top: 0.5vw;
 
     background: url("../../../public/Assets/FaceCachee.png");
     background-size: 100%;
@@ -15,7 +14,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
     
     border: none;
     border-radius: 100vw;

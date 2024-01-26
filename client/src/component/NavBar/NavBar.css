@@ -1,0 +1,31 @@
+#navBar {
+    height : 25vw;
+    width: 6vw;
+    background: #fff4 ;
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    border-radius: 5vw;
+    
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.navBarButton {
+    height: 5vw;
+    width: 5vw;
+    padding: 0.5vw;
+
+    outline: none;
+    border: none;
+
+    color: #fff;
+    background: #332252;
+    border-radius: 5vw;
+
+    font-size: 0.8vw;
+    font-weight: bold;
+    text-align: center;
+}

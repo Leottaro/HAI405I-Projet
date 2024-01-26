@@ -1,6 +1,7 @@
 import Rank from "../../component/Rank/Rank";
 import Retour from "../../component/Retour/Retour";
 import socket, { account } from "../../socket";
+import NavBar from "../../component/NavBar/NavBar";
 import "./profil.css";
 import { useEffect, useState } from "react";
 
@@ -95,7 +96,7 @@ function Profil() {
                     </div>
                 </div>
             </div>
-            <Retour left="2vw" top="2vh" />
+            <NavBar/>
         </>
     )
 }

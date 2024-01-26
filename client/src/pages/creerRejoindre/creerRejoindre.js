@@ -5,8 +5,7 @@ import { useParams } from "react-router-dom";
 import Creer from "./creer";
 import Rejoindre from "./rejoindre";
 import MesParties from "./mesParties";
-import NavProfil from "../../component/NavProfil/NavProfil";
-import Retour from "../../component/Retour/Retour";
+import NavBar from "../../component/NavBar/NavBar";
 
 function CreerRejoindre(params) {
     const { jeux } = useParams();
@@ -33,7 +32,7 @@ function CreerRejoindre(params) {
     return (
         <>
             <div id="CRDiv">
-                <NavProfil></NavProfil>
+                <NavBar/>
                 <div id="CRbuttonDiv">
                     <button className="CRButton" onClick={creer} disabled={mode === "creer"}>Creer</button>
                     <button className="CRButton" onClick={rejoindre} disabled={mode === "rejoindre"}>Rejoindre</button>
@@ -41,7 +40,6 @@ function CreerRejoindre(params) {
                 </div>
                 {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
             </div>
-            <Retour left="7vw" top="2.5vw" />
         </>
     );
 }

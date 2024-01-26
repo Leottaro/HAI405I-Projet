@@ -1,6 +1,7 @@
 import "./leaderboard.css";
 import socket, { account } from "../../socket";
 import { useEffect, useState } from "react";
+import NavBar from "../../component/NavBar/NavBar";
 
 function Leaderboard() {
     // {nom , nbWin}
@@ -67,6 +68,7 @@ function Leaderboard() {
                     )}
                 </div>
             </div>
+            <NavBar/>
         </div>
     )
 }
