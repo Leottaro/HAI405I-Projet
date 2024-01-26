@@ -60,7 +60,7 @@ function Profil() {
     return (
         <>
             <div id="profil">
-            <Rank winBataille={winBataille} nbBataille={nbBataille} winSix={winSix} nbSixS={nbSix}/>
+            <Rank winBataille={winBataille} nbBataille={nbBataille} winSix={winSix} nbSix={nbSix}/>
                 <label id="nom">{account}</label>
                 <div id="pasLeNom">
                     <div id="profilJeux">
