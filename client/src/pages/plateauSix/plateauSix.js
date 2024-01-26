@@ -29,7 +29,7 @@ function PlateauSix() {
         }, {}));
         setMoi(json[account]);
         setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
-        setAfficheSave(json[account].isCreator);
+        setAfficheSave(json[account].isCreator && afficheStart);
         setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
     });
     socket.on("resPlateau", listJson => { // [ [{valeur:"n", type:""}, ...], 4 fois]
