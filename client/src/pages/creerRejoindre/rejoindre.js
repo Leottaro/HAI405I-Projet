@@ -41,7 +41,7 @@ function Rejoindre() {
             <label className="CRtitle">Parties en cours:</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
-                    <Parties key={index} nbrJoueurs={partie.nbrJoueurs} code={partie.code} />
+                    <Parties key={index} buttonText="rejoindre" nbrJoueurs={partie.nbrJoueurs} buttonCallback={() => socket.emit("reqJoin", partie.code)} />
                 ))}
             </div>
         </div>

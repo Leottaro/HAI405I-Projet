@@ -216,6 +216,14 @@ io.on("connection", function (socket) {
         setTimeout(() => resPlayers(code), 250);
     });
 
+    socket.on("reqRestart", async code => { // TODO:
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const [err, rows] = await sqlRequest(`SELECT * FROM partie WHERE code="${code}"`);
+        const jeux = rows[0];
+    });
+
     // LEAVE 
 
     socket.on("reqLeave", () => {
@@ -232,7 +240,7 @@ io.on("connection", function (socket) {
 
     // MY GAMES
 
-    socket.on("reqMyGames", async jeux => {
+    socket.on("reqMyGames", async jeux => { // TODO:
         if (!sockets[socket.id]) {
             return;
         }
@@ -354,7 +362,7 @@ io.on("connection", function (socket) {
         }
     });
 
-    socket.on("reqSave", () => {
+    socket.on("reqSave", () => { // TODO:
         if (!sockets[socket.id] || !sockets[socket.id].partie) {
             return;
         }
@@ -427,7 +435,6 @@ io.on("connection", function (socket) {
                 else {
                     database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`);
                 }
-                console.log("cé la bataye");
             });
         }
         else if (jeux.nomJeux === "sixQuiPrend") {

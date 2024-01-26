@@ -33,7 +33,7 @@ function MesParties() {
             <label id="message">{message}</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
-                    <Parties key={index} nbrJoueurs={partie.jeux.maxPlayers} code={partie.code} mesParties={true} />
+                    <Parties key={index} buttonText="recommencer" nbrJoueurs={partie.jeux.maxPlayers} buttonCallback={() => socket.emit("reqRestart", partie.code)} />
                 ))}
             </div>
         </div>
