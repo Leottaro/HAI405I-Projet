@@ -96,8 +96,8 @@ httpServer.listen(port, () => {
 const sockets = {}; // clef: socket.id              valeur: {compte, code}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
-io.emit("goTo", "/");
 io.on("connection", function (socket) {
+    socket.emit("resAccount");
     socket.emit("goTo", "/");
 
     // CONNECTION
@@ -153,9 +153,7 @@ io.on("connection", function (socket) {
         if (code && jeux) {
             jeux.removePlayer(socket.id);
             socket.leave(code);
-            if (jeux.playersIDs.length < 2) {
-                delete parties[code];
-            } else {
+            if (!jeux.ended) {
                 resPlayers(code);
             }
         }
@@ -183,8 +181,9 @@ io.on("connection", function (socket) {
         } while (parties[json.code] || err || rows.length > 0);
 
         parties[code] = new jeux(socket.id, code, nbrJoueursMax, json.options);
-        sockets[socket.id].partie = code;
+        parties[code].endCallback = () => finJeux(code);
 
+        sockets[socket.id].partie = code;
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", parties[code].url);
@@ -225,13 +224,10 @@ io.on("connection", function (socket) {
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux) {
+        if (!jeux || jeux.ended) {
             return;
         }
         jeux.removePlayer(socket.id);
-        if (jeux.playersIDs.length < 2) {
-            delete parties[code];
-        }
     });
 
     // MY GAMES
@@ -310,11 +306,6 @@ io.on("connection", function (socket) {
                     jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
                     resPlayers(code);
                     resPlateau(code);
-                    if (jeux.ended && sockets[socket.id]) {
-                        const code = sockets[socket.id].partie;
-                        const jeux = parties[code];
-                        //io.in(code).emit("Victoire", sockets[jeux.winner].compte); // TODO: le serv a crash ici
-                    }
                 });
 
             }
@@ -339,9 +330,6 @@ io.on("connection", function (socket) {
             if (res == 1) {
                 resPlayers(code);
                 resPlateau(code);
-                if (jeux.ended) {
-                    finJeux();
-                }
             } else if (res == 2) {
                 if (jeux.nomJeux == "sixQuiPrend") {
                     jeux.playChoiceTimeout();
@@ -387,17 +375,31 @@ io.on("connection", function (socket) {
         }
         resPlayers(code);
         resPlateau(code);
-        if (jeux.ended) {
-            finJeux();
-        }
     });
 
     // Fin
 
-    async function finJeux() {
-        const code = sockets[socket.id].partie;
+    async function finJeux(code) {
         const jeux = parties[code];
-        io.in(code).emit("Victoire", sockets[jeux.winner].compte);
+        switch (jeux.nomJeux) {
+            case "bataille":
+                io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
+                break;
+            case "sixQuiPrend":
+                io.in(code).emit("goTo", "/Score");
+                io.in(code).emit("winSix", {
+                    gagnant: sockets[jeux.winner].compte,
+                    joueurs: jeux.playersIDs.map(id => sockets[id].compte),
+                    scores: Object.keys(jeux.scores).reduce((newScores, id) => {
+                        newScores[sockets[id].compte] = jeux.scores[id];
+                        return newScores;
+                    }, {}),
+                });
+                break;
+            default:
+                throw new Error("Nomjeux non adapté à la fin de partie");
+        }
+
         database.run(`INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`);
         if(jeux.nomJeux==="bataille"){
             jeux.playersIDs.forEach(id => {
@@ -421,6 +423,8 @@ io.on("connection", function (socket) {
             });
         }
         
+
+        delete parties[code];
     }
 
     // Profil
@@ -432,22 +436,7 @@ io.on("connection", function (socket) {
         const [err, rows] = await sqlRequest(`SELECT nomJeux, place, points FROM aJoue, partieFinie 
         WHERE codeR=code
         AND nom="${sockets[socket.id].compte}"`);
-        console.log("rows : ",rows);
         socket.emit("resProfilStat", rows);
-    });
-
-    // scoreboard
-
-    socket.on("winSix", data => {
-        const code = sockets[socket.id].partie;
-        const jeux = parties[code];
-        socket.emit("resGagnant", data);
-        socket.emit("listJoueur", jeux.playersIDs.map(id => sockets[id].compte));
-        socket.emit("scorePartie", Object.keys(jeux.scores).reduce((newScores, id) => {
-            newScores[sockets[id].compte] = jeux.scores[id];
-            return newScores;
-        }, {}));
-        socket.emit("goTo", "/Score");
     });
 
     // leaderboard
@@ -480,6 +469,5 @@ io.on("connection", function (socket) {
             ORDER BY nbWin DESC`
         );
         socket.emit("resLeaderboard", [general, bataille, six]);
-    
     })
 });

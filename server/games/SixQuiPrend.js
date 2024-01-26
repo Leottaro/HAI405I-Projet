@@ -15,6 +15,7 @@ class SixQuiPrend {
         this.playersIDs = [];
         this.paquets = {};
         this.choosed = {};
+        this.endCallback;
 
         this.plateau = [[], [], [], []];
         this.scores = {};
@@ -59,7 +60,7 @@ class SixQuiPrend {
         }
         this.playersIDs.push(playerID);
         this.paquets[playerID] = [];
-        this.scores[playerID] = 0;
+        this.scores[playerID] = 60;
         return true;
     }
 
@@ -190,6 +191,7 @@ class SixQuiPrend {
             Object.keys(this.paquets).forEach(playerID => this.paquets[playerID] = []);
             this.choosed = {};
             this.plateau = [[], [], [], []];
+            this.endCallback();
         }
         return 1;
     }

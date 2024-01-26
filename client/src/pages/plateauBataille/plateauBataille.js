@@ -32,12 +32,12 @@ function PlateauBataille() {
         setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
     });
 
-    socket.on("Victoire", data => {
-        if (data === account) {
+    socket.on("Gagnant", pseudo => {
+        if (pseudo === account) {
             setWinner("Vous avez Gagné !");
         }
         else {
-            setWinner(data + " a gagné...");
+            setWinner(pseudo + " a gagné...");
         }
     })
 
@@ -51,8 +51,8 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
-            <NavProfil/>
-            <Audio/>
+            <NavProfil />
+            <Audio />
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
@@ -62,7 +62,7 @@ function PlateauBataille() {
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
             </div>
-            <Chat/>
+            <Chat />
         </div>
     );
 }

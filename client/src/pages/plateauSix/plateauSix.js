@@ -36,16 +36,6 @@ function PlateauSix() {
         setListePlateau(listJson);
     });
 
-    socket.on("Victoire", data => {
-        socket.emit("winSix", data);
-        if (data === account) {
-            setWinner("Vous avez Gagné !");
-        }
-        else {
-            setWinner(data + " a gagné...");
-        }
-    })
-
     function start() {
         socket.emit("reqStart");
     }

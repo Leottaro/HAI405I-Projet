@@ -6,4 +6,7 @@ client/build
 server/node_modules
 server/databases
 
+# Server debugging
+databases/
+
 .DS_Store

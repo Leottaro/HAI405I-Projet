@@ -13,6 +13,7 @@ class Bataille {
         this.playersIDs = [];
         this.paquets = {};
         this.choosed = {};
+        this.endCallback;
 
         this.enLice = [];
         this.tempCartes = [];
@@ -131,15 +132,16 @@ class Bataille {
             this.enLice = sortedChoosed.slice(0, nbEgalite);
             return this.nextRound();
         }
-        this.ended = this.enLice.length <= 1;
-        if (this.ended) {
-            this.winner = winner;
-        }
         this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes))
             .sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
         this.choosed = {};
         this.tempCartes = [];
         this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
+        this.ended = this.enLice.length <= 1;
+        if (this.ended) {
+            this.winner = winner;
+            this.endCallback();
+        }
         return 1;
     }
 }
