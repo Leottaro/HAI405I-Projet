@@ -11,37 +11,23 @@ import Retour from "../../component/Retour/Retour";
 function CreerRejoindre(params) {
     const { jeux } = useParams();
     const [mode, setMode] = useState(params.mode);
-    const [rejoindreClock, setRejoindreClock] = useState(0);
-    const [mesPartiesClock, setMesPartiesClock] = useState(0);
-
-    useEffect(() => {
-        if (mode === "rejoindre") {
-            clearInterval(mesPartiesClock);
-            socket.emit("reqGames", jeux);
-            setRejoindreClock(setInterval(() => socket.emit("reqGames", jeux), 1000));
-        } else if (mode === "mesParties") {
-            clearInterval(rejoindreClock);
-            socket.emit("reqMyGames", jeux);
-            setMesPartiesClock(setInterval(() => socket.emit("reqMyGames", jeux), 1000));
-        } else {
-            clearInterval(rejoindreClock);
-            clearInterval(mesPartiesClock);
-        }
-    }, [mode]);
 
     function creer() {
-        if (mode === "creer") return;
-        setMode("creer");
+        if (mode !== "creer") {
+            setMode("creer");
+        }
     }
 
     function rejoindre() {
-        if (mode === "rejoindre") return;
-        setMode("rejoindre");
+        if (mode !== "rejoindre") {
+            setMode("rejoindre");
+        }
     }
 
     function mesParties() {
-        if (mode === "mesParties") return;
-        setMode("mesParties");
+        if (mode !== "mesParties") {
+            setMode("mesParties");
+        }
     }
 
     return (
@@ -55,7 +41,7 @@ function CreerRejoindre(params) {
                 </div>
                 {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
             </div>
-            <Retour left="7vw" top="2.5vw"/>
+            <Retour left="7vw" top="2.5vw" />
         </>
     );
 }

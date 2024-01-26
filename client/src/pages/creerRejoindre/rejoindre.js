@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import Parties from "./parties";
+import { useParams } from "react-router-dom";
 
 function Rejoindre() {
+    const { jeux } = useParams();
     const [lien, setLienPartie] = useState(1);
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);
@@ -16,13 +18,15 @@ function Rejoindre() {
             if (!json.success)
                 setMessage(json.message);
         });
-    
         socket.on('resGames', liste => {
             if (liste) {
                 setListPartie(liste);
             }
         });
+        socket.emit("reqGames", jeux);
+        const clock = setInterval(() => socket.emit("reqGames", jeux), 1000);
         return () => {
+            clearInterval(clock);
             socket.off("resJoin");
             socket.off("resGames");
         }

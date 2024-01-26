@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import Parties from "./parties";
+import { useParams } from "react-router-dom";
 
 function MesParties() {
+    const { jeux } = useParams();
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);
 
@@ -16,7 +18,10 @@ function MesParties() {
                 setListPartie(liste);
             }
         });
+        socket.emit("reqMyGames", jeux);
+        const clock = setInterval(() => socket.emit("reqMyGames", jeux), 1000);
         return () => {
+            clearInterval(clock);
             socket.off('resJoin');
             socket.off('resMyGames');
         };
