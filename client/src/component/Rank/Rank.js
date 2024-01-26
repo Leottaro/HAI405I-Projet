@@ -31,7 +31,6 @@ function Rank(props) {
         }
     }
     function getSourceSix(){
-        console.log(props.nbSix);
         if(props.winSix-(props.nbSix-props.winSix)>15){
             setSourceSix(rank4);
         }

@@ -316,18 +316,21 @@ io.on("connection", function (socket) {
                     jeux.nextRound();
                     resPlayers(code);
                     resPlateau(code);
-                    jeux.playChoiceTimeout()
                 });
-                jeux.playRoundInterval();
 
-                // supprimer puis recréer le timeout du choix des cartes
+                // définit la fonction exécutée quand le choix de carte prends trop de temps
                 jeux.setChoiceCallback(() => {
-                    jeux.playRoundInterval();
-                    jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 4));
+                    jeux.prends(jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà, Math.floor(Math.random() * 5));
                     resPlayers(code);
                     resPlateau(code);
                 });
 
+                // définit la fonction exécutée quand on play un timeout
+                jeux.setPlayCallback(timeLeft => {
+                    io.in(code).emit("resTimeLeft", timeLeft / 1000);
+                });
+
+                jeux.playRoundTimeout();
             }
         }
     });
@@ -346,18 +349,9 @@ io.on("connection", function (socket) {
         resPlateau(code);
         if (jeux.everyonePlayed()) {
             await new Promise(r => setTimeout(r, 1000));
-            let res = jeux.nextRound();
-            if (res == 1) {
+            if (jeux.nextRound()) {
                 resPlayers(code);
                 resPlateau(code);
-            } else if (res == 2) {
-                if (jeux.nomJeux == "sixQuiPrend") {
-                    jeux.playChoiceTimeout();
-                }
-            }
-
-            if (jeux.nomJeux == "sixQuiPrend") {
-                jeux.playRoundInterval();
             }
         }
     });
@@ -413,6 +407,7 @@ io.on("connection", function (socket) {
                 break;
             case "sixQuiPrend":
                 io.in(code).emit("goTo", "/Score");
+                await new Promise(r => setTimeout(r, 100));
                 io.in(code).emit("winSix", {
                     gagnant: sockets[jeux.winner].compte,
                     joueurs: jeux.playersIDs.map(id => sockets[id].compte),
@@ -447,7 +442,6 @@ io.on("connection", function (socket) {
                 }
             });
         }
-
 
         delete parties[code];
     }

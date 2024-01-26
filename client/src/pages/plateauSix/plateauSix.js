@@ -1,5 +1,5 @@
 import socket, { account } from "../../socket";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MonJeux from "../../component/MonJeux/MonJeux";
 import JoueurSix from "./joueurSix/joueurSix";
 import Chat from "../../component/Chat/Chat";
@@ -10,7 +10,7 @@ import NavBar from "../../component/NavBar/NavBar";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
 
-function PlateauSix() {
+function PlateauSix(props) {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "", paquet: [] });
@@ -19,6 +19,7 @@ function PlateauSix() {
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [winner, setWinner] = useState("");
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
+    const [timeLeft, setTimeLeft] = useState(0);
 
     useEffect(() => {
         socket.on("resPlayers", json => { // {nom: {isCreator, paquet, choosed, score}, ...}
@@ -40,11 +41,21 @@ function PlateauSix() {
         });
         socket.emit("reqPlateau");
 
+        socket.on("resTimeLeft", delay => {
+            setTimeLeft(() => delay);
+        });
+
+        const interval = setInterval(() => {
+            setTimeLeft(timeLeft => timeLeft > 0 ? timeLeft - 0.1 : 0);
+        }, 100);
+
         return () => {
             socket.off("resPlayers");
             socket.off("resPlateau");
+            socket.off("resTimeLeft");
+            clearInterval(interval);
         };
-    });
+    }, []);
 
     function start() {
         socket.emit("reqStart");
@@ -58,7 +69,6 @@ function PlateauSix() {
         <div id="plateauSix">
             <NavBar />
             <Audio />
-            <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
             </div>
@@ -68,6 +78,7 @@ function PlateauSix() {
                 }
             </div>
             <Start afficheStart={afficheStart} afficheSave={afficheStart ^ afficheSave} code={code} start={start} save={save} />
+            <label id="timer">{timeLeft.toFixed(1) + " seconds left"}</label>
             <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} texte={moi.score + " têtes de boeuf"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesSix/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
