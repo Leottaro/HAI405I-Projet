@@ -11,6 +11,7 @@ function Profil(){
     const [winBataille, setWinBataille] = useState(0);
     const [winrateSix, setWinrateSix] = useState(0);
     const [winrateBataille, setWinrateBataille] = useState(0);
+    const [tetes, setTetes] = useState(0);
     useEffect(() => {
         socket.emit("reqProfilStat");
     }, []);
@@ -23,18 +24,19 @@ function Profil(){
         let tempWinBataille=0;
         let tempPlaceSix=0;
         let tempPlaceBataille=0;
+        let tempTetes=0;
         parties.forEach(partie => {
+            console.log("tetes",partie.points);
             switch (partie.nomJeux){
                 case "sixQuiPrend":
-                    console.log("six qui prends");
                     tempNbSix+=1;
                     if(partie.place==1){
                         tempWinSix+=1;
                     }
                     tempPlaceSix+=partie.place;
+                    tempTetes+=partie.points;
                     break;
                 case "bataille":
-                    console.log("bataille");
                     tempNbBataille+=1;
                     if(partie.place==1){
                         tempWinBataille+=1;
@@ -51,6 +53,8 @@ function Profil(){
         setWinBataille(tempWinBataille);
         setWinrateSix(tempPlaceSix/tempNbSix);
         setWinrateBataille(tempPlaceBataille/tempNbBataille);
+        setTetes(tempTetes/tempNbSix);
+        console.log("temp tetes", tempTetes);
     });
 
 
@@ -60,7 +64,7 @@ function Profil(){
                 <label id="nom">{account}</label>
                 <div id="pasLeNom">
                     <div id="profilJeux">
-                        <div className="profilJeux">
+                        <div id="profilBataille">
                             <div className="stat">
                                 <label className="nomJeux">Bataille</label>
                                 <label className="labelProfil">Parties jouées : {nbBataille}</label>
@@ -68,12 +72,13 @@ function Profil(){
                                 <label className="labelProfil">Placement Moyen : {winrateBataille}</label>
                             </div>
                         </div>
-                        <div className="profilJeux">
+                        <div id="profilSix">
                             <div className="stat">
                                 <label className="nomJeux">Six Qui Prend</label>
                                 <label className="labelProfil">Parties jouées : {nbSix}</label>
                                 <label className="labelProfil">Victoires : {winSix}</label>
                                 <label className="labelProfil">Placement Moyen : {winrateSix}</label>
+                                <label className="labelProfil">Nombre de têtes de taureau Moyen : {tetes}</label>
                             </div>
                         </div>
                     </div>
