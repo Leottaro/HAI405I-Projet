@@ -1,3 +1,4 @@
+import Rank from "../../component/Rank/Rank";
 import Retour from "../../component/Retour/Retour";
 import socket, { account } from "../../socket";
 import "./profil.css";
@@ -61,6 +62,7 @@ function Profil(){
     return (
         <>
             <div id="profil">
+            <Rank winBataille={winBataille} nbBataille={nbBataille} winSix={winSix} nbSixS={nbSix}/>
                 <label id="nom">{account}</label>
                 <div id="pasLeNom">
                     <div id="profilJeux">

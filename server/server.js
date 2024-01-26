@@ -436,7 +436,7 @@ io.on("connection", function (socket) {
         const [err, rows] = await sqlRequest(`SELECT nomJeux, place, points FROM aJoue, partieFinie 
         WHERE codeR=code
         AND nom="${sockets[socket.id].compte}"`);
-        socket.emit("resProfilStat", rows);
+        socket.emit("resProfilStat", rows || []);
     });
 
     // leaderboard

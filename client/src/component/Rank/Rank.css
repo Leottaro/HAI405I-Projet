@@ -1,0 +1,16 @@
+#rankBataille{
+    height: 10vh;
+    aspect-ratio: 0.9;
+    position: absolute;
+    top: 35vh;
+    right: 50vw;
+    border-radius: 1vh;
+}
+#rankSix{
+    height: 10vh;
+    aspect-ratio:0.9;
+    position: absolute;
+    top: 55vh;
+    right: 50vw;
+    border-radius: 1vh;
+}
