@@ -60,7 +60,7 @@ class SixQuiPrend {
         }
         this.playersIDs.push(playerID);
         this.paquets[playerID] = [];
-        this.scores[playerID] = 60;
+        this.scores[playerID] = 0;
         return true;
     }
 
@@ -78,6 +78,10 @@ class SixQuiPrend {
         // on supprime son paquet
         delete this.paquets[playerID];
         delete this.scores[playerID];
+        // si la game n'a plus assez de joueurs, on la supprime
+        if ((this.started && this.playersIDs.length < 2) || (!this.started && this.playersIDs.length == 0)) {
+            this.endCallback();
+        }
         return true;
     }
 
@@ -209,6 +213,6 @@ class SixQuiPrend {
         return true;
     }
 
-    
+
 }
 module.exports = SixQuiPrend;

@@ -46,10 +46,6 @@ class Bataille {
         }
         // on le vire
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
-        if (this.playersIDs.length == 0) {
-            delete this.paquets[playerID];
-            return true;
-        }
         // on répartit son paquet aux autres joueurs
         for (let i = 0; i < this.paquets[playerID].length; i++) {
             const receveur = this.playersIDs[i % this.playersIDs.length];
@@ -67,6 +63,10 @@ class Bataille {
             this.tempCartes = [];
         }
         delete this.paquets[playerID];
+        // si la game n'a plus assez de joueurs, on la supprime
+        if ((this.started && this.playersIDs.length < 2) || (!this.started && this.playersIDs.length == 0)) {
+            this.endCallback();
+        }
         return true;
     }
 

@@ -5,7 +5,7 @@ function NavProfil() {
     const navigate = useNavigate();
 
     function goToProfil() {
-        navigate("/profil/");
+        navigate("/profil");
     }
 
     return (

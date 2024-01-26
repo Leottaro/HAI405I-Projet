@@ -93,7 +93,7 @@ httpServer.listen(port, () => {
     console.log(`server running on port http://localhost:${port}/`);
 });
 
-const sockets = {}; // clef: socket.id              valeur: {compte, code}
+const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
 io.on("connection", function (socket) {
@@ -267,6 +267,12 @@ io.on("connection", function (socket) {
         }
         io.in(code).emit("resPlayers", final);
     }
+    socket.on("reqPlayers", () => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        resPlayers(sockets[socket.id].partie);
+    });
 
     function resPlateau(code) {
         if (!parties[code]) return;
@@ -274,6 +280,12 @@ io.on("connection", function (socket) {
         const final = jeux.plateau;
         io.in(code).emit("resPlateau", final);
     }
+    socket.on("reqPlateau", () => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        resPlateau(sockets[socket.id].partie);
+    });
 
     socket.on("reqStart", () => {
         if (!sockets[socket.id]) {
@@ -381,6 +393,12 @@ io.on("connection", function (socket) {
 
     async function finJeux(code) {
         const jeux = parties[code];
+
+        if (!jeux.ended) {
+            delete parties[code];
+            return;
+        }
+
         switch (jeux.nomJeux) {
             case "bataille":
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
@@ -401,7 +419,7 @@ io.on("connection", function (socket) {
         }
 
         database.run(`INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`);
-        if(jeux.nomJeux==="bataille"){
+        if (jeux.nomJeux === "bataille") {
             jeux.playersIDs.forEach(id => {
                 if (id == jeux.winner) {
                     database.run(`INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`);
@@ -412,7 +430,7 @@ io.on("connection", function (socket) {
                 console.log("cé la bataye");
             });
         }
-        else if(jeux.nomJeux==="sixQuiPrend"){
+        else if (jeux.nomJeux === "sixQuiPrend") {
             jeux.playersIDs.forEach(id => {
                 if (id == jeux.winner) {
                     database.run(`INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`);
@@ -422,7 +440,7 @@ io.on("connection", function (socket) {
                 }
             });
         }
-        
+
 
         delete parties[code];
     }
