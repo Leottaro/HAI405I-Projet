@@ -30,7 +30,7 @@ function PlateauSix() {
             }, {}));
             setMoi(json[account]);
             setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
-            setAfficheSave(json[account].isCreator && afficheStart);
+            setAfficheSave(json[account].isCreator);
             setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
         });
         socket.emit("reqPlayers");
@@ -67,7 +67,7 @@ function PlateauSix() {
                     listePlateau.map((liste, index) => <div className="ligne" onClick={() => socket.emit("reqSixPrends", index)}>{liste.map(json => <Carte visible valeur={json.valeur} type={json.type} chemin={"CartesSix/" + json.valeur + json.type + ".png"} />)}</div>)
                 }
             </div>
-            <Start afficheStart={afficheStart} afficheSave={afficheSave} code={code} start={start} save={save} />
+            <Start afficheStart={afficheStart} afficheSave={afficheStart ^ afficheSave} code={code} start={start} save={save} />
             <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} texte={moi.score + " têtes de boeuf"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesSix/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}
