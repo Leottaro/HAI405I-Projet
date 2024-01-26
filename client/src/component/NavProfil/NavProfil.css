@@ -1,14 +1,14 @@
 #navProfil {
-    height: 5vw;
-    width: 5vw;
-    margin-top: 0.5vw;
+    height: 10vh;
+    width: 10vh;
+    margin-top: 1vh;
 
     background: url("../../../public/Assets/FaceCachee.png");
     background-size: 100%;
     color: #000000;
     
     font-weight: bold;
-    font-size: 1.5vw;
+    font-size: 3vh;
     text-align: center;
 
     display: flex;

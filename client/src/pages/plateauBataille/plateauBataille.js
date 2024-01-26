@@ -6,7 +6,7 @@ import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import './plateauBataille.css';
 import { useParams } from "react-router-dom";
-import NavProfil from "../../component/NavProfil/NavProfil";
+import NavBar from "../../component/NavBar/NavBar";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
 
@@ -59,7 +59,7 @@ function PlateauBataille() {
 
     return (
         <div id="plateauBataille">
-            <NavProfil />
+            <NavBar />
             <Audio />
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">

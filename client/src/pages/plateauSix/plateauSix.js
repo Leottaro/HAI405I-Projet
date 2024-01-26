@@ -6,7 +6,7 @@ import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import './plateauSix.css';
 import { useParams } from "react-router-dom";
-import NavProfil from "../../component/NavProfil/NavProfil";
+import NavBar from "../../component/NavBar/NavBar";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
 
@@ -56,7 +56,7 @@ function PlateauSix() {
 
     return (
         <div id="plateauSix">
-            <NavProfil></NavProfil>
+            <NavBar />
             <Audio />
             <h2 id="winner">{winner}</h2>
             <div id="listeJoueurs">
