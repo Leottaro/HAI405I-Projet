@@ -11,10 +11,9 @@ function Rank(props) {
     const [sourceSix,setSourceSix]= useState(rank1);
 
     useEffect(() => {
-        getSourceBataille();
-        
+        getSourceBataille();   
         getSourceSix();
-    }, []);
+    });
 
     function getSourceBataille(){
         if(props.winBataille-(props.nbBataille-props.winBataille)>15){
@@ -46,8 +45,8 @@ function Rank(props) {
     }
     return (
         <div>
-            <img id="rankBataille" src={sourceBataille}/>
-            <img id="rankSix" src={sourceSix}/>
+            <img id="rankBataille" src={sourceBataille} alt=""/>
+            <img id="rankSix" src={sourceSix} alt=""/>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import "./leaderboard.css";
-import socket, { account } from "../../socket";
+import socket from "../../socket";
 import { useEffect, useState } from "react";
 import NavBar from "../../component/NavBar/NavBar";
 
@@ -27,7 +27,7 @@ function Leaderboard() {
                 <div className="classement">
                     {general.map((json, i) =>
                         <div className="divPlace">
-                            <div className={i == 0 ? "first" : (i == 1 ? "second" : (i == 2 ? "third" : "place"))}>
+                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">
@@ -43,7 +43,7 @@ function Leaderboard() {
                     <label className="nomJeu">Bataille</label>
                     {bataille.map((json, i) =>
                         <div className="divPlace">
-                            <div className={i == 0 ? "first" : (i == 1 ? "second" : (i == 2 ? "third" : "place"))}>
+                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">
@@ -57,7 +57,7 @@ function Leaderboard() {
                     <label className="nomJeu">Six qui prend</label>
                     {six.map((json, i) =>
                         <div className="divPlace">
-                            <div className={i == 0 ? "first" : (i == 1 ? "second" : (i == 2 ? "third" : "place"))}>
+                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">

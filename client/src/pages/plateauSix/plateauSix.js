@@ -1,5 +1,5 @@
 import socket, { account } from "../../socket";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import MonJeux from "../../component/MonJeux/MonJeux";
 import JoueurSix from "./joueurSix/joueurSix";
 import Chat from "../../component/Chat/Chat";
@@ -17,7 +17,6 @@ function PlateauSix(props) {
     const [afficheStart, setAfficheStart] = useState(false);
     const [afficheSave, setAfficheSave] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
-    const [winner, setWinner] = useState("");
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
 

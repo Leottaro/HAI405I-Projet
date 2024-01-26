@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import socket from "../../socket";
+import { useState } from "react";
 import "./creerRejoindre.css";
 import { useParams } from "react-router-dom";
 import Creer from "./creer";

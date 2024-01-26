@@ -1,5 +1,4 @@
 import Rank from "../../component/Rank/Rank";
-import Retour from "../../component/Retour/Retour";
 import socket, { account } from "../../socket";
 import NavBar from "../../component/NavBar/NavBar";
 import "./profil.css";
@@ -28,7 +27,7 @@ function Profil() {
                 switch (partie.nomJeux) {
                     case "sixQuiPrend":
                         tempNbSix += 1;
-                        if (partie.place == 1) {
+                        if (partie.place === 1) {
                             tempWinSix += 1;
                         }
                         tempPlaceSix += partie.place;
@@ -36,7 +35,7 @@ function Profil() {
                         break;
                     case "bataille":
                         tempNbBataille += 1;
-                        if (partie.place == 1) {
+                        if (partie.place === 1) {
                             tempWinBataille += 1;
                         }
                         tempPlaceBataille += partie.place;
@@ -87,7 +86,7 @@ function Profil() {
                         <label id="labelHistorique">Historique</label>
                         <div id="scrollHistorique">
                             {parties.map(json =>
-                                <div className={json.place == 1 ? "victoire" : "defaite"}>
+                                <div className={json.place === 1 ? "victoire" : "defaite"}>
                                     <label className="mode">{json.nomJeux}</label>
                                     <label className="resultat">{json.place}</label>
                                 </div>
