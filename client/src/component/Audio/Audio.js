@@ -3,10 +3,16 @@ import './Audio.css';
 
 function Audio() { 
     const source = "../Assets/EpicSaxoGuy.mp3";
-    
+    const [mute, setMute] = useState(false);
+
+    function muted(){
+        setMute(!mute);
+    }
+
     return (
         <div>
-            <audio hidden className="audio" controls autoPlay loop>
+            <button id="buttonMute" onClick={muted}>Mute</button>
+            <audio muted={mute} hidden className="audio" controls autoPlay loop>
                 <source src={source} type="audio/mpeg" />
             </audio>
         </div>

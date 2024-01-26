@@ -1,7 +1,13 @@
-.audio{
-    height: 3vw;
-    height: 2vh;
+#buttonMute{
+    height: 5vh;
+    aspect-ratio: 1.2;
     position: absolute;
     top: 2vw;
     right: 2vw;
+    border-radius: 1vh;
+    background: #573b8a;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
 }
