@@ -43,8 +43,9 @@ function Chat() {
 
     return (
         <>
-            <svg viewBox="-12 -12 24 24" id="ChatButton" onClick={onChatButtonClick} className={isChatShown ? "shown" : ""}>
-                <path d="M 7 0 L -7 0 M 7 0 L 1 -6 M 7 0 L 1 6" strokeLinecap="round" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 48" id="ChatButton" onClick={onChatButtonClick} className={isChatShown ? "shown" : ""} >
+                <path className="arrow" d="M20 24H4M20 24l-8-6M20 24l-8 6" stroke="#fff" strokeLinecap="round" strokeWidth={3} />
+                <path className="background" fill="#ffffff40" d="M0 24c0-6 6-12 12-12S24 6 24 0v48c0-6-6-12-12-12S0 30 0 24Z" />
             </svg>
             <span id="ChatNotif" className={isNotifShown ? "shown" : ""} />
             <div id="ChatDiv" className={isChatShown ? "shown" : ""}>
