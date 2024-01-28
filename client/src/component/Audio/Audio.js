@@ -10,7 +10,7 @@ function Audio() {
     function handleClick() {
         const newVolume = (volume + 1) % 4; // 0: mute, 1: 25%, 2: 66%, 3:100%
         setVolume(newVolume);
-        audioRef.current.volume = newVolume == 1 ? 0.25 : newVolume == 2 ? 0.66 : newVolume == 3 ? 1 : 0;
+        audioRef.current.volume = newVolume === 1 ? 0.25 : newVolume === 2 ? 0.66 : newVolume === 3 ? 1 : 0;
     }
 
     window.onmouseup = () => setMouseDown(false);

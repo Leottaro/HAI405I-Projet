@@ -11,6 +11,7 @@ import PlateauBataille from "./pages/plateauBataille/plateauBataille";
 import PlateauSix from "./pages/plateauSix/plateauSix";
 import Score from "./pages/score/score";
 import Leaderboard from "./pages/leaderboard/leaderboard";
+import Navbar from "./component/NavBar/NavBar";
 
 function App() {
   const navigate = useNavigate();
@@ -32,17 +33,20 @@ function App() {
   }, [location]);
 
   return (
-    <Routes>
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/profil" element={<Profil />} />
-      <Route path="/Connection" element={<Connection />} />
-      <Route path="/selectionJeux" element={<SelectionJeux />} />
-      <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
-      <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
-      <Route path="/plateauSix/:code" element={<PlateauSix />} />
-      <Route path="/Score" element={<Score />} />
-      <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
-    </Routes>
+    <>
+      {location.pathname !== "/Connection" ? <Navbar /> : <></>}
+      <Routes>
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/profil" element={<Profil />} />
+        <Route path="/Connection" element={<Connection />} />
+        <Route path="/selectionJeux" element={<SelectionJeux />} />
+        <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
+        <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
+        <Route path="/plateauSix/:code" element={<PlateauSix />} />
+        <Route path="/Score" element={<Score />} />
+        <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
+      </Routes>
+    </>
   );
 }
 

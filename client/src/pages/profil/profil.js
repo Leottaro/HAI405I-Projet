@@ -1,6 +1,5 @@
 import Rank from "../../component/Rank/Rank";
 import socket, { account } from "../../socket";
-import NavBar from "../../component/NavBar/NavBar";
 import "./profil.css";
 import { useEffect, useState } from "react";
 
@@ -95,7 +94,6 @@ function Profil() {
                     </div>
                 </div>
             </div>
-            <NavBar/>
         </>
     )
 }

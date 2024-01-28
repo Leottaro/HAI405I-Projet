@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import Creer from "./creer";
 import Rejoindre from "./rejoindre";
 import MesParties from "./mesParties";
-import NavBar from "../../component/NavBar/NavBar";
 
 function CreerRejoindre(params) {
     const { jeux } = useParams();
@@ -31,7 +30,6 @@ function CreerRejoindre(params) {
     return (
         <>
             <div id="CRDiv">
-                <NavBar/>
                 <div id="CRbuttonDiv">
                     <button className="CRButton" onClick={creer} disabled={mode === "creer"}>Creer</button>
                     <button className="CRButton" onClick={rejoindre} disabled={mode === "rejoindre"}>Rejoindre</button>

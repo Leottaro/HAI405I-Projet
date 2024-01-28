@@ -1,31 +1,52 @@
 #navBar {
-    height : 50vh;
-    width: 12vh;
-    background: #fff4 ;
+    padding: 1vh 0vw 1vh 0vw;
+
     position: absolute;
     top: 2vh;
     left: 2vh;
+
+    background: #fff4;
+    border: none;
     border-radius: 10vh;
-    
-    align-items: center;
+
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    overflow: hidden;
 }
 
-.navBarButton {
-    height: 10vh;
-    width: 10vh;
-    padding: 0.10vh;
+#navBar * {
+    height: 5vh;
+    margin: 0vh 1vw 0vh 1vw;
+}
 
-    outline: none;
-    border: none;
+#navBar label {
+    width: 8vw;
+    padding: 0.1vh;
 
     color: #fff;
     background: #332252;
     border-radius: 10vh;
 
-    font-size: 1.6vh;
+    font-size: 1vw;
     font-weight: bold;
-    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#navBarButton #background {
+    fill: #332252;
+}
+
+#navBarButton #vector1,
+#navBarButton #vector2,
+#navBarButton #vector3 {
+    transition: all 0.5s;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
 }

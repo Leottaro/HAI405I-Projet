@@ -6,7 +6,6 @@ import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import './plateauSix.css';
 import { useParams } from "react-router-dom";
-import NavBar from "../../component/NavBar/NavBar";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
 
@@ -66,7 +65,6 @@ function PlateauSix(props) {
 
     return (
         <div id="plateauSix">
-            <NavBar />
             <Audio />
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurSix pseudo={player} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} score={listeJoueurs[player].score} key={"joueur" + index} />)}
