@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     const locationTitle = location.pathname.split('/')[1];
     document.title = locationTitle || "Home";
-    if (!locationTitle.startsWith("plateau") && locationTitle !== "profil") {
+    if (!locationTitle.startsWith("plateau")) {
       socket.emit("reqLeave");
     }
   }, [location]);
@@ -36,13 +36,13 @@ function App() {
     <>
       {location.pathname !== "/Connection" ? <Navbar /> : <></>}
       <Routes>
-        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/Connection" element={account ? <Navigate to="/profil" /> : <Connection />} />
         <Route path="/profil" element={<Profil />} />
-        <Route path="/Connection" element={<Connection />} />
         <Route path="/selectionJeux" element={<SelectionJeux />} />
         <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
         <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
         <Route path="/plateauSix/:code" element={<PlateauSix />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/Score" element={<Score />} />
         <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
       </Routes>
