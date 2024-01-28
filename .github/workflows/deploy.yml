@@ -27,4 +27,3 @@ jobs:
             - name: Start client & server
               run: |
                   pm2 start HAI405I-BACK
-                  cd client && RUNNER_TRACKING_ID="" && pnpm run serve &
