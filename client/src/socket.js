@@ -1,5 +1,9 @@
 import io from "socket.io-client";
-const socket = io.connect(process.env.REACT_APP_HAI405I_HOST || "http://localhost:3001/");
+const host =
+    process.env.NODE_ENV === "production"
+        ? "http://jeuxapi.laboulangerie.net/"
+        : "http://localhost:3001/";
+const socket = io.connect(host);
 export default socket;
 
 export let account;
