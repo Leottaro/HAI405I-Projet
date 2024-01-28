@@ -44,12 +44,23 @@
     align-items: center;
 }
 
+#navBar label:hover {
+    background: #573b8a;
+}
+
+#navBar label.disabled {
+    background: #211735;
+}
+
 #navBarButton {
     min-width: 5vh;
 }
 
 #navBarButton #background {
     fill: #332252;
+}
+#navBarButton:hover #background {
+    fill: #573b8a;
 }
 
 #navBarButton #vector1,

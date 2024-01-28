@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./NavBar.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [hidden, setHidden] = useState(true);
 
     return (
@@ -15,9 +16,9 @@ function Navbar() {
                 <path id="vector3" d={hidden ? "M6 18 L18 18" : "M6 18 L18 6"} />
             </svg>
             <label onClick={() => window.history.back()}>Retour</label>
-            <label onClick={() => navigate("/selectionJeux")}>Selection du jeux</label>
-            <label onClick={() => navigate("/leaderboard")}>Leader board</label>
-            <label onClick={() => navigate("/profil")}>Profil</label>
+            <label className={location.pathname === "/selectionJeux" ? "disabled" : ""} onClick={() => navigate("/selectionJeux")}>Selection du jeux</label>
+            <label className={location.pathname === "/leaderboard" ? "disabled" : ""} onClick={() => navigate("/leaderboard")}>Leaderboard</label>
+            <label className={location.pathname === "/profil" ? "disabled" : ""} onClick={() => navigate("/profil")}>Profil</label>
         </div>
     )
 }
