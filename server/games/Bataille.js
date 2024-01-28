@@ -13,6 +13,7 @@ class Bataille {
         this.playersIDs = [];
         this.paquets = {};
         this.choosed = {};
+        this.endCallback;
 
         this.enLice = [];
         this.tempCartes = [];
@@ -45,10 +46,6 @@ class Bataille {
         }
         // on le vire
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
-        if (this.playersIDs.length == 0) {
-            delete this.paquets[playerID];
-            return true;
-        }
         // on répartit son paquet aux autres joueurs
         for (let i = 0; i < this.paquets[playerID].length; i++) {
             const receveur = this.playersIDs[i % this.playersIDs.length];
@@ -66,6 +63,10 @@ class Bataille {
             this.tempCartes = [];
         }
         delete this.paquets[playerID];
+        // si la game n'a plus assez de joueurs, on la supprime
+        if ((this.started && this.playersIDs.length < 2) || (!this.started && this.playersIDs.length == 0)) {
+            this.endCallback();
+        }
         return true;
     }
 
@@ -131,15 +132,16 @@ class Bataille {
             this.enLice = sortedChoosed.slice(0, nbEgalite);
             return this.nextRound();
         }
-        this.ended = this.enLice.length <= 1;
-        if (this.ended) {
-            this.winner = winner;
-        }
         this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes))
             .sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
         this.choosed = {};
         this.tempCartes = [];
         this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
+        this.ended = this.enLice.length <= 1;
+        if (this.ended) {
+            this.winner = winner;
+            this.endCallback();
+        }
         return 1;
     }
 }

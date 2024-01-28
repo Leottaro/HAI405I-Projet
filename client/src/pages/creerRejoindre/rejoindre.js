@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../socket";
 import Parties from "./parties";
+import { useParams } from "react-router-dom";
 
 function Rejoindre() {
+    const { jeux } = useParams();
     const [lien, setLienPartie] = useState(1);
     const [message, setMessage] = useState("");
     const [listParties, setListPartie] = useState([]);
@@ -11,16 +13,24 @@ function Rejoindre() {
         socket.emit("reqJoin", lien.toString());
     }
 
-    socket.on('resJoin', json => {
-        if (!json.success)
-            setMessage(json.message);
-    });
-
-    socket.on('resGames', liste => {
-        if (liste) {
-            setListPartie(liste);
+    useEffect(() => {
+        socket.on('resJoin', json => {
+            if (!json.success)
+                setMessage(json.message);
+        });
+        socket.on('resGames', liste => {
+            if (liste) {
+                setListPartie(liste);
+            }
+        });
+        socket.emit("reqGames", jeux);
+        const clock = setInterval(() => socket.emit("reqGames", jeux), 1000);
+        return () => {
+            clearInterval(clock);
+            socket.off("resJoin");
+            socket.off("resGames");
         }
-    });
+    }, []);
 
     return (
         <div id="CRContent">
@@ -31,7 +41,7 @@ function Rejoindre() {
             <label className="CRtitle">Parties en cours:</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
-                    <Parties key={index} nbrJoueurs={partie.nbrJoueurs} code={partie.code} />
+                    <Parties key={index} buttonText="rejoindre" nbrJoueurs={partie.nbrJoueurs} buttonCallback={() => socket.emit("reqJoin", partie.code)} />
                 ))}
             </div>
         </div>

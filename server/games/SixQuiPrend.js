@@ -15,16 +15,18 @@ class SixQuiPrend {
         this.playersIDs = [];
         this.paquets = {};
         this.choosed = {};
+        this.endCallback;
 
         this.plateau = [[], [], [], []];
         this.scores = {};
         this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
         this.roundDelay = options ? options.roundDelay * 1000 : undefined;
-        this.roundInterval;
+        this.roundTimeout;
         this.roundCallback;
         this.choiceDelay = options ? options.choiceDelay * 1000 : undefined;
         this.choiceTimeout;
         this.choiceCallback;
+        this.playCallback;
 
         this.addPlayer(creatorID);
     }
@@ -32,10 +34,11 @@ class SixQuiPrend {
     setRoundCallback(callback) {
         this.roundCallback = callback;
     }
-    playRoundInterval() {
-        clearInterval(this.roundInterval);
+    playRoundTimeout() {
+        clearTimeout(this.roundTimeout);
         if (this.roundDelay) {
-            this.roundInterval = setInterval(this.roundCallback, this.roundDelay);
+            this.roundTimeout = setTimeout(this.roundCallback, this.roundDelay);
+            this.playCallback(this.roundDelay);
         }
     }
 
@@ -46,7 +49,12 @@ class SixQuiPrend {
         clearTimeout(this.choiceTimeout);
         if (this.choiceDelay) {
             this.choiceTimeout = setTimeout(this.choiceCallback, this.choiceDelay);
+            this.playCallback(this.choiceDelay);
         }
+    }
+
+    setPlayCallback(callback) {
+        this.playCallback = callback;
     }
 
     hasStarted() {
@@ -77,6 +85,10 @@ class SixQuiPrend {
         // on supprime son paquet
         delete this.paquets[playerID];
         delete this.scores[playerID];
+        // si la game n'a plus assez de joueurs, on la supprime
+        if ((this.started && this.playersIDs.length < 2) || (!this.started && this.playersIDs.length == 0)) {
+            this.endCallback();
+        }
         return true;
     }
 
@@ -166,6 +178,7 @@ class SixQuiPrend {
             }
             if (!biggest.ligne) {
                 this.leJoueurQuiAMisUneCarteTropPetiteAvantLà = playerID;
+                this.playChoiceTimeout();
                 return 2;
             }
             if (this.plateau[biggest.ligne].length == 5) {
@@ -190,6 +203,9 @@ class SixQuiPrend {
             Object.keys(this.paquets).forEach(playerID => this.paquets[playerID] = []);
             this.choosed = {};
             this.plateau = [[], [], [], []];
+            this.endCallback();
+        } else {
+            this.playRoundTimeout();
         }
         return 1;
     }
@@ -207,6 +223,6 @@ class SixQuiPrend {
         return true;
     }
 
-    
+
 }
 module.exports = SixQuiPrend;

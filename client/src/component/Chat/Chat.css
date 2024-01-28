@@ -6,49 +6,46 @@
     top: 0vh;
     right: -30vw;
 
+    background: #ffffff40;
+    border: none;
     border-radius: 1rem 0rem 0rem 1rem;
-
+    
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    justify-content: end;
-}
-
-#ChatButton {
-    height: 3rem;
-    width: 3rem;
-
-    position: absolute;
-    top: calc((100vh - 3rem)/2);
-    right: 0vw;
-
-    border-radius: 2rem 0rem 0rem 2rem;
-}
-
-#ChatButton path {
-    stroke: #fff;
-    stroke-width: 0.15rem;
-    transform: rotate(180deg);
-    transition: cubic-bezier(.50,-0.5,.5,1.5) 1s;
-}
-
-#ChatDiv,
-#ChatButton {
-    transition: right 1s;
-    background: #ffffff40;
-    border: none;
 }
 
 #ChatDiv.shown {
     right: 0vw;
 }
 
+#ChatButton {
+    width: 3rem;
+
+    position: absolute;
+    top: 50vh;
+    right: 0vw;
+    transform: translate(0, -50%);
+}
+
 #ChatButton.shown {
     right: 30vw;
 }
 
-#ChatButton:hover {
-    background: #ffffffc0;
+#ChatDiv, #ChatButton {
+    transition: right 1s;
+}
+
+#ChatButton .arrow {
+    stroke: #fff;
+    stroke-width: 0.15rem;
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
+    transition: cubic-bezier(.50,-0.5,.5,1.5) 1s;
+}
+
+#ChatButton:hover .background {
+    fill: #ffffffc0;
 }
 
 #ChatButton.shown path {
@@ -60,7 +57,7 @@
     height: 0.5rem;
 
     position: absolute;
-    top: calc((100vh + 3rem)/2 - 1rem);
+    bottom: calc(50vh - 1rem);
     right: calc(30vw + 0.5rem);
     
     border-radius: 2rem;

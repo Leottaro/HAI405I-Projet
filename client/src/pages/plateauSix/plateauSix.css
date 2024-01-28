@@ -48,3 +48,13 @@
     right: 10vw;
     bottom: 5vh;
 }
+
+#timer {
+    position: absolute;
+    left: 11vw;
+    bottom: 23vh;
+    transform: translate(-50%, 0%);
+
+    font-size: 2vh;
+    color: #fff;
+}

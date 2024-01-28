@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import './selectionJeux.css';
 import sixQuiPrend from './sixQuiPrend.jpg'
 import bataille from './bataille.png'
-import NavProfil from "../../component/NavProfil/NavProfil";
 
 function SelectionJeux() {
     const [i, setI] = useState(0);
@@ -47,7 +46,6 @@ function SelectionJeux() {
 
     return (
         <div id="selectionJeuxDiv">
-            <NavProfil></NavProfil>
             <button id="gauche" className="selectionJeuxButton" onClick={gauche}>❮</button>
             <img id="img" className={placement} src={listeJeux[i]} onClick={choisir} alt="" />
             <button id="droite" className="selectionJeuxButton" onClick={droite}>❯</button>

@@ -38,9 +38,20 @@
     width: calc(100% - 210px);
 }
 
-.profilJeux {
+#profilBataille {
     width: calc(100% - 20px);
     height: 165px;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#profilSix {
+    width: calc(100% - 20px);
+    height: 200px;
     margin: 10px;
     background: #573b8a;
     border-radius: 10px;

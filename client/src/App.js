@@ -10,6 +10,8 @@ import CreerRejoindre from "./pages/creerRejoindre/creerRejoindre";
 import PlateauBataille from "./pages/plateauBataille/plateauBataille";
 import PlateauSix from "./pages/plateauSix/plateauSix";
 import Score from "./pages/score/score";
+import Leaderboard from "./pages/leaderboard/leaderboard";
+import Navbar from "./component/NavBar/NavBar";
 
 function App() {
   const navigate = useNavigate();
@@ -20,26 +22,31 @@ function App() {
       navigate(page);
     });
     return () => socket.off("goTo");
-  }, [])
+  }, []);
 
   useEffect(() => {
-    document.title = location.pathname.split('/')[1] || "Home";
-    if (!location.pathname.startsWith("/plateau")) {
+    const locationTitle = location.pathname.split('/')[1];
+    document.title = locationTitle || "Home";
+    if (!locationTitle.startsWith("plateau")) {
       socket.emit("reqLeave");
     }
   }, [location]);
 
   return (
-    <Routes>
-      <Route path="/profil" element={<Profil />} />
-      <Route path="/Connection" element={<Connection />} />
-      <Route path="/selectionJeux" element={<SelectionJeux />} />
-      <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
-      <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
-      <Route path="/plateauSix/:code" element={<PlateauSix />} />
-      <Route path="/Score" element={<Score />} />
-      <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
-    </Routes>
+    <>
+      {location.pathname !== "/Connection" ? <Navbar /> : <></>}
+      <Routes>
+        <Route path="/Connection" element={account ? <Navigate to="/profil" /> : <Connection />} />
+        <Route path="/profil" element={<Profil />} />
+        <Route path="/selectionJeux" element={<SelectionJeux />} />
+        <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
+        <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
+        <Route path="/plateauSix/:code" element={<PlateauSix />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/Score" element={<Score />} />
+        <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
+      </Routes>
+    </>
   );
 }
 
