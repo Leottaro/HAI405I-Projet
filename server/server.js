@@ -187,7 +187,6 @@ io.on("connection", function (socket) {
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", parties[code].url);
-        setTimeout(() => resPlayers(code), 100);
     });
 
     // REJOINDRE
@@ -213,7 +212,6 @@ io.on("connection", function (socket) {
         socket.join(code);
         socket.emit("resJoin", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", jeux.url);
-        setTimeout(() => resPlayers(code), 250);
     });
 
     socket.on("reqRestart", async code => { // TODO:

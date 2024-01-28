@@ -13,7 +13,7 @@ function Rank(props) {
     useEffect(() => {
         getSourceBataille();   
         getSourceSix();
-    });
+    }, []);
 
     function getSourceBataille(){
         if(props.winBataille-(props.nbBataille-props.winBataille)>15){

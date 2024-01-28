@@ -15,7 +15,7 @@ function Score() {
             setScores(json.scores);
         });
         return () => socket.off("winSix");
-    });
+    }, []);
 
     const navigate = useNavigate();
     function rejouer() {

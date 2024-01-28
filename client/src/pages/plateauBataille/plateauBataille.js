@@ -46,7 +46,7 @@ function PlateauBataille() {
             socket.off("resPlayers");
             socket.off("Gagnant");
         };
-    });
+    }, []);
 
     function start() {
         socket.emit("reqStart");

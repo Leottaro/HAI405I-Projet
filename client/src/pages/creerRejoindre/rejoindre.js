@@ -30,7 +30,7 @@ function Rejoindre() {
             socket.off("resJoin");
             socket.off("resGames");
         }
-    })
+    }, []);
 
     return (
         <div id="CRContent">

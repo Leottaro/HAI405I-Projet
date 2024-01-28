@@ -28,7 +28,7 @@ function Connection() {
             socket.off("resSignIn");
             socket.off("resLogIn");
         };
-    });
+    }, []);
 
     return (
         <div id="Div">

@@ -16,7 +16,7 @@ function Leaderboard() {
         })
         socket.emit("reqLeaderboard");
         return () => socket.off("resLeaderboard");
-    });
+    }, []);
 
 
     return (
