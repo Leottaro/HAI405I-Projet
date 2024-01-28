@@ -1,20 +1,25 @@
 #navBar {
+    transition: all 0.5s;
+    width: calc(38vw + 5vh);
+    height: 7vh;
     padding: 1vh 0vw 1vh 0vw;
-
+    
     position: absolute;
     top: 2vh;
     left: 2vh;
-
+    
     background: #fff4;
     border: none;
-    border-radius: 10vh;
-
+    border-radius: 7vh;
+    
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
+    
     overflow: hidden;
+}
+
+#navBar.hidden {
+    width: calc(5vh + 2vw);
 }
 
 #navBar * {
@@ -23,8 +28,8 @@
 }
 
 #navBar label {
-    width: 8vw;
-    padding: 0.1vh;
+    width: 7vw;
+    min-width: 7vw;
 
     color: #fff;
     background: #332252;
@@ -34,8 +39,13 @@
     font-weight: bold;
 
     display: flex;
+    text-align: center;
     justify-content: center;
     align-items: center;
+}
+
+#navBarButton {
+    min-width: 5vh;
 }
 
 #navBarButton #background {
