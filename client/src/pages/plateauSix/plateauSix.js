@@ -75,7 +75,9 @@ function PlateauSix(props) {
                 }
             </div>
             <Start afficheStart={afficheStart} afficheSave={!afficheStart && afficheSave} code={code} start={start} save={save} />
-            <label id="timer">{timeLeft.toFixed(1) + " seconds left"}</label>
+            <div id={timeLeft>10 ? "divTimer" : (timeLeft>5 ? "divTimerOrange" : "divTimerRed")}>
+                <label id="timer">{timeLeft.toFixed(1)}</label>
+            </div>
             <MonJeux paquet={moi.paquet} dossier={"CartesSix/"} texte={moi.score + " têtes de boeuf"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesSix/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}

@@ -49,12 +49,53 @@
     align-items: center;
 }
 
-#timer {
+#divTimer {
     position: absolute;
     left: 11vw;
     bottom: 23vh;
     transform: translate(-50%, 0%);
+    background: #573b8a;
+    border-radius: 10px;
+    display: flex;
 
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#divTimerOrange {
+    position: absolute;
+    left: 11vw;
+    bottom: 23vh;
+    transform: translate(-50%, 0%);
+    background: orange;
+    border-radius: 10px;
+    display: flex;
+
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#divTimerRed {
+    position: absolute;
+    left: 11vw;
+    bottom: 23vh;
+    transform: translate(-50%, 0%);
+    background: red;
+    border-radius: 10px;
+    display: flex;
+
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#timer {
+    margin-top: 1vh;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
     font-size: 2vh;
     color: #fff;
 }
