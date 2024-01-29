@@ -59,7 +59,6 @@ function Profil() {
     return (
         <>
             <div id="profil">
-            <Rank winBataille={winBataille} nbBataille={nbBataille} winSix={winSix} nbSix={nbSix}/>
                 <label id="nom">{account}</label>
                 <div id="pasLeNom">
                     <div id="profilJeux">
@@ -70,6 +69,7 @@ function Profil() {
                                 <label className="labelProfil">Victoires : {winBataille}</label>
                                 <label className="labelProfil">Placement Moyen : {winrateBataille}</label>
                             </div>
+                            <Rank win={winBataille} nb={nbBataille}/>
                         </div>
                         <div id="profilSix">
                             <div className="stat">
@@ -79,6 +79,7 @@ function Profil() {
                                 <label className="labelProfil">Placement Moyen : {winrateSix}</label>
                                 <label className="labelProfil">Nombre de têtes de taureau Moyen : {tetes}</label>
                             </div>
+                            <Rank win={winSix} nb={nbSix}/>
                         </div>
                     </div>
                     <div id="historique">
