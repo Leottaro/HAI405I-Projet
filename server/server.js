@@ -480,6 +480,7 @@ io.on("connection", function (socket) {
     const jeux = parties[code];
 
     if (!jeux.ended) {
+      io.in(code).emit("goTo", "/profil");
       delete parties[code];
       return;
     }
