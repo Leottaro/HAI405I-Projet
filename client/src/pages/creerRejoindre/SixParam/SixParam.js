@@ -20,7 +20,7 @@ function SixParam(props) { // {title, min, max, defaultValue}
 
     useEffect(() => {
         props.onChange(value);
-    }, [value]);
+    }, [props, value]);
 
     return (
         <div className="parameter">

@@ -53,7 +53,7 @@ function Profil() {
         });
         socket.emit("reqProfilStat");
         return () => socket.off("resProfilStat");
-    }, []);
+    }, [parties]);
 
 
     return (

@@ -1,5 +1,3 @@
-import socket from "../../socket";
-
 function Parties(props) {
     return (
         <div className="divPartie">

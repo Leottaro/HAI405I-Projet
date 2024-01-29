@@ -22,7 +22,7 @@ function App() {
       navigate(page);
     });
     return () => socket.off("goTo");
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const locationTitle = location.pathname.split('/')[1];

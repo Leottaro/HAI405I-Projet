@@ -15,7 +15,7 @@ function Chat() {
             setNotifShown(!isChatShown)
         });
         return () => socket.off("resMsg");
-    }, []);
+    }, [listeMsg, isChatShown]);
 
     useEffect(() => {
         if (MessagesRef.current) {

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import socket, { account } from "../../socket";
+import { account } from "../../socket";
 import Carte from "../Carte/Carte";
 import "./MonJeux.css";
 

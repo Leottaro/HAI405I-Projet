@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./score.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Score() {
     const [gagnant, setGagnant] = useState();

@@ -25,7 +25,7 @@ function MesParties() {
             socket.off('resJoin');
             socket.off('resMyGames');
         };
-    }, []);
+    }, [jeux]);
 
     return (
         <div id="CRContent">
