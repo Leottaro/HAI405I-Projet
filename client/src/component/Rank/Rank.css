@@ -1,8 +1,10 @@
-#rank{
-    position: relative;
-    height: 10vh;
-    aspect-ratio:0.9;
-    top: 25%;
-    margin-left: 70%;
+#rank {
+    position: absolute;
+    top: 50%;
+    right: 2vw;
+    transform: translate(0, -50%);
+
+    height: max(5vw, 5vh);
+    aspect-ratio: 0.9;
     border-radius: 1vh;
 }

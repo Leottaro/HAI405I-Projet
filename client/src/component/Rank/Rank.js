@@ -20,9 +20,7 @@ function Rank(props) {
     }, [props]);
 
     return (
-        <div>
-            <img id="rank" src={"../../assets/ranks/" + source} alt="" />
-        </div>
+        <img id="rank" src={"../../assets/ranks/" + source} alt="" />
     );
 }
 export default Rank;
