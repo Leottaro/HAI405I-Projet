@@ -1,7 +1,13 @@
 import { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import socket, { account } from "./socket";
-import './App.css';
+import "./App.css";
 
 import Profil from "./pages/profil/profil";
 import Connection from "./pages/connection/connection";
@@ -18,14 +24,14 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    socket.on("goTo", page => {
+    socket.on("goTo", (page) => {
       navigate(page);
     });
     return () => socket.off("goTo");
   }, [navigate]);
 
   useEffect(() => {
-    const locationTitle = location.pathname.split('/')[1];
+    const locationTitle = location.pathname.split("/")[1];
     document.title = locationTitle || "Home";
     if (!locationTitle.startsWith("plateau")) {
       socket.emit("reqLeave");
@@ -36,15 +42,24 @@ function App() {
     <>
       {location.pathname !== "/Connection" ? <Navbar /> : <></>}
       <Routes>
-        <Route path="/Connection" element={account ? <Navigate to="/profil" /> : <Connection />} />
+        <Route
+          path="/Connection"
+          element={account ? <Navigate to="/profil" /> : <Connection />}
+        />
         <Route path="/profil" element={<Profil />} />
         <Route path="/selectionJeux" element={<SelectionJeux />} />
-        <Route path="/creerRejoindre/:jeux" element={<CreerRejoindre mode="creer" />} />
+        <Route
+          path="/creerRejoindre/:jeux"
+          element={<CreerRejoindre mode="creer" />}
+        />
         <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
         <Route path="/plateauSix/:code" element={<PlateauSix />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/Score" element={<Score />} />
-        <Route path="*" element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />} />
+        <Route
+          path="*"
+          element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />}
+        />
       </Routes>
     </>
   );

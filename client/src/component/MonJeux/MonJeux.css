@@ -1,38 +1,38 @@
 .monJeux {
-    width: 45vw;
-    height: 20vh;
+  width: 45vw;
+  height: 20vh;
 
-    position: absolute;
-    bottom: 1vh;
-    left: 50vw;
-    transform: translate(-50%, 0%);
+  position: absolute;
+  bottom: 1vh;
+  left: 50vw;
+  transform: translate(-50%, 0%);
 
-    background: linear-gradient(to bottom, #9C2542, #c5677e, #9C2542);
-    text-align: center;
-    border-radius: 10px;
+  background: linear-gradient(to bottom, #9c2542, #c5677e, #9c2542);
+  text-align: center;
+  border-radius: 10px;
 
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
 }
 
 .mesCartes {
-    height: 10vh;
+  height: 10vh;
 
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .monLabel {
-    width: 100%;
-    height: 3vh;
-    font-size: 2vh;
+  width: 100%;
+  height: 3vh;
+  font-size: 2vh;
 }
 
 .mesCartes .carte:hover {
-    border: 1px solid black;
+  border: 1px solid black;
 }

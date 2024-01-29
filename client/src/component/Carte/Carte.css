@@ -1,4 +1,4 @@
-.carte{
-    height: min(10vh, calc(0.7 * 15vw));
-    aspect-ratio: 7/10;
+.carte {
+  height: min(10vh, calc(0.7 * 15vw));
+  aspect-ratio: 7/10;
 }

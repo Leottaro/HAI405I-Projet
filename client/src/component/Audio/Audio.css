@@ -1,27 +1,27 @@
 #volumeButton {
-    transition: all 0.1s;
-    height: 6vh;
-    width: 3vw;
-    padding: 1vh;
+  transition: all 0.1s;
+  height: 6vh;
+  width: 3vw;
+  padding: 1vh;
 
-    position: absolute;
-    top: 2vw;
-    right: 2vw;
-    
-    background: #573b8a;
-    border: none;
-    border-radius: 1vh;
-    
-    color: #fff;
-    font-size: 1em;
-    font-weight: bold;
+  position: absolute;
+  top: 2vw;
+  right: 2vw;
+
+  background: #573b8a;
+  border: none;
+  border-radius: 1vh;
+
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
 }
 
 #volumeButton:hover {
-    background: #6d44b8;
+  background: #6d44b8;
 }
 
 #volumeButton.clicking {
-    height: calc(6vh - 0.25vh);
-    margin: 0.125vh 0.125vh 0px 0px;
+  height: calc(6vh - 0.25vh);
+  margin: 0.125vh 0.125vh 0px 0px;
 }

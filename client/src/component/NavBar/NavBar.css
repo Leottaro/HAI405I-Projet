@@ -1,73 +1,73 @@
 #navBar {
-    transition: all 0.5s;
-    width: calc(38vw + 5vh);
-    height: 7vh;
-    padding: 1vh 0vw 1vh 0vw;
-    
-    position: absolute;
-    top: 2vh;
-    left: 2vh;
-    
-    background: #fff4;
-    border: none;
-    border-radius: 7vh;
-    
-    display: flex;
-    flex-direction: row;
-    
-    overflow: hidden;
+  transition: all 0.5s;
+  width: calc(38vw + 5vh);
+  height: 7vh;
+  padding: 1vh 0vw 1vh 0vw;
+
+  position: absolute;
+  top: 2vh;
+  left: 2vh;
+
+  background: #fff4;
+  border: none;
+  border-radius: 7vh;
+
+  display: flex;
+  flex-direction: row;
+
+  overflow: hidden;
 }
 
 #navBar.hidden {
-    width: calc(5vh + 2vw);
+  width: calc(5vh + 2vw);
 }
 
 #navBar * {
-    height: 5vh;
-    margin: 0vh 1vw 0vh 1vw;
+  height: 5vh;
+  margin: 0vh 1vw 0vh 1vw;
 }
 
 #navBar label {
-    width: 7vw;
-    min-width: 7vw;
+  width: 7vw;
+  min-width: 7vw;
 
-    color: #fff;
-    background: #332252;
-    border-radius: 10vh;
+  color: #fff;
+  background: #332252;
+  border-radius: 10vh;
 
-    font-size: 1vw;
-    font-weight: bold;
+  font-size: 1vw;
+  font-weight: bold;
 
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 #navBar label:hover {
-    background: #573b8a;
+  background: #573b8a;
 }
 
 #navBar label.disabled {
-    background: #211735;
+  background: #211735;
 }
 
 #navBarButton {
-    min-width: 5vh;
+  min-width: 5vh;
 }
 
 #navBarButton #background {
-    fill: #332252;
+  fill: #332252;
 }
 #navBarButton:hover #background {
-    fill: #573b8a;
+  fill: #573b8a;
 }
 
 #navBarButton #vector1,
 #navBarButton #vector2,
 #navBarButton #vector3 {
-    transition: all 0.5s;
-    stroke: #fff;
-    stroke-width: 3;
-    stroke-linecap: round;
+  transition: all 0.5s;
+  stroke: #fff;
+  stroke-width: 3;
+  stroke-linecap: round;
 }
