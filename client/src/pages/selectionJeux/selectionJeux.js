@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './selectionJeux.css';
-import sixQuiPrend from './sixQuiPrend.jpg'
-import bataille from './bataille.png'
 
 function SelectionJeux() {
     const [i, setI] = useState(0);
     const [placement, setPlacement] = useState("center");
-    const listeJeux = [bataille, sixQuiPrend];
     const listeNomJeux = ["bataille", "sixQuiPrend"];
 
     function gauche() {
@@ -20,7 +17,7 @@ function SelectionJeux() {
             if (i > 0) {
                 setI(i - 1);
             } else {
-                setI(listeJeux.length - 1);
+                setI(listeNomJeux.length - 1);
             }
             setPlacement("center");
         }, 500);
@@ -34,7 +31,7 @@ function SelectionJeux() {
             setPlacement("gauche");
         }, 250);
         setTimeout(() => {
-            setI((i + 1) % listeJeux.length);
+            setI((i + 1) % listeNomJeux.length);
             setPlacement("center");
         }, 500);
     }
@@ -47,7 +44,7 @@ function SelectionJeux() {
     return (
         <div id="selectionJeuxDiv">
             <button id="gauche" className="selectionJeuxButton" onClick={gauche}>❮</button>
-            <img id="img" className={placement} src={listeJeux[i]} onClick={choisir} alt="" />
+            <img id="img" className={placement} src={"../../../assets/jeux/" + listeNomJeux[i] + ".png"} onClick={choisir} alt="" />
             <button id="droite" className="selectionJeuxButton" onClick={droite}>❯</button>
         </div>
     );

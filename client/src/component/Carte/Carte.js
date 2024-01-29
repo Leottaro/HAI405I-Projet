@@ -24,7 +24,7 @@ function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.
     }
 
     return (
-        <img className="carte" onClick={carteClick} src={"../../Assets/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
+        <img className="carte" onClick={carteClick} src={"../../assets/cartes/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
     );
 }
 export default Carte;

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import './Audio.css';
 
 function Audio() {
-    const source = "../Assets/background_music.mp3";
+    const source = "../assets/musiques/background_music.mp3";
     const audioRef = useRef(null);
     const [volume, setVolume] = useState(0);
     const [mouseDown, setMouseDown] = useState(false);
