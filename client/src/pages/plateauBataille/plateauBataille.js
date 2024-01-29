@@ -28,11 +28,11 @@ function PlateauBataille() {
             }, {}));
             setMoi(json[account]);
             setAfficheStart(json[account].isCreator && Object.keys(json).length >= 2 && json[account].paquet.length === 0);
-            setAfficheSave(json[account].isCreator);
+            setAfficheSave(json[account].isCreator && Object.keys(json).some(player => json[player].paquet.length > 0));
             setEstFinDeTour(Object.keys(json).every(player => json[player].choosed));
         });
         socket.emit("reqPlayers");
-    
+
         socket.on("Gagnant", pseudo => {
             if (pseudo === account) {
                 setWinner("Vous avez Gagné !");
@@ -41,7 +41,7 @@ function PlateauBataille() {
                 setWinner(pseudo + " a gagné...");
             }
         })
-        
+
         return () => {
             socket.off("resPlayers");
             socket.off("Gagnant");
@@ -63,7 +63,7 @@ function PlateauBataille() {
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs).sort().map((player, index) => <JoueurBataille pseudo={player} nbrCartes={listeJoueurs[player].paquet.length} carte={listeJoueurs[player].choosed} carteVisible={estFinDeTour} key={"joueur" + index} />)}
             </div>
-            <Start afficheStart={afficheStart} afficheSave={afficheStart ^ afficheSave} code={code} start={start} save={save} />
+            <Start afficheStart={afficheStart} afficheSave={!afficheStart && afficheSave} code={code} start={start} save={save} />
             <MonJeux paquet={moi.paquet} dossier={"CartesBataille/"} texte={moi.paquet.length + " Cartes"} />
             <div id="choisie">
                 {moi.choosed ? <Carte visible valeur={moi.choosed.valeur} type={moi.choosed.type} chemin={"CartesBataille/" + moi.choosed.valeur + moi.choosed.type + ".png"} /> : <></>}

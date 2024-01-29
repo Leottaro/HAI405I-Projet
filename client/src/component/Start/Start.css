@@ -1,4 +1,4 @@
-#divStart{
+#divStart {
     border-radius: 10px;
     width: 19vw;
     height: 20vh;
@@ -12,37 +12,26 @@
     box-shadow: 5px 10px 20px #000;
 }
 
+#divStart button {
+    width: 8vw;
+    height: 4vh;
 
-#start {
-    width: 40%;
-    height: 15%;
     color: #fff;
     font-weight: bold;
+    font-size: min(1.5vh, 1vw);
     border: none;
     border-radius: 5px;
     background: #9C2542;
-    margin: 1vw;
+    margin: 1vh 1vw 1vh 1vw;
 }
 
-#start:hover {
-    background: #ca5975;
-}
-
-#save {
-    width: 40%;
-    height: 15%;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    background: #9C2542;
-}
-
-#save:hover {
+#divStart button:hover {
     background: #ca5975;
 }
 
 .code {
+    margin: 1vh;
     color: white;
-    margin: 8px;
+    font-weight: bold;
+    font-size: min(3vh, 2vw);
 }

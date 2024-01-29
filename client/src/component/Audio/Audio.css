@@ -1,6 +1,7 @@
 #volumeButton {
     transition: all 0.1s;
     height: 6vh;
+    width: 3vw;
     padding: 1vh;
 
     position: absolute;

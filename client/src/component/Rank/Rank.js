@@ -2,7 +2,7 @@ import "./Rank.css";
 import { useEffect, useState } from "react";
 
 function Rank(props) {
-    const [source, setSource] = useState("rank1.png");
+    const [source, setSource] = useState("rank1.jpg");
 
     useEffect(() => {
         if (props.win - (props.nb - props.win) > 5) {

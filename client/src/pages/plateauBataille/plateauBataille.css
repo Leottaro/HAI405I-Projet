@@ -5,12 +5,25 @@
 }
 
 #listeJoueurs {
-    display: block;
-    width: 100vw;
-    height: 250px;
+    width: 85vw;
+    height: 20vh;
+    margin: 0px auto 0px auto;
+
     display: flex;
     justify-content: center;
     align-items: top;
+}
+
+#choisie {
+    width: 25vw;
+    height: 20vh;
+    
+    position: absolute;
+    right: 0vw;
+    bottom: 1vh;
+
+    display: flex;
+    align-items: center;
 }
 
 #winner {
@@ -21,10 +34,4 @@
     text-align: center;
     left: calc(50vw - 150px);
     top: calc(50vh - 15px);
-}
-
-#choisie {
-    position: absolute;
-    right: 10vw;
-    bottom: 5vh;
 }

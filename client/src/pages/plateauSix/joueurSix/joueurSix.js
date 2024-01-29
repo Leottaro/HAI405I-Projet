@@ -17,7 +17,7 @@ function JoueurSix(props) { // {pseudo, carte, carteVisible, score}
         <div className="joueurSix">
             <label className="labelJS">{props.pseudo}</label>
             <label className="labelJS">{props.score + " têtes de boeuf"}</label>
-            {!props.carte ? <></> : <Carte visible={carteVisible} valeur={carte.valeur} type={carte.type} chemin={"CartesSix/" + carte.valeur + carte.type + ".png"} />}
+            {!props.carte ? <div className="carte"> </div> : <Carte visible={carteVisible} valeur={carte.valeur} type={carte.type} chemin={"CartesSix/" + carte.valeur + carte.type + ".png"} />}
         </div>
     );
 }
