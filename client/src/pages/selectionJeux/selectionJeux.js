@@ -5,7 +5,7 @@ import "./selectionJeux.css";
 function SelectionJeux() {
     const [i, setI] = useState(0);
     const [placement, setPlacement] = useState("center");
-    const listeNomJeux = ["bataille", "sixQuiPrend"];
+    const listeNomJeux = ["bataille", "sixQuiPrend", "memory"];
 
     function gauche() {
         setPlacement("gauche");
