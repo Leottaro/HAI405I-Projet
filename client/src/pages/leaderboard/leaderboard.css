@@ -1,169 +1,169 @@
 #leaderboard {
-  width: 60vw;
-  height: 60vh;
-  background: white;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-  border-radius: 10px;
-  box-shadow: 5px 20px 50px #000;
+    width: 60vw;
+    height: 60vh;
+    background: white;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
 
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 #total {
-  width: 280px;
-  height: 96%;
-  margin: 10px;
-  background: #573b8a;
-  border-radius: 10px;
-  margin: 1%;
+    width: 280px;
+    height: 96%;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+    margin: 1%;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 #classementBataille {
-  width: 280px;
-  min-width: 280px;
-  height: 96%;
-  margin: 10px;
-  background: #573b8a;
-  border-radius: 10px;
-  margin: 5px;
+    width: 280px;
+    min-width: 280px;
+    height: 96%;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+    margin: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  overflow-x: hidden;
-  overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #classementSix {
-  width: 280px;
-  min-width: 280px;
-  height: 96%;
-  margin: 10px;
-  background: #573b8a;
-  border-radius: 10px;
-  margin: 5px;
+    width: 280px;
+    min-width: 280px;
+    height: 96%;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+    margin: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  overflow-x: hidden;
-  overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #eachGame {
-  width: 71%;
-  height: 96%;
-  margin: 10px;
-  border-radius: 10px;
-  margin: 1%;
+    width: 71%;
+    height: 96%;
+    margin: 10px;
+    border-radius: 10px;
+    margin: 1%;
 
-  display: flex;
-  flex-direction: row;
-  overflow-x: scroll;
-  overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
 .nomJeu {
-  margin: 10px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  width: calc(100% - 20px);
+    margin: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    width: calc(100% - 20px);
 }
 
 .classement {
-  width: 100%;
-  height: calc(100% - 40px);
+    width: 100%;
+    height: calc(100% - 40px);
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  overflow-x: hidden;
-  overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .divPlace {
-  width: 95%;
-  height: 50px;
-  background: white;
-  border-radius: 5px;
-  margin-left: 2.5%;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  text-align: center;
+    width: 95%;
+    height: 50px;
+    background: white;
+    border-radius: 5px;
+    margin-left: 2.5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
 
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .first {
-  height: 100%;
-  width: 20%;
-  text-align: center;
-  background: rgb(255, 202, 88);
-  border-radius: 5px;
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    background: rgb(255, 202, 88);
+    border-radius: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .second {
-  height: 100%;
-  width: 20%;
-  text-align: center;
-  background: rgb(185, 185, 185);
-  border-radius: 5px;
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    background: rgb(185, 185, 185);
+    border-radius: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .third {
-  height: 100%;
-  width: 20%;
-  text-align: center;
-  background: #cd7f32;
-  border-radius: 5px;
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    background: #cd7f32;
+    border-radius: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .place {
-  height: 100%;
-  width: 20%;
-  text-align: center;
-  background: rgb(117, 117, 117);
-  border-radius: 5px;
+    height: 100%;
+    width: 20%;
+    text-align: center;
+    background: rgb(117, 117, 117);
+    border-radius: 5px;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .labelPlace {
-  margin-top: 15px;
+    margin-top: 15px;
 }
 
 .joueur {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
 
-  text-align: center;
+    text-align: center;
 }
 
 .nomJoueur {
-  margin-top: 5px;
-  width: 100%;
-  text-align: center;
+    margin-top: 5px;
+    width: 100%;
+    text-align: center;
 }
 
 .statJoueur {
-  margin-top: 5px;
-  width: 100%;
-  text-align: center;
+    margin-top: 5px;
+    width: 100%;
+    text-align: center;
 }

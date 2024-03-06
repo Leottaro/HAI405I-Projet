@@ -1,16 +1,16 @@
 *,
 *::before,
 *::after {
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  overflow: hidden;
+    margin: 0;
+    overflow: hidden;
 }
 
 #root {
-  height: 100vh;
+    height: 100vh;
 }

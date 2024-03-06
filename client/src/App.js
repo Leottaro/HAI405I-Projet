@@ -1,11 +1,5 @@
 import { useEffect } from "react";
-import {
-  Routes,
-  Route,
-  useNavigate,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import socket, { account } from "./socket";
 import "./App.css";
 
@@ -20,49 +14,67 @@ import Leaderboard from "./pages/leaderboard/leaderboard";
 import Navbar from "./component/NavBar/NavBar";
 
 function App() {
-  const navigate = useNavigate();
-  const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  useEffect(() => {
-    socket.on("goTo", (page) => {
-      navigate(page);
-    });
-    return () => socket.off("goTo");
-  }, [navigate]);
+    useEffect(() => {
+        socket.on("goTo", (page) => {
+            navigate(page);
+        });
+        return () => socket.off("goTo");
+    }, [navigate]);
 
-  useEffect(() => {
-    const locationTitle = location.pathname.split("/")[1];
-    document.title = locationTitle || "Home";
-    if (!locationTitle.startsWith("plateau")) {
-      socket.emit("reqLeave");
-    }
-  }, [location]);
+    useEffect(() => {
+        const locationTitle = location.pathname.split("/")[1];
+        document.title = locationTitle || "Home";
+        if (!locationTitle.startsWith("plateau")) {
+            socket.emit("reqLeave");
+        }
+    }, [location]);
 
-  return (
-    <>
-      {location.pathname !== "/Connection" ? <Navbar /> : <></>}
-      <Routes>
-        <Route
-          path="/Connection"
-          element={account ? <Navigate to="/profil" /> : <Connection />}
-        />
-        <Route path="/profil" element={<Profil />} />
-        <Route path="/selectionJeux" element={<SelectionJeux />} />
-        <Route
-          path="/creerRejoindre/:jeux"
-          element={<CreerRejoindre mode="creer" />}
-        />
-        <Route path="/plateauBataille/:code" element={<PlateauBataille />} />
-        <Route path="/plateauSix/:code" element={<PlateauSix />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/Score" element={<Score />} />
-        <Route
-          path="*"
-          element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />}
-        />
-      </Routes>
-    </>
-  );
+    return (
+        <>
+            {location.pathname !== "/Connection" ? <Navbar /> : <></>}
+            <Routes>
+                <Route
+                    path="/Connection"
+                    element={account ? <Navigate to="/profil" /> : <Connection />}
+                />
+                <Route
+                    path="/profil"
+                    element={<Profil />}
+                />
+                <Route
+                    path="/selectionJeux"
+                    element={<SelectionJeux />}
+                />
+                <Route
+                    path="/creerRejoindre/:jeux"
+                    element={<CreerRejoindre mode="creer" />}
+                />
+                <Route
+                    path="/plateauBataille/:code"
+                    element={<PlateauBataille />}
+                />
+                <Route
+                    path="/plateauSix/:code"
+                    element={<PlateauSix />}
+                />
+                <Route
+                    path="/leaderboard"
+                    element={<Leaderboard />}
+                />
+                <Route
+                    path="/Score"
+                    element={<Score />}
+                />
+                <Route
+                    path="*"
+                    element={<Navigate to={account ? "/selectionJeux" : "/Connection"} />}
+                />
+            </Routes>
+        </>
+    );
 }
 
 export default App;

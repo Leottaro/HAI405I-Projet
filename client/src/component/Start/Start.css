@@ -1,37 +1,37 @@
 #divStart {
-  border-radius: 10px;
-  width: 19vw;
-  height: 20vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  left: 2vw;
-  bottom: 2vh;
-  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-  box-shadow: 5px 10px 20px #000;
+    border-radius: 10px;
+    width: 19vw;
+    height: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 2vw;
+    bottom: 2vh;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    box-shadow: 5px 10px 20px #000;
 }
 
 #divStart button {
-  width: 8vw;
-  height: 4vh;
+    width: 8vw;
+    height: 4vh;
 
-  color: #fff;
-  font-weight: bold;
-  font-size: min(1.5vh, 1vw);
-  border: none;
-  border-radius: 5px;
-  background: #9c2542;
-  margin: 1vh 1vw 1vh 1vw;
+    color: #fff;
+    font-weight: bold;
+    font-size: min(1.5vh, 1vw);
+    border: none;
+    border-radius: 5px;
+    background: #9c2542;
+    margin: 1vh 1vw 1vh 1vw;
 }
 
 #divStart button:hover {
-  background: #ca5975;
+    background: #ca5975;
 }
 
 .code {
-  margin: 1vh;
-  color: white;
-  font-weight: bold;
-  font-size: min(3vh, 2vw);
+    margin: 1vh;
+    color: white;
+    font-weight: bold;
+    font-size: min(3vh, 2vw);
 }
