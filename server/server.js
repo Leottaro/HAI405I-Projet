@@ -84,7 +84,8 @@ const database = new sqlite3.Database("./databases/HAI405I.db", async (err) => {
 
 const Bataille = require("./games/Bataille");
 const SixQuiPrend = require("./games/SixQuiPrend");
-const listeJeux = { bataille: Bataille, sixQuiPrend: SixQuiPrend };
+const Memory = require("./games/Memory");
+const listeJeux = { bataille: Bataille, sixQuiPrend: SixQuiPrend, memory: Memory};
 
 app.get("/", (req, res) => {
     res.send("<h1>voici le serveur</h1>");
@@ -218,6 +219,7 @@ io.on("connection", function (socket) {
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", parties[code].url);
+        console.log(parties[code].url)
     });
 
     // REJOINDRE
