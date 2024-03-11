@@ -9,6 +9,7 @@ import SelectionJeux from "./pages/selectionJeux/selectionJeux";
 import CreerRejoindre from "./pages/creerRejoindre/creerRejoindre";
 import PlateauBataille from "./pages/plateauBataille/plateauBataille";
 import PlateauSix from "./pages/plateauSix/plateauSix";
+import PlateauMemory from "./pages/plateauMemory/plateauMemory";
 import Score from "./pages/score/score";
 import Leaderboard from "./pages/leaderboard/leaderboard";
 import Navbar from "./component/NavBar/NavBar";
@@ -59,6 +60,10 @@ function App() {
                 <Route
                     path="/plateauSix/:code"
                     element={<PlateauSix />}
+                />
+                <Route
+                    path="/plateauMemory/:code"
+                    element={<PlateauMemory />}
                 />
                 <Route
                     path="/leaderboard"

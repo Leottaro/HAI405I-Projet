@@ -1,12 +1,12 @@
 import socket, { account } from "../../socket";
 import { useEffect, useState } from "react";
-import MonJeux from "../../component/MonJeux/MonJeux";
 import Chat from "../../component/Chat/Chat";
 import Carte from "../../component/Carte/Carte";
 import "./plateauMemory.css";
 import { useParams } from "react-router-dom";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
+import JoueurMemory from "./joueurMerory/joueurMemory";
 
 function PlateauMemory() {
     const { code } = useParams();
@@ -18,10 +18,24 @@ function PlateauMemory() {
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
     const [winner, setWinner] = useState("");
+    const [listeCarte, setListeCarte] = useState([]);
 
     useEffect(() => {
+        let carte=[[],[],[],[]];
+        for(let i=0;i<10;i++){
+            carte[0].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
+        }
+        for(let i=0;i<10;i++){
+            carte[1].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
+        }
+        for(let i=0;i<10;i++){
+            carte[2].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
+        }
+        for(let i=0;i<10;i++){
+            carte[3].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
+        }
+        setListeCarte(carte);
         socket.on("resPlayers", (json) => {
-            // {nom: {isCreator, paquet, choosed, score}, ...}
             setListeJoueurs(
                 Object.keys(json).reduce((filtered, player) => {
                     if (player !== account) {
@@ -65,7 +79,6 @@ function PlateauMemory() {
                 setWinner(pseudo + " a gagné...");
             }
         });
-
         return () => {
             socket.off("resPlayers");
             socket.off("resPlateau");
@@ -73,6 +86,7 @@ function PlateauMemory() {
             socket.off("Gagnant");
             clearInterval(interval);
         };
+    
     }, []);
 
     function start() {
@@ -94,24 +108,26 @@ function PlateauMemory() {
                         <JoueurMemory
                             pseudo={player}
                             key={"joueur" + index}
+                            score={0}
                         />
                     ))}
             </div>
-            <div id="tapis">
-                {listePlateau.map((liste, index) => (
+            <div id="tapisMemory">{
+                listeCarte.map((liste, index) => (
                     <div
                         className="ligne"
                         onClick={() => socket.emit("reqMemory", index)}
                     >
-                        {liste.map((json) => (
-                            <Carte
-                                visible
-                                valeur={json.valeur}
-                                type={json.type}
-                                chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
-                            />
-                        ))}
-                    </div>
+                    {liste.map((json) => (
+                    <Carte
+                        visible
+                        valeur={json.valeur}
+                        type={json.type}
+                        chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
+                    />
+                    ))}
+                    
+                </div>
                 ))}
             </div>
             <Start
@@ -121,9 +137,11 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            <MonJeux
-                texte={moi}
-            />
+            <div id="JoueurMemoryMoi">
+                <JoueurMemory 
+                    pseudo={account}
+                    score={0}/>
+            </div>
             <Chat />
         </div>
     );

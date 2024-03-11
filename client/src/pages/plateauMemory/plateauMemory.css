@@ -35,3 +35,23 @@
     left: calc(50vw - 150px);
     top: calc(50vh - 15px);
 }
+
+#tapisMemory {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    width: 45vw;
+    height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#JoueurMemoryMoi {
+    height: 20vh;
+    transform:  translate(-50%, 0);
+    position: absolute;
+    top: 80vh;
+    left: 50vw
+}
