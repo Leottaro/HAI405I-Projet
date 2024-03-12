@@ -8,17 +8,21 @@ export default function MonJeux(props) {
         <div className="monJeux">
             <p className="monLabel">{account}</p>
             <div className="mesCartes">
-                {props.paquet
-                    .filter((carte) => carte)
-                    .map((carte, index) => (
-                        <Carte
-                            visible
-                            valeur={carte.valeur}
-                            type={carte.type}
-                            chemin={props.dossier + carte.valeur + carte.type + ".png"}
-                            key={"carte" + index}
-                        />
-                    ))}
+                {props.paquet ? (
+                    props.paquet
+                        .filter((carte) => carte)
+                        .map((carte, index) => (
+                            <Carte
+                                visible
+                                valeur={carte.valeur}
+                                type={carte.type}
+                                chemin={props.dossier + carte.valeur + carte.type + ".png"}
+                                key={"carte" + index}
+                            />
+                        ))
+                ) : (
+                    <></>
+                )}
             </div>
             <label className="monLabel">{props.texte}</label>
         </div>

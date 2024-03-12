@@ -17,8 +17,8 @@ class Memory {
 
         this.plateau = [];
         this.scores = {};
-        this.choosingPlayer = "";
-        this.choosed = { valeur: "", type: "" };
+        this.choosingPlayer = creatorID;
+        this.choosed;
         this.roundDelay = options ? options.roundDelay * 1000 : undefined;
         this.roundTimeout;
         this.roundCallback;
@@ -93,11 +93,11 @@ class Memory {
         if (this.playersIDs[playerID]) {
             return false;
         }
-        return {
-            isCreator: this.playersIDs[0] === playerID,
-            isChoosing: this.choosingPlayer === playerID,
-            score: this.scores[playerID],
-        };
+        const isCreator = this.playersIDs[0] === playerID;
+        const isChoosing = this.choosingPlayer === playerID;
+        const choosed = isChoosing ? this.choosed : undefined;
+        const score = this.scores[playerID];
+        return { isCreator, isChoosing, choosed, score };
     }
 
     start() {
@@ -109,13 +109,19 @@ class Memory {
             this.scores[playerID] = 0;
         }
 
-        // créer le paquet de carte mélangé (on veut 40 cartes)
-        this.plateau = Carte.creerPaquet().splice(0, 40);
+        // créer le paquet de carte mélangé
+        let Cartes = Carte.creerPaquet().splice(0, 20);
+        Cartes = Cartes.concat(Cartes);
+        for (let i = 0; i < Cartes.length; i++) {
+            const j = Math.floor(i + Math.random() * (Cartes.length - i));
+            [Cartes[i], Cartes[j]] = [Cartes[j], Cartes[i]];
+        }
+        this.plateau = Cartes;
         return true;
     }
 
     coup(playerID, carte) {
-        if (this.ended || !this.scores[playerID] || playerID !== this.choosingPlayer) {
+        if (this.ended || this.scores[playerID] === undefined || playerID !== this.choosingPlayer) {
             return false;
         }
         let i = 0;
@@ -129,6 +135,7 @@ class Memory {
             this.choosed = i;
         } else {
             // TODO:
+            this.choosed = undefined;
         }
         return true;
     }
@@ -139,7 +146,7 @@ class Memory {
 
     nextRound() {
         // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
-        if (this.ended || !this.everyonePlayed() || this.choosingPlayer) {
+        if (this.ended || !this.everyonePlayed()) {
             return 0;
         }
         const players = this.playersIDs.sort(

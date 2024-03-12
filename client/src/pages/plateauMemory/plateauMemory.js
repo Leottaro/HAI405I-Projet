@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import Start from "../../component/Start/Start";
 import Audio from "../../component/Audio/Audio";
 import JoueurMemory from "./joueurMerory/joueurMemory";
+import MonJeux from "../../component/MonJeux/MonJeux";
 
 function PlateauMemory() {
     const { code } = useParams();
@@ -104,7 +105,7 @@ function PlateauMemory() {
                     >
                         {liste.map((json, j) => (
                             <Carte
-                                visible
+                                visible={10 * i + j === moi.choosed}
                                 valeur={json.valeur}
                                 type={json.type}
                                 chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
@@ -121,12 +122,13 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            <div id="JoueurMemoryMoi">
-                <JoueurMemory
-                    pseudo={account}
-                    score={0}
-                />
+            <div id={timeLeft > 10 ? "divTimer" : timeLeft > 5 ? "divTimerOrange" : "divTimerRed"}>
+                <label id="timer">{timeLeft.toFixed(1)}</label>
             </div>
+            <MonJeux
+                dossier={"CartesSix/"}
+                texte={"score: " + moi.score}
+            />
             <Chat />
         </div>
     );

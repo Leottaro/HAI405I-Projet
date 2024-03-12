@@ -363,7 +363,7 @@ io.on("connection", function (socket) {
         if (jeux.start()) {
             resPlayers(code);
             resPlateau(code);
-            if (jeux.nomJeux == "sixQuiPrend") {
+            if (jeux.nomJeux === "sixQuiPrend" || jeux.nomJeux === "memory") {
                 // définit la fonction exécutée quand le round prends trop de temps
                 jeux.setRoundCallback(() => {
                     for (const playerID of jeux.playersIDs) {
@@ -403,7 +403,6 @@ io.on("connection", function (socket) {
         if (!jeux || !jeux.coup(socket.id, carte)) {
             return;
         }
-        socket.emit("select", carte);
         resPlayers(code);
         resPlateau(code);
         if (jeux.everyonePlayed()) {
