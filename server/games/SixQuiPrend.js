@@ -19,7 +19,7 @@ class SixQuiPrend {
 
         this.plateau = [[], [], [], []];
         this.scores = {};
-        this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+        this.choosingPlayer;
         this.roundDelay = options ? options.roundDelay * 1000 : undefined;
         this.roundTimeout;
         this.roundCallback;
@@ -178,7 +178,7 @@ class SixQuiPrend {
 
     nextRound() {
         // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
-        if (this.ended || !this.everyonePlayed() || this.leJoueurQuiAMisUneCarteTropPetiteAvantLà) {
+        if (this.ended || !this.everyonePlayed() || this.choosingPlayer) {
             return 0;
         }
         const players = this.playersIDs.sort(
@@ -198,7 +198,7 @@ class SixQuiPrend {
                 }
             }
             if (!biggest.ligne) {
-                this.leJoueurQuiAMisUneCarteTropPetiteAvantLà = playerID;
+                this.choosingPlayer = playerID;
                 this.playChoiceTimeout();
                 return 2;
             }
@@ -235,8 +235,8 @@ class SixQuiPrend {
 
     prends(playerID, ligne) {
         if (
-            !this.leJoueurQuiAMisUneCarteTropPetiteAvantLà ||
-            this.leJoueurQuiAMisUneCarteTropPetiteAvantLà !== playerID ||
+            !this.choosingPlayer ||
+            this.choosingPlayer !== playerID ||
             ligne < 0 ||
             ligne > 3
         ) {
@@ -246,7 +246,7 @@ class SixQuiPrend {
             this.scores[playerID] += this.carteScore(carte);
         }
         this.plateau[ligne] = [];
-        delete this.leJoueurQuiAMisUneCarteTropPetiteAvantLà;
+        delete this.choosingPlayer;
         this.nextRound();
         return true;
     }

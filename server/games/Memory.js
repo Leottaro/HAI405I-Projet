@@ -1,9 +1,11 @@
 const Carte = require("./Carte");
 
 class Memory {
+    static roundDelays = { min: 5, default: 30, max: 60 };
+    static choiceDelays = { min: 1, default: 5, max: 10 };
     static playersRange = [2, 10];
 
-    constructor(creatorID, lien, maxPlayers) {
+    constructor(creatorID, lien, maxPlayers, options) {
         this.nomJeux = "memory";
         this.url = "/plateauMemory" + "/" + lien;
         this.started = false;
@@ -11,14 +13,47 @@ class Memory {
         this.winner;
         this.maxPlayers = maxPlayers;
         this.playersIDs = [];
-        this.paquets = {};
-        this.choosed = {};
         this.endCallback;
 
-        this.enLice = [];
-        this.tempCartes = [];
+        this.plateau = [];
+        this.scores = {};
+        this.choosingPlayer = "";
+        this.choosed = { valeur: "", type: "" };
+        this.roundDelay = options ? options.roundDelay * 1000 : undefined;
+        this.roundTimeout;
+        this.roundCallback;
+        this.choiceDelay = options ? options.choiceDelay * 1000 : undefined;
+        this.choiceTimeout;
+        this.choiceCallback;
+        this.playCallback;
 
         this.addPlayer(creatorID);
+    }
+
+    setRoundCallback(callback) {
+        this.roundCallback = callback;
+    }
+    playRoundTimeout() {
+        clearTimeout(this.roundTimeout);
+        if (this.roundDelay) {
+            this.roundTimeout = setTimeout(this.roundCallback, this.roundDelay);
+            this.playCallback(this.roundDelay);
+        }
+    }
+
+    setChoiceCallback(callback) {
+        this.choiceCallback = callback;
+    }
+    playChoiceTimeout() {
+        clearTimeout(this.choiceTimeout);
+        if (this.choiceDelay) {
+            this.choiceTimeout = setTimeout(this.choiceCallback, this.choiceDelay);
+            this.playCallback(this.choiceDelay);
+        }
+    }
+
+    setPlayCallback(callback) {
+        this.playCallback = callback;
     }
 
     hasStarted() {
@@ -30,39 +65,20 @@ class Memory {
             return false;
         }
         this.playersIDs.push(playerID);
-        this.paquets[playerID] = [];
-        this.enLice.push(playerID);
+        this.scores[playerID] = -1;
         return true;
     }
 
     removePlayer(playerID) {
-        if (!this.paquets[playerID]) {
+        if (!this.scores[playerID]) {
             return false;
         }
-        // réintegre sa carthe choisir dans son paquet
-        if (this.choosed[playerID]) {
-            this.paquets[playerID].push(this.choosed[playerID]);
-            delete this.choosed[playerID];
-        }
+        // delete sa carte choisie
+        delete this.choosed[playerID];
         // on le vire
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
-        // on répartit son paquet aux autres joueurs
-        for (let i = 0; i < this.paquets[playerID].length; i++) {
-            const receveur = this.playersIDs[i % this.playersIDs.length];
-            this.paquets[receveur].push(this.paquets[playerID][i]);
-        }
-        // réstituer les tempCartes aux joueurs enLice
-        if (this.tempCartes.length > 0) {
-            if (this.enLice.includes(playerID)) {
-                this.enLice.splice(this.enLice.indexOf(playerID), 1);
-            }
-            for (let i = 0; i < this.tempCartes.length; i++) {
-                const receveur = this.enLice[i % this.enLice.length];
-                this.paquets[receveur].push(this.paquets[playerID][i]);
-            }
-            this.tempCartes = [];
-        }
-        delete this.paquets[playerID];
+        // on supprime son score
+        delete this.scores[playerID];
         // si la game n'a plus assez de joueurs, on la supprime
         if (
             (this.started && this.playersIDs.length < 2) ||
@@ -79,91 +95,116 @@ class Memory {
         }
         return {
             isCreator: this.playersIDs[0] === playerID,
-            paquet: this.paquets[playerID],
-            choosed: this.choosed[playerID],
+            isChoosing: this.choosingPlayer === playerID,
+            score: this.scores[playerID],
         };
     }
 
     start() {
-        if (this.ended || this.started || this.playersIDs.length < Bataille.playersRange[0]) {
+        if (this.ended || this.started || this.playersIDs.length < Memory.playersRange[0]) {
             return false;
         }
-        const paquet = Carte.creerPaquet();
-        let i = -1;
-        for (const carte of paquet) {
-            i = (i + 1) % this.playersIDs.length;
-            this.paquets[this.playersIDs[i]].push(carte);
-        }
-        this.started = true;
+        // mettre tout les scores à 0
         for (const playerID of this.playersIDs) {
-            delete this.choosed[playerID];
-            this.paquets[playerID] = this.paquets[playerID].sort((carteA, carteB) =>
-                Carte.sort(carteA, carteB, true)
-            );
+            this.scores[playerID] = 0;
         }
+
+        // créer le paquet de carte mélangé (on veut 40 cartes)
+        this.plateau = Carte.creerPaquet().splice(0, 40);
         return true;
     }
 
     coup(playerID, carte) {
-        if (
-            this.ended ||
-            this.choosed[playerID] ||
-            !this.paquets[playerID].some((carteJson) => Carte.equals(carteJson, carte))
-        ) {
+        if (this.ended || !this.scores[playerID] || playerID !== this.choosingPlayer) {
             return false;
         }
         let i = 0;
-        while (!Carte.equals(carte, this.paquets[playerID][i])) i++;
-        this.choosed[playerID] = this.paquets[playerID].splice(i, 1)[0];
+        while (!Carte.equals(carte, this.plateau[i])) {
+            i++;
+            if (i >= this.plateau.length) {
+                return false;
+            }
+        }
+        if (!this.choosed) {
+            this.choosed = i;
+        } else {
+            // TODO:
+        }
         return true;
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(
-            (playerID) =>
-                this.paquets[playerID].length == 0 ||
-                this.choosed[playerID] ||
-                !this.enLice.includes(playerID)
-        );
+        return this.playersIDs.some((id) => this.choosed[id]);
     }
 
     nextRound() {
-        // return 0 si il y a un problème, 1 si tout va bien
-        if (this.ended || !this.everyonePlayed()) {
+        // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
+        if (this.ended || !this.everyonePlayed() || this.choosingPlayer) {
             return 0;
         }
-        let winner;
-        let sortedChoosed = this.enLice.sort((id1, id2) =>
-            Carte.sort(this.choosed[id1], this.choosed[id2], true)
+        const players = this.playersIDs.sort(
+            (id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur
         );
-        let nbEgalite = 1;
-        for (let i = 1; i < sortedChoosed.length; i++) {
-            if (this.choosed[sortedChoosed[i]].valeur == this.choosed[sortedChoosed[0]].valeur) {
-                this.tempCartes.push(this.choosed[sortedChoosed[i]]);
-                delete this.choosed[sortedChoosed[i]];
-                nbEgalite = i + 1;
+        for (const playerID of players) {
+            const choosed = this.choosed[playerID];
+            let biggest = { ligne: 0, carte: { valeur: -1, type: "" } };
+            for (const ligne in this.plateau) {
+                if (this.plateau[ligne].length == 0) {
+                    biggest = { ligne, carte: { valeur: -1, type: "" } };
+                    break;
+                }
+                const carte = this.plateau[ligne].at(-1);
+                if (carte.valeur < choosed.valeur && carte.valeur > biggest.carte.valeur) {
+                    biggest = { ligne, carte };
+                }
             }
+            if (!biggest.ligne) {
+                this.choosingPlayer = playerID;
+                this.playChoiceTimeout();
+                return 2;
+            }
+            if (this.plateau[biggest.ligne].length == 5) {
+                for (const carte of this.plateau[biggest.ligne]) {
+                    this.scores[playerID] += this.carteScore(carte);
+                }
+                this.plateau[biggest.ligne] = [];
+            }
+            this.plateau[biggest.ligne].push(choosed);
+            delete this.choosed[playerID];
         }
-        if (nbEgalite == 1) {
-            winner = sortedChoosed[0];
-        } else {
-            this.tempCartes.push(this.choosed[sortedChoosed[0]]);
-            delete this.choosed[sortedChoosed[0]];
-            this.enLice = sortedChoosed.slice(0, nbEgalite);
-            return this.nextRound();
+
+        if (this.playersIDs.map((id) => this.AAA[id]).some((paquet) => paquet.length == 0)) {
+            this.started = false;
+            this.plateau = [[], [], [], []];
+            this.start();
         }
-        this.paquets[winner] = this.paquets[winner]
-            .concat(Object.values(this.choosed).concat(this.tempCartes))
-            .sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
-        this.choosed = {};
-        this.tempCartes = [];
-        this.enLice = this.playersIDs.filter((playerID) => this.paquets[playerID].length > 0);
-        this.ended = this.enLice.length <= 1;
-        if (this.ended) {
-            this.winner = winner;
+
+        if (this.playersIDs.some((id) => this.scores[id] >= 66)) {
+            this.ended = true;
+            this.winner = this.playersIDs.sort(
+                (id1, id2) => this.scores[id1] - this.scores[id2]
+            )[0];
+            Object.keys(this.AAA).forEach((playerID) => (this.AAA[playerID] = []));
+            this.choosed = {};
+            this.plateau = [[], [], [], []];
             this.endCallback();
+        } else {
+            this.playRoundTimeout();
         }
         return 1;
+    }
+
+    prends(playerID, ligne) {
+        if (!this.choosingPlayer || this.choosingPlayer !== playerID || ligne < 0 || ligne > 3) {
+            return false;
+        }
+        for (const carte of this.plateau[ligne]) {
+            this.scores[playerID] += this.carteScore(carte);
+        }
+        this.plateau[ligne] = [];
+        delete this.choosingPlayer;
+        this.nextRound();
+        return true;
     }
 }
 module.exports = Memory;

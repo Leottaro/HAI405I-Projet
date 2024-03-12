@@ -85,7 +85,7 @@ const database = new sqlite3.Database("./databases/HAI405I.db", async (err) => {
 const Bataille = require("./games/Bataille");
 const SixQuiPrend = require("./games/SixQuiPrend");
 const Memory = require("./games/Memory");
-const listeJeux = { bataille: Bataille, sixQuiPrend: SixQuiPrend, memory: Memory};
+const listeJeux = { bataille: Bataille, sixQuiPrend: SixQuiPrend, memory: Memory };
 
 app.get("/", (req, res) => {
     res.send("<h1>voici le serveur</h1>");
@@ -219,7 +219,7 @@ io.on("connection", function (socket) {
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", parties[code].url);
-        console.log(parties[code].url)
+        console.log(parties[code].url);
     });
 
     // REJOINDRE
@@ -288,7 +288,9 @@ io.on("connection", function (socket) {
             return;
         }
         const [err, rows] = await sqlRequest(
-            `SELECT * FROM partie WHERE createur="${sockets[socket.id].compte}" AND nomJeux="${jeux}"`
+            `SELECT * FROM partie WHERE createur="${
+                sockets[socket.id].compte
+            }" AND nomJeux="${jeux}"`
         );
         socket.emit(
             "resMyGames",
@@ -377,10 +379,7 @@ io.on("connection", function (socket) {
 
                 // définit la fonction exécutée quand le choix de carte prends trop de temps
                 jeux.setChoiceCallback(() => {
-                    jeux.prends(
-                        jeux.leJoueurQuiAMisUneCarteTropPetiteAvantLà,
-                        Math.floor(Math.random() * 5)
-                    );
+                    jeux.prends(jeux.choosingPlayer, Math.floor(Math.random() * 5));
                     resPlayers(code);
                     resPlateau(code);
                 });
@@ -429,7 +428,9 @@ io.on("connection", function (socket) {
         }
 
         database.run(
-            `INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${createur}", "${jeux.nomJeux}", "${JSON.stringify(jeux).replaceAll('"', "'")}")`
+            `INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${createur}", "${
+                jeux.nomJeux
+            }", "${JSON.stringify(jeux).replaceAll('"', "'")}")`
         );
 
         io.in(code).emit("goTo", "/creerRejoindre/" + jeux.nomJeux);

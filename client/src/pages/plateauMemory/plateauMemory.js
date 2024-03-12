@@ -18,23 +18,8 @@ function PlateauMemory() {
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
     const [winner, setWinner] = useState("");
-    const [listeCarte, setListeCarte] = useState([]);
 
     useEffect(() => {
-        let carte=[[],[],[],[]];
-        for(let i=0;i<10;i++){
-            carte[0].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
-        }
-        for(let i=0;i<10;i++){
-            carte[1].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
-        }
-        for(let i=0;i<10;i++){
-            carte[2].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
-        }
-        for(let i=0;i<10;i++){
-            carte[3].push({nom:"CartesBataille/2Carreau",valeur:2,type:"Carreau"})
-        }
-        setListeCarte(carte);
         socket.on("resPlayers", (json) => {
             setListeJoueurs(
                 Object.keys(json).reduce((filtered, player) => {
@@ -48,20 +33,19 @@ function PlateauMemory() {
             setAfficheStart(
                 json[account].isCreator &&
                     Object.keys(json).length >= 2 &&
-                    json[account].paquet.length === 0
+                    json[account].score === -1 // score de -1 -> jeux pas commencé
             );
             setAfficheSave(
                 json[account].isCreator &&
-                    Object.keys(json).some((player) => json[player].paquet.length > 0)
+                    Object.keys(json).some((player) => json[player].score >= 0)
             );
             setEstFinDeTour(Object.keys(json).every((player) => json[player].choosed));
         });
         socket.emit("reqPlayers");
 
-        
         socket.on("resPlateau", (listJson) => {
-            // [ [{valeur:"n", type:""}, ...], 4 fois]
-            setListePlateau(listJson);
+            // reçois [ {valeur:"n", type:""}, ...] et enregistre [ [{valeur:"n", type:""}, ... (10)], ... (4)]
+            setListePlateau([0, 1, 2, 3].map((_, i) => listJson.slice(i * 10, (i + 1) * 10)));
         });
         socket.emit("reqPlateau");
 
@@ -86,7 +70,6 @@ function PlateauMemory() {
             socket.off("Gagnant");
             clearInterval(interval);
         };
-    
     }, []);
 
     function start() {
@@ -112,22 +95,23 @@ function PlateauMemory() {
                         />
                     ))}
             </div>
-            <div id="tapisMemory">{
-                listeCarte.map((liste, index) => (
+            <div id="tapisMemory">
+                {listePlateau.map((liste, i) => (
                     <div
                         className="ligne"
-                        onClick={() => socket.emit("reqMemory", index)}
+                        onClick={() => socket.emit("reqMemory", i)}
+                        key={10 * i}
                     >
-                    {liste.map((json) => (
-                    <Carte
-                        visible
-                        valeur={json.valeur}
-                        type={json.type}
-                        chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
-                    />
-                    ))}
-                    
-                </div>
+                        {liste.map((json, j) => (
+                            <Carte
+                                visible
+                                valeur={json.valeur}
+                                type={json.type}
+                                chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
+                                key={10 * i + j + 1}
+                            />
+                        ))}
+                    </div>
                 ))}
             </div>
             <Start
@@ -138,9 +122,10 @@ function PlateauMemory() {
                 save={save}
             />
             <div id="JoueurMemoryMoi">
-                <JoueurMemory 
+                <JoueurMemory
                     pseudo={account}
-                    score={0}/>
+                    score={0}
+                />
             </div>
             <Chat />
         </div>
