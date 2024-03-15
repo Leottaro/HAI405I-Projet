@@ -9,13 +9,15 @@ import Audio from "../../component/Audio/Audio";
 import JoueurMemory from "./joueurMerory/joueurMemory";
 import MonJeux from "../../component/MonJeux/MonJeux";
 
+const nbCartesParLigne = 10;
+
 function PlateauMemory() {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "" });
+    const [carteChoisie, setCarteChoisie] = useState(-1);
     const [afficheStart, setAfficheStart] = useState(false);
     const [afficheSave, setAfficheSave] = useState(false);
-    const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
     const [winner, setWinner] = useState("");
@@ -40,13 +42,20 @@ function PlateauMemory() {
                 json[account].isCreator &&
                     Object.keys(json).some((player) => json[player].score >= 0)
             );
-            setEstFinDeTour(Object.keys(json).every((player) => json[player].choosed));
+            setCarteChoisie(
+                Object.values(json).reduce((choosed, data) => (choosed ? choosed : data.choosed))
+                    .choosed
+            );
         });
         socket.emit("reqPlayers");
 
         socket.on("resPlateau", (listJson) => {
-            // reçois [ {valeur:"n", type:""}, ...] et enregistre [ [{valeur:"n", type:""}, ... (10)], ... (4)]
-            setListePlateau([0, 1, 2, 3].map((_, i) => listJson.slice(i * 10, (i + 1) * 10)));
+            // reçois [ {valeur:"n", type:""}, ...] et enregistre [ [{valeur:"n", type:""}, ... (nbCartesParLigne)], ... (4)]
+            setListePlateau(
+                [0, 1, 2, 3].map((_, i) =>
+                    listJson.slice(i * nbCartesParLigne, (i + 1) * nbCartesParLigne)
+                )
+            );
         });
         socket.emit("reqPlateau");
 
@@ -55,7 +64,7 @@ function PlateauMemory() {
         });
         const interval = setInterval(() => {
             setTimeLeft((timeLeft) => (timeLeft > 0 ? timeLeft - 0.1 : 0));
-        }, 100);
+        }, nbCartesParLigne);
 
         socket.on("Gagnant", (pseudo) => {
             if (pseudo === account) {
@@ -101,15 +110,16 @@ function PlateauMemory() {
                     <div
                         className="ligne"
                         onClick={() => socket.emit("reqMemory", i)}
-                        key={10 * i}
+                        key={nbCartesParLigne * i}
                     >
                         {liste.map((json, j) => (
                             <Carte
-                                visible={10 * i + j === moi.choosed}
+                                visible={nbCartesParLigne * i + j === carteChoisie}
                                 valeur={json.valeur}
                                 type={json.type}
+                                index={nbCartesParLigne * i + j}
                                 chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
-                                key={10 * i + j + 1}
+                                key={nbCartesParLigne * i + j + 1}
                             />
                         ))}
                     </div>
@@ -122,7 +132,15 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            <div id={timeLeft > 10 ? "divTimer" : timeLeft > 5 ? "divTimerOrange" : "divTimerRed"}>
+            <div
+                id={
+                    timeLeft > nbCartesParLigne
+                        ? "divTimer"
+                        : timeLeft > 5
+                        ? "divTimerOrange"
+                        : "divTimerRed"
+                }
+            >
                 <label id="timer">{timeLeft.toFixed(1)}</label>
             </div>
             <MonJeux

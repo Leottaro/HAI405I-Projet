@@ -142,7 +142,7 @@ class SixQuiPrend {
         return true;
     }
 
-    coup(playerID, carte) {
+    coup(playerID, carte, index) {
         if (
             this.ended ||
             this.choosed[playerID] ||
@@ -234,12 +234,7 @@ class SixQuiPrend {
     }
 
     prends(playerID, ligne) {
-        if (
-            !this.choosingPlayer ||
-            this.choosingPlayer !== playerID ||
-            ligne < 0 ||
-            ligne > 3
-        ) {
+        if (!this.choosingPlayer || this.choosingPlayer !== playerID || ligne < 0 || ligne > 3) {
             return false;
         }
         for (const carte of this.plateau[ligne]) {

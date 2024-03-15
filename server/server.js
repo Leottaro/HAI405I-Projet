@@ -394,13 +394,15 @@ io.on("connection", function (socket) {
         }
     });
 
-    socket.on("reqCoup", async (carte) => {
+    socket.on("reqCoup", async (json) => {
         if (!sockets[socket.id]) {
             return;
         }
+        const carte = json.carte;
+        const index = json.index;
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux || !jeux.coup(socket.id, carte)) {
+        if (!jeux || !jeux.coup(socket.id, carte, index)) {
             return;
         }
         resPlayers(code);

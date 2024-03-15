@@ -120,30 +120,25 @@ class Memory {
         return true;
     }
 
-    coup(playerID, carte) {
+    coup(playerID, carte, index) {
         if (this.ended || this.scores[playerID] === undefined || playerID !== this.choosingPlayer) {
             return false;
         }
-        let i = 0;
-        while (!Carte.equals(carte, this.plateau[i])) {
-            i++;
-            if (i >= this.plateau.length) {
-                return false;
-            }
-        }
         if (!this.choosed) {
-            this.choosed = i;
+            this.choosed = index;
         } else {
-            if(this.choosed==i){
+            if (this.choosed == index) {
                 return false;
-            }
-            else if(this.plateau[i]==this.plateau[this.choosed]){
+            } else if (this.plateau[index] == this.plateau[this.choosed]) {
                 this.scores[playerID]++;
-                this.plateau[i]=undefined;
-                this.plateau[this.choosed]=undefined;
+                this.plateau[index] = undefined;
+                this.plateau[this.choosed] = undefined;
             }
             this.choosed = undefined;
-            this.choosingPlayer=this.playersIDs[(this.playersIDs.indexOf(this.choosingPlayer)+1)%this.playersIDs.length];
+            this.choosingPlayer =
+                this.playersIDs[
+                    (this.playersIDs.indexOf(this.choosingPlayer) + 1) % this.playersIDs.length
+                ];
             console.log(this.choosingPlayer);
         }
         return true;

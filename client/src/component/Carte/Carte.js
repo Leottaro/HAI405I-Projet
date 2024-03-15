@@ -3,7 +3,7 @@ import socket from "../../socket";
 import "./Carte.css";
 
 function Carte(props) {
-    // {nom, valeur, type} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
+    // {nom, valeur, type, index} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
     const [chemin, setChemin] = useState("");
     const [visible, setVisible] = useState(false);
     const [valeur, setValeur] = useState("");
@@ -21,7 +21,7 @@ function Carte(props) {
     }, [props]);
 
     function carteClick() {
-        socket.emit("reqCoup", { valeur: valeur, type: type });
+        socket.emit("reqCoup", { carte: { valeur: valeur, type: type }, index: props.index });
     }
 
     return (

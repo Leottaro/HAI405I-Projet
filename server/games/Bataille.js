@@ -104,7 +104,7 @@ class Bataille {
         return true;
     }
 
-    coup(playerID, carte) {
+    coup(playerID, carte, index) {
         if (
             this.ended ||
             this.choosed[playerID] ||
