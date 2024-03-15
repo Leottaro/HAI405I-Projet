@@ -405,7 +405,7 @@ io.on("connection", function (socket) {
         }
         resPlayers(code);
         resPlateau(code);
-        if (jeux.everyonePlayed()) {
+        if (jeux.nomJeux !== "memory" && jeux.everyonePlayed()) {
             await new Promise((r) => setTimeout(r, 1000));
             if (jeux.nextRound()) {
                 resPlayers(code);
