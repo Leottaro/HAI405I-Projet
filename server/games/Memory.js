@@ -104,6 +104,8 @@ class Memory {
         if (this.ended || this.started || this.playersIDs.length < Memory.playersRange[0]) {
             return false;
         }
+        this.started = true;
+
         // mettre tout les scores à 0
         for (const playerID of this.playersIDs) {
             this.scores[playerID] = 0;
@@ -121,28 +123,51 @@ class Memory {
     }
 
     coup(playerID, carte, index) {
-        if (this.ended || this.scores[playerID] === undefined || playerID !== this.choosingPlayer) {
+        if (
+            this.ended ||
+            this.scores[playerID] === undefined ||
+            playerID !== this.choosingPlayer ||
+            this.everyonePlayed()
+        ) {
             return false;
         }
+
+        if (index == this.choosed1 || index == this.choosed2) {
+            return false;
+        }
+
         if (!this.choosed1) {
             this.choosed1 = index;
             return true;
         }
+
         if (!this.choosed2) {
             this.choosed2 = index;
             return true;
         }
+    }
+
+    everyonePlayed() {
+        return this.choosed1 && this.choosed2;
+    }
+
+    nextRound() {
+        if (!this.started || this.ended || !this.everyonePlayed()) {
+            return false;
+        }
+
         if (Carte.equals(this.plateau[this.choosed1], this.plateau[this.choosed2])) {
             this.scores[playerID]++;
             this.plateau[this.choosed1] = undefined;
             this.plateau[this.choosed2] = undefined;
+        } else {
+            this.choosingPlayer =
+                this.playersIDs[
+                    (this.playersIDs.indexOf(this.choosingPlayer) + 1) % this.playersIDs.length
+                ];
         }
         this.choosed1 = undefined;
         this.choosed2 = undefined;
-        this.choosingPlayer =
-            this.playersIDs[
-                (this.playersIDs.indexOf(this.choosingPlayer) + 1) % this.playersIDs.length
-            ];
         return true;
     }
 }

@@ -102,7 +102,7 @@ function PlateauMemory() {
                         <JoueurMemory
                             pseudo={player}
                             key={"joueur" + index}
-                            score={0}
+                            score={listeJoueurs[player].score}
                         />
                     ))}
             </div>
@@ -121,7 +121,7 @@ function PlateauMemory() {
                                     type={json.type}
                                     index={nbCartesParLigne * i + j}
                                     chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
-                                    key={nbCartesParLigne * i + j + 1}
+                                    key={nbCartesParLigne * i + j}
                                 />
                             ) : (
                                 <div className="carte"></div>
