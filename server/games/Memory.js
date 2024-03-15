@@ -18,7 +18,8 @@ class Memory {
         this.plateau = [];
         this.scores = {};
         this.choosingPlayer = creatorID;
-        this.choosed;
+        this.choosed1;
+        this.choosed2;
         this.roundDelay = options ? options.roundDelay * 1000 : undefined;
         this.roundTimeout;
         this.roundCallback;
@@ -73,8 +74,6 @@ class Memory {
         if (!this.scores[playerID]) {
             return false;
         }
-        // delete sa carte choisie
-        delete this.choosed[playerID];
         // on le vire
         this.playersIDs.splice(this.playersIDs.indexOf(playerID), 1);
         // on supprime son score
@@ -95,9 +94,10 @@ class Memory {
         }
         const isCreator = this.playersIDs[0] === playerID;
         const isChoosing = this.choosingPlayer === playerID;
-        const choosed = isChoosing ? this.choosed : undefined;
+        const choosed1 = isChoosing ? this.choosed1 : undefined;
+        const choosed2 = isChoosing ? this.choosed2 : undefined;
         const score = this.scores[playerID];
-        return { isCreator, isChoosing, choosed, score };
+        return { isCreator, score, isChoosing, choosed1, choosed2 };
     }
 
     start() {
@@ -124,23 +124,25 @@ class Memory {
         if (this.ended || this.scores[playerID] === undefined || playerID !== this.choosingPlayer) {
             return false;
         }
-        if (!this.choosed) {
-            this.choosed = index;
-        } else {
-            if (this.choosed == index) {
-                return false;
-            } else if (this.plateau[index] == this.plateau[this.choosed]) {
-                this.scores[playerID]++;
-                this.plateau[index] = undefined;
-                this.plateau[this.choosed] = undefined;
-            }
-            this.choosed = undefined;
-            this.choosingPlayer =
-                this.playersIDs[
-                    (this.playersIDs.indexOf(this.choosingPlayer) + 1) % this.playersIDs.length
-                ];
-            console.log(this.choosingPlayer);
+        if (!this.choosed1) {
+            this.choosed1 = index;
+            return true;
         }
+        if (!this.choosed2) {
+            this.choosed2 = index;
+            return true;
+        }
+        if (Carte.equals(this.plateau[this.choosed1], this.plateau[this.choosed2])) {
+            this.scores[playerID]++;
+            this.plateau[this.choosed1] = undefined;
+            this.plateau[this.choosed2] = undefined;
+        }
+        this.choosed1 = undefined;
+        this.choosed2 = undefined;
+        this.choosingPlayer =
+            this.playersIDs[
+                (this.playersIDs.indexOf(this.choosingPlayer) + 1) % this.playersIDs.length
+            ];
         return true;
     }
 }

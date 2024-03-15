@@ -15,7 +15,7 @@ function PlateauMemory() {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
     const [moi, setMoi] = useState({ nom: "" });
-    const [carteChoisie, setCarteChoisie] = useState(-1);
+    const [carteChoisies, setCarteChoisies] = useState([]);
     const [afficheStart, setAfficheStart] = useState(false);
     const [afficheSave, setAfficheSave] = useState(false);
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
@@ -42,9 +42,10 @@ function PlateauMemory() {
                 json[account].isCreator &&
                     Object.keys(json).some((player) => json[player].score >= 0)
             );
-            setCarteChoisie(
-                Object.values(json).reduce((choosed, data) => (choosed ? choosed : data.choosed))
-                    .choosed
+            setCarteChoisies(
+                Object.values(json)
+                    .map((data) => [data.choosed1, data.choosed2])
+                    .reduce((choosen, data) => (choosen[0] ? choosen : data))
             );
         });
         socket.emit("reqPlayers");
@@ -112,16 +113,20 @@ function PlateauMemory() {
                         onClick={() => socket.emit("reqMemory", i)}
                         key={nbCartesParLigne * i}
                     >
-                        {liste.map((json, j) => (
-                            <Carte
-                                visible={nbCartesParLigne * i + j === carteChoisie}
-                                valeur={json.valeur}
-                                type={json.type}
-                                index={nbCartesParLigne * i + j}
-                                chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
-                                key={nbCartesParLigne * i + j + 1}
-                            />
-                        ))}
+                        {liste.map((json, j) =>
+                            json ? (
+                                <Carte
+                                    visible={carteChoisies.includes(nbCartesParLigne * i + j)}
+                                    valeur={json.valeur}
+                                    type={json.type}
+                                    index={nbCartesParLigne * i + j}
+                                    chemin={"CartesBataille/" + json.valeur + json.type + ".png"}
+                                    key={nbCartesParLigne * i + j + 1}
+                                />
+                            ) : (
+                                <div className="carte"></div>
+                            )
+                        )}
                     </div>
                 ))}
             </div>
