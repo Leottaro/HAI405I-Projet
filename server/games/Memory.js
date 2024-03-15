@@ -132,23 +132,23 @@ class Memory {
             return false;
         }
 
-        if (index == this.choosed1 || index == this.choosed2) {
+        if (index === this.choosed1 || index === this.choosed2) {
             return false;
         }
 
-        if (!this.choosed1) {
+        if (this.choosed1 === undefined) {
             this.choosed1 = index;
             return true;
         }
 
-        if (!this.choosed2) {
+        if (this.choosed2 === undefined) {
             this.choosed2 = index;
             return true;
         }
     }
 
     everyonePlayed() {
-        return this.choosed1 && this.choosed2;
+        return this.choosed1 !== undefined && this.choosed2 !== undefined;
     }
 
     nextRound() {
@@ -168,8 +168,8 @@ class Memory {
         }
         this.choosed1 = undefined;
         this.choosed2 = undefined;
-        if(this.plateau.every(carte => carte===undefined)){
-            this.ended=true;
+        if (this.plateau.every((carte) => carte === undefined)) {
+            this.ended = true;
             this.endCallback();
         }
         return true;

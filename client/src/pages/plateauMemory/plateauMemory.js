@@ -45,7 +45,7 @@ function PlateauMemory() {
             setCarteChoisies(
                 Object.values(json)
                     .map((data) => [data.choosed1, data.choosed2])
-                    .reduce((choosen, data) => (choosen[0] ? choosen : data))
+                    .reduce((choosen, data) => (choosen[0] !== undefined ? choosen : data))
             );
         });
         socket.emit("reqPlayers");

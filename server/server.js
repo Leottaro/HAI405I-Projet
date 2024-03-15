@@ -219,7 +219,6 @@ io.on("connection", function (socket) {
         socket.join(code);
         socket.emit("resCreate", { success: true, message: "ça a marché oui" });
         socket.emit("goTo", parties[code].url);
-        console.log(parties[code].url);
     });
 
     // REJOINDRE
