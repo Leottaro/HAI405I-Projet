@@ -168,8 +168,15 @@ class Memory {
         }
         this.choosed1 = undefined;
         this.choosed2 = undefined;
-        if (this.plateau.every((carte) => carte === undefined)) {
-            this.ended = true;
+        if(this.plateau.every(carte => carte===undefined)){
+            let maxKey=this.playersIDs[0];
+            for (const playerID of this.playersIDs) {
+                if (this.scores[playerID] > this.scores[maxKey]) {
+                    maxKey = playerID;
+                }
+            }
+            this.winner=maxKey;
+            this.ended=true;
             this.endCallback();
         }
         return true;

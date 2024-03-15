@@ -482,6 +482,9 @@ io.on("connection", function (socket) {
                     }, {}),
                 });
                 break;
+            case "memory":
+                io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
+                break;
             default:
                 throw new Error("Nomjeux non adapté à la fin de partie");
         }
