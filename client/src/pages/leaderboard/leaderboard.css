@@ -38,6 +38,22 @@
     overflow-y: scroll;
 }
 
+#classementMemory {
+    width: 280px;
+    min-width: 280px;
+    height: 96%;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+    margin: 5px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 #classementSix {
     width: 280px;
     min-width: 280px;

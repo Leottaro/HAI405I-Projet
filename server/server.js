@@ -514,6 +514,18 @@ io.on("connection", function (socket) {
                     );
                 }
             });
+        } else if (jeux.nomJeux === "memory") {
+            jeux.playersIDs.forEach((id) => {
+                if (id == jeux.winner) {
+                    database.run(
+                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
+                    );
+                } else {
+                    database.run(
+                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
+                    );
+                }
+            });
         }
 
         delete parties[code];
@@ -560,6 +572,14 @@ io.on("connection", function (socket) {
             GROUP BY nom
             ORDER BY nbWin DESC`
         );
-        socket.emit("resLeaderboard", [general, bataille, six]);
+        const [errMemory, memory] = await sqlRequest(
+            `SELECT nom, COUNT(*) as nbWin FROM aJoue, partieFinie 
+            WHERE codeR=code
+            AND place=1
+            AND nomJeux="memory"
+            GROUP BY nom
+            ORDER BY nbWin DESC`
+        );
+        socket.emit("resLeaderboard", [general, bataille, six, memory]);
     });
 });

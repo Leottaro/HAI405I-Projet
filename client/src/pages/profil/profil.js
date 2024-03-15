@@ -5,23 +5,31 @@ import { useEffect, useState } from "react";
 
 function Profil() {
     const [parties, setParties] = useState([]);
-    const [nbSix, setNbSix] = useState(0);
     const [nbBataille, setNbBataille] = useState(0);
-    const [winSix, setWinSix] = useState(0);
     const [winBataille, setWinBataille] = useState(0);
-    const [winrateSix, setWinrateSix] = useState(0);
     const [winrateBataille, setWinrateBataille] = useState(0);
+    const [nbSix, setNbSix] = useState(0);
+    const [winSix, setWinSix] = useState(0);
+    const [winrateSix, setWinrateSix] = useState(0);
     const [tetes, setTetes] = useState(0);
+    const [nbMemory, setNbMemory] = useState(0);
+    const [winMemory, setWinMemory] = useState(0);
+    const [winrateMemory, setWinrateMemory] = useState(0);
+    
+    
     useEffect(() => {
         socket.on("resProfilStat", (data) => {
             setParties(data);
-            let tempNbSix = 0;
             let tempNbBataille = 0;
-            let tempWinSix = 0;
             let tempWinBataille = 0;
-            let tempPlaceSix = 0;
             let tempPlaceBataille = 0;
+            let tempNbSix = 0;
+            let tempWinSix = 0;
+            let tempPlaceSix = 0;
             let tempTetes = 0;
+            let tempNbMemory = 0;
+            let tempWinMemory = 0;
+            let tempPlaceMemory = 0;
             parties.forEach((partie) => {
                 switch (partie.nomJeux) {
                     case "sixQuiPrend":
@@ -39,17 +47,27 @@ function Profil() {
                         }
                         tempPlaceBataille += partie.place;
                         break;
+                    case "memory":
+                        tempNbMemory += 1;
+                        if (partie.place === 1) {
+                            tempWinMemory += 1;
+                        }
+                        tempPlaceMemory += partie.place;
+                        break;
                     default:
                         break;
                 }
             });
-            setNbSix(tempNbSix);
             setNbBataille(tempNbBataille);
-            setWinSix(tempWinSix);
             setWinBataille(tempWinBataille);
-            setWinrateSix(tempPlaceSix / tempNbSix);
             setWinrateBataille(tempPlaceBataille / tempNbBataille);
+            setNbSix(tempNbSix);
+            setWinSix(tempWinSix);
+            setWinrateSix(tempPlaceSix / tempNbSix);
             setTetes(tempTetes / tempNbSix);
+            setNbBataille(tempNbMemory);
+            setWinMemory(tempWinMemory);
+            setWinrateMemory(tempPlaceMemory / tempNbMemory);
         });
         socket.emit("reqProfilStat");
         return () => socket.off("resProfilStat");
@@ -90,6 +108,20 @@ function Profil() {
                             <Rank
                                 win={winSix}
                                 nb={nbSix}
+                            />
+                        </div>
+                        <div id="profilMemory">
+                            <div className="stat">
+                                <label className="nomJeux">Memory</label>
+                                <label className="labelProfil">Parties jouées : {nbMemory}</label>
+                                <label className="labelProfil">Victoires : {winMemory}</label>
+                                <label className="labelProfil">
+                                    Placement Moyen : {winrateMemory}
+                                </label>
+                            </div>
+                            <Rank
+                                win={winMemory}
+                                nb={nbMemory}
                             />
                         </div>
                     </div>

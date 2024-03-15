@@ -7,12 +7,14 @@ function Leaderboard() {
     const [general, setGeneral] = useState([]);
     const [bataille, setBataille] = useState([]);
     const [six, setSix] = useState([]);
+    const [memory, setMemory] = useState([]);
 
     useEffect(() => {
-        socket.on("resLeaderboard", ([g, b, s]) => {
+        socket.on("resLeaderboard", ([g, b, s, m]) => {
             setGeneral(g);
             setBataille(b);
             setSix(s);
+            setMemory(m);
         });
         socket.emit("reqLeaderboard");
         return () => socket.off("resLeaderboard");
@@ -74,6 +76,30 @@ function Leaderboard() {
                 <div id="classementSix">
                     <label className="nomJeu">Six qui prend</label>
                     {six.map((json, i) => (
+                        <div className="divPlace">
+                            <div
+                                className={
+                                    i === 0
+                                        ? "first"
+                                        : i === 1
+                                          ? "second"
+                                          : i === 2
+                                            ? "third"
+                                            : "place"
+                                }
+                            >
+                                <label className="labelPlace">{i + 1}</label>
+                            </div>
+                            <div className="joueur">
+                                <label className="nomJoueur">{json.nom}</label>
+                                <label className="statJoueur">{json.nbWin} Victoires</label>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div id="classementMemory">
+                    <label className="nomJeu">Memory</label>
+                    {memory.map((json, i) => (
                         <div className="divPlace">
                             <div
                                 className={

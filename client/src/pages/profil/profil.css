@@ -51,6 +51,19 @@
     flex-direction: row;
 }
 
+#profilMemory {
+    position: relative;
+    width: calc(100% - 20px);
+    min-height: 165px;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+
 #profilSix {
     position: relative;
     width: calc(100% - 20px);
