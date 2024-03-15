@@ -157,7 +157,7 @@ class Memory {
         }
 
         if (Carte.equals(this.plateau[this.choosed1], this.plateau[this.choosed2])) {
-            this.scores[playerID]++;
+            this.scores[this.choosingPlayer]++;
             this.plateau[this.choosed1] = undefined;
             this.plateau[this.choosed2] = undefined;
         } else {
