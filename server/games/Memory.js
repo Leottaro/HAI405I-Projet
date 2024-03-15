@@ -134,83 +134,18 @@ class Memory {
         if (!this.choosed) {
             this.choosed = i;
         } else {
-            // TODO:
+            if(this.choosed==i){
+                return false;
+            }
+            else if(this.plateau[i]==this.plateau[this.choosed]){
+                this.scores[playerID]++;
+                this.plateau[i]=undefined;
+                this.plateau[this.choosed]=undefined;
+            }
             this.choosed = undefined;
+            this.choosingPlayer=this.playersIDs[(this.playersIDs.indexOf(this.choosingPlayer)+1)%this.playersIDs.length];
+            console.log(this.choosingPlayer);
         }
-        return true;
-    }
-
-    everyonePlayed() {
-        return this.playersIDs.some((id) => this.choosed[id]);
-    }
-
-    nextRound() {
-        // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
-        if (this.ended || !this.everyonePlayed()) {
-            return 0;
-        }
-        const players = this.playersIDs.sort(
-            (id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur
-        );
-        for (const playerID of players) {
-            const choosed = this.choosed[playerID];
-            let biggest = { ligne: 0, carte: { valeur: -1, type: "" } };
-            for (const ligne in this.plateau) {
-                if (this.plateau[ligne].length == 0) {
-                    biggest = { ligne, carte: { valeur: -1, type: "" } };
-                    break;
-                }
-                const carte = this.plateau[ligne].at(-1);
-                if (carte.valeur < choosed.valeur && carte.valeur > biggest.carte.valeur) {
-                    biggest = { ligne, carte };
-                }
-            }
-            if (!biggest.ligne) {
-                this.choosingPlayer = playerID;
-                this.playChoiceTimeout();
-                return 2;
-            }
-            if (this.plateau[biggest.ligne].length == 5) {
-                for (const carte of this.plateau[biggest.ligne]) {
-                    this.scores[playerID] += this.carteScore(carte);
-                }
-                this.plateau[biggest.ligne] = [];
-            }
-            this.plateau[biggest.ligne].push(choosed);
-            delete this.choosed[playerID];
-        }
-
-        if (this.playersIDs.map((id) => this.AAA[id]).some((paquet) => paquet.length == 0)) {
-            this.started = false;
-            this.plateau = [[], [], [], []];
-            this.start();
-        }
-
-        if (this.playersIDs.some((id) => this.scores[id] >= 66)) {
-            this.ended = true;
-            this.winner = this.playersIDs.sort(
-                (id1, id2) => this.scores[id1] - this.scores[id2]
-            )[0];
-            Object.keys(this.AAA).forEach((playerID) => (this.AAA[playerID] = []));
-            this.choosed = {};
-            this.plateau = [[], [], [], []];
-            this.endCallback();
-        } else {
-            this.playRoundTimeout();
-        }
-        return 1;
-    }
-
-    prends(playerID, ligne) {
-        if (!this.choosingPlayer || this.choosingPlayer !== playerID || ligne < 0 || ligne > 3) {
-            return false;
-        }
-        for (const carte of this.plateau[ligne]) {
-            this.scores[playerID] += this.carteScore(carte);
-        }
-        this.plateau[ligne] = [];
-        delete this.choosingPlayer;
-        this.nextRound();
         return true;
     }
 }
