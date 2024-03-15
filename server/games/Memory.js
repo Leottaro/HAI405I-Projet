@@ -168,6 +168,10 @@ class Memory {
         }
         this.choosed1 = undefined;
         this.choosed2 = undefined;
+        if(this.plateau.every(carte => carte===undefined)){
+            this.ended=true;
+            this.endCallback();
+        }
         return true;
     }
 }
