@@ -15,8 +15,7 @@ function Profil() {
     const [nbMemory, setNbMemory] = useState(0);
     const [winMemory, setWinMemory] = useState(0);
     const [winrateMemory, setWinrateMemory] = useState(0);
-    
-    
+
     useEffect(() => {
         socket.on("resProfilStat", (data) => {
             setParties(data);
@@ -66,6 +65,7 @@ function Profil() {
             setWinrateSix(tempPlaceSix / tempNbSix);
             setTetes(tempTetes / tempNbSix);
             setNbBataille(tempNbMemory);
+            setNbMemory(tempNbMemory);
             setWinMemory(tempWinMemory);
             setWinrateMemory(tempPlaceMemory / tempNbMemory);
         });
