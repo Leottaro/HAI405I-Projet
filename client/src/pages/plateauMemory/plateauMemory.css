@@ -41,8 +41,6 @@
     top: 50vh;
     left: 50vw;
     transform: translate(-50%, -50%);
-    width: 45vw;
-    height: 60vh;
 
     display: flex;
     flex-direction: column;
@@ -50,8 +48,8 @@
 }
 #JoueurMemoryMoi {
     height: 20vh;
-    transform:  translate(-50%, 0);
+    transform: translate(-50%, 0);
     position: absolute;
     top: 80vh;
-    left: 50vw
+    left: 50vw;
 }
