@@ -2,7 +2,6 @@ const Carte = require("./Carte");
 
 class Memory {
     static roundDelays = { min: 5, default: 30, max: 60 };
-    static choiceDelays = { min: 1, default: 5, max: 10 };
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers, options) {
@@ -23,9 +22,6 @@ class Memory {
         this.roundDelay = options ? options.roundDelay * 1000 : undefined;
         this.roundTimeout;
         this.roundCallback;
-        this.choiceDelay = options ? options.choiceDelay * 1000 : undefined;
-        this.choiceTimeout;
-        this.choiceCallback;
         this.playCallback;
 
         this.addPlayer(creatorID);
@@ -39,17 +35,6 @@ class Memory {
         if (this.roundDelay) {
             this.roundTimeout = setTimeout(this.roundCallback, this.roundDelay);
             this.playCallback(this.roundDelay);
-        }
-    }
-
-    setChoiceCallback(callback) {
-        this.choiceCallback = callback;
-    }
-    playChoiceTimeout() {
-        clearTimeout(this.choiceTimeout);
-        if (this.choiceDelay) {
-            this.choiceTimeout = setTimeout(this.choiceCallback, this.choiceDelay);
-            this.playCallback(this.choiceDelay);
         }
     }
 
@@ -152,7 +137,13 @@ class Memory {
     }
 
     nextRound() {
-        if (!this.started || this.ended || !this.everyonePlayed()) {
+        if (
+            !this.started ||
+            this.ended ||
+            this.choosed1 === undefined ||
+            this.choosed2 === undefined ||
+            !this.everyonePlayed()
+        ) {
             return false;
         }
 
@@ -168,16 +159,18 @@ class Memory {
         }
         this.choosed1 = undefined;
         this.choosed2 = undefined;
-        if(this.plateau.every(carte => carte===undefined)){
-            let maxKey=this.playersIDs[0];
+        if (this.plateau.every((carte) => carte === undefined)) {
+            let maxKey = this.playersIDs[0];
             for (const playerID of this.playersIDs) {
                 if (this.scores[playerID] > this.scores[maxKey]) {
                     maxKey = playerID;
                 }
             }
-            this.winner=maxKey;
-            this.ended=true;
+            this.winner = maxKey;
+            this.ended = true;
             this.endCallback();
+        } else {
+            this.playRoundTimeout();
         }
         return true;
     }

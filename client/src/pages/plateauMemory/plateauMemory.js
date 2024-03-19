@@ -65,7 +65,7 @@ function PlateauMemory() {
         });
         const interval = setInterval(() => {
             setTimeLeft((timeLeft) => (timeLeft > 0 ? timeLeft - 0.1 : 0));
-        }, nbCartesParLigne);
+        }, 100);
 
         socket.on("Gagnant", (pseudo) => {
             if (pseudo === account) {
@@ -137,17 +137,21 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            <div
-                id={
-                    timeLeft > nbCartesParLigne
-                        ? "divTimer"
-                        : timeLeft > 5
-                        ? "divTimerOrange"
-                        : "divTimerRed"
-                }
-            >
-                <label id="timer">{timeLeft.toFixed(1)}</label>
-            </div>
+            {!afficheStart && moi.isChoosing ? (
+                <div
+                    id={
+                        timeLeft > nbCartesParLigne
+                            ? "divTimer"
+                            : timeLeft > 5
+                            ? "divTimerOrange"
+                            : "divTimerRed"
+                    }
+                >
+                    <label id="timer">{timeLeft.toFixed(1)}</label>
+                </div>
+            ) : (
+                <></>
+            )}
             <MonJeux
                 dossier={"CartesSix/"}
                 texte={"score: " + moi.score}

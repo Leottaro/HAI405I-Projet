@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import { useParams } from "react-router-dom";
-import SixParam from "./SixParam/SixParam";
+import OptionalParam from "./OptionalParam/OptionalParam";
 
 function Creer() {
     const { jeux } = useParams();
     const [nbrJoueursMax, setNbrJoueursMax] = useState(2);
-    const [roundDelays, setRoundDelays] = useState({});
-    const [choiceDelays, setChoiceDelays] = useState({});
+    const [optionalParams, setOptionalParams] = useState({});
 
     useEffect(() => {
         socket.emit("reqGamesInfos", jeux);
@@ -15,16 +14,12 @@ function Creer() {
 
     socket.on("resGamesInfos", (json) => {
         // quand jeux === sixQuiPrend { roundDelays: {min, default, max}, choiceDelays: {min, default, max} }
-        setRoundDelays(json.roundDelays);
-        setChoiceDelays(json.choiceDelays);
+        setOptionalParams(json);
+        console.log(json);
     });
 
     function valider() {
-        let json = { nbrJoueursMax: nbrJoueursMax, jeux: jeux };
-        if (jeux === "sixQuiPrend") {
-            json.options = options;
-        }
-        socket.emit("reqCreate", json);
+        socket.emit("reqCreate", { nbrJoueursMax, jeux, options });
     }
 
     let options = {};
@@ -43,20 +38,42 @@ function Creer() {
             />
             {jeux === "sixQuiPrend" ? (
                 <div id="ParametersDiv">
-                    <SixParam
-                        desc="temps max par rounds"
-                        min={roundDelays.min}
-                        defaultValue={roundDelays.default}
-                        max={roundDelays.max}
-                        onChange={(value) => (options.roundDelay = value)}
-                    />
-                    <SixParam
-                        desc="temps max choix de ligne"
-                        min={choiceDelays.min}
-                        defaultValue={choiceDelays.default}
-                        max={choiceDelays.max}
-                        onChange={(value) => (options.choiceDelay = value)}
-                    />
+                    {optionalParams.roundDelays ? (
+                        <OptionalParam
+                            desc="temps max par rounds"
+                            min={optionalParams.roundDelays.min}
+                            defaultValue={optionalParams.roundDelays.default}
+                            max={optionalParams.roundDelays.max}
+                            onChange={(value) => (options.roundDelay = value)}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    {optionalParams.choiceDelays ? (
+                        <OptionalParam
+                            desc="temps max choix de ligne"
+                            min={optionalParams.choiceDelays.min}
+                            defaultValue={optionalParams.choiceDelays.default}
+                            max={optionalParams.choiceDelays.max}
+                            onChange={(value) => (options.choiceDelay = value)}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            ) : jeux === "memory" ? (
+                <div id="ParametersDiv">
+                    {optionalParams.roundDelays ? (
+                        <OptionalParam
+                            desc="temps max par joueur"
+                            min={optionalParams.roundDelays.min}
+                            defaultValue={optionalParams.roundDelays.default}
+                            max={optionalParams.roundDelays.max}
+                            onChange={(value) => (options.roundDelay = value)}
+                        />
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ) : (
                 <></>

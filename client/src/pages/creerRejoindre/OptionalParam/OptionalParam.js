@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "./SixParam.css";
+import "./OptionalParam.css";
 
-function SixParam(props) {
+function OptionalParam(props) {
     // {title, min, max, defaultValue}
     const [value, setValue] = useState(0);
 
@@ -39,4 +39,4 @@ function SixParam(props) {
         </div>
     );
 }
-export default SixParam;
+export default OptionalParam;

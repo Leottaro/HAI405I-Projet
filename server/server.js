@@ -320,6 +320,10 @@ io.on("connection", function (socket) {
                 roundDelays: SixQuiPrend.roundDelays,
                 choiceDelays: SixQuiPrend.choiceDelays,
             });
+        } else if (jeux === "memory") {
+            socket.emit("resGamesInfos", {
+                roundDelays: Memory.roundDelays,
+            });
         }
     });
 
@@ -359,10 +363,13 @@ io.on("connection", function (socket) {
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (jeux.start()) {
-            resPlayers(code);
-            resPlateau(code);
-            if (jeux.nomJeux === "sixQuiPrend" || jeux.nomJeux === "memory") {
+        if (!jeux.start()) {
+            return;
+        }
+        resPlayers(code);
+        resPlateau(code);
+        switch (jeux.nomJeux) {
+            case "sixQuiPrend":
                 // définit la fonction exécutée quand le round prends trop de temps
                 jeux.setRoundCallback(() => {
                     for (const playerID of jeux.playersIDs) {
@@ -389,7 +396,31 @@ io.on("connection", function (socket) {
                 });
 
                 jeux.playRoundTimeout();
-            }
+                break;
+            case "memory":
+                // définit la fonction exécutée quand le round prends trop de temps
+                jeux.setRoundCallback(async () => {
+                    while (!jeux.everyonePlayed()) {
+                        const i = Math.floor(Math.random() * jeux.plateau.length);
+                        jeux.coup(jeux.choosingPlayer, jeux.plateau[i], i);
+                    }
+                    resPlayers(code);
+                    resPlateau(code);
+                    await new Promise((r) => setTimeout(r, 1000));
+                    jeux.nextRound();
+                    resPlayers(code);
+                    resPlateau(code);
+                });
+
+                // définit la fonction exécutée quand on play un timeout
+                jeux.setPlayCallback((timeLeft) => {
+                    io.in(code).emit("resTimeLeft", timeLeft / 1000);
+                });
+
+                jeux.playRoundTimeout();
+                break;
+            default:
+                break;
         }
     });
 
