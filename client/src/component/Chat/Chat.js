@@ -47,7 +47,7 @@ function Chat() {
                 viewBox="0 0 24 48"
                 id="ChatButton"
                 onClick={onChatButtonClick}
-                className={isChatShown ? "shown" : ""}
+                className={isChatShown ? "" : "hidden"}
             >
                 <path
                     className="arrow"
@@ -68,7 +68,7 @@ function Chat() {
             />
             <div
                 id="ChatDiv"
-                className={isChatShown ? "shown" : ""}
+                className={isChatShown ? "" : "hidden"}
             >
                 <div id="inputDiv">
                     <input

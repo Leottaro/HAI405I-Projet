@@ -4,7 +4,7 @@
 
     position: absolute;
     top: 0vh;
-    right: -30vw;
+    right: 0vw;
 
     background: #ffffff40;
     border: none;
@@ -13,10 +13,13 @@
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
+
+    visibility: visible;
 }
 
-#ChatDiv.shown {
-    right: 0vw;
+#ChatDiv.hidden {
+    right: -30vw;
+    visibility: hidden;
 }
 
 #ChatButton {
@@ -24,23 +27,23 @@
 
     position: absolute;
     top: 50vh;
-    right: 0vw;
+    right: 30vw;
     transform: translate(0, -50%);
 }
 
-#ChatButton.shown {
-    right: 30vw;
+#ChatButton.hidden {
+    right: 0vw;
 }
 
 #ChatDiv,
 #ChatButton {
-    transition: right 1s;
+    transition: all 1s;
 }
 
 #ChatButton .arrow {
     stroke: #fff;
     stroke-width: 0.15rem;
-    transform: rotate(180deg);
+    transform: none;
     transform-origin: 50% 50%;
     transition: cubic-bezier(0.5, -0.5, 0.5, 1.5) 1s;
 }
@@ -49,8 +52,8 @@
     fill: #ffffffc0;
 }
 
-#ChatButton.shown path {
-    transform: none;
+#ChatButton.hidden .arrow {
+    transform: rotate(180deg);
 }
 
 #ChatNotif {
