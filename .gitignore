@@ -1,9 +1,11 @@
+# Global
+*/node_modules
+*/package-lock.json
+
 # Client
-client/node_modules
 client/build
 
 # Server
-server/node_modules
 server/databases
 
 # Server debugging
