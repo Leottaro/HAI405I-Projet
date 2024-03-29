@@ -15,7 +15,6 @@ function Creer() {
     socket.on("resGamesInfos", (json) => {
         // quand jeux === sixQuiPrend { roundDelays: {min, default, max}, choiceDelays: {min, default, max} }
         setOptionalParams(json);
-        console.log(json);
     });
 
     function valider() {

@@ -181,7 +181,7 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         if (code && jeux) {
             jeux.removePlayer(socket.id);
-            socket.leave(code);
+            socket.leave(code); 
             if (!jeux.ended) {
                 resPlayers(code);
             }
@@ -256,13 +256,8 @@ io.on("connection", function (socket) {
         socket.emit("goTo", jeux.url);
     });
 
-    socket.on("reqRestart", async (code) => {
+    socket.on("reqRestart", (code) => {
         // TODO:
-        if (!sockets[socket.id]) {
-            return;
-        }
-        const [err, rows] = await sqlRequest(`SELECT * FROM partie WHERE code="${code}"`);
-        const jeux = rows[0];
     });
 
     // LEAVE
@@ -273,10 +268,10 @@ io.on("connection", function (socket) {
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux || jeux.ended) {
-            return;
+        socket.leave(code);
+        if (jeux) {
+            jeux.removePlayer(socket.id);
         }
-        jeux.removePlayer(socket.id);
     });
 
     // MY GAMES
@@ -493,10 +488,12 @@ io.on("connection", function (socket) {
 
         if (!jeux.ended) {
             io.in(code).emit("goTo", "/profil");
+            io.socketsLeave(code);
             delete parties[code];
             return;
         }
 
+        jeux.nextRound();
         switch (jeux.nomJeux) {
             case "bataille":
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);

@@ -36,7 +36,7 @@ class Bataille {
     }
 
     removePlayer(playerID) {
-        if (!this.paquets[playerID]) {
+        if (this.paquets[playerID] === undefined) {
             return false;
         }
         // réintegre sa carthe choisir dans son paquet

@@ -68,6 +68,7 @@ function PlateauMemory() {
         }, 100);
 
         socket.on("Gagnant", (pseudo) => {
+            clearInterval(interval);
             if (pseudo === account) {
                 setWinner("Vous avez Gagné !");
             } else {
@@ -137,7 +138,7 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            {!afficheStart && moi.isChoosing ? (
+            {afficheSave && moi.isChoosing ? (
                 <div
                     id={
                         timeLeft > nbCartesParLigne

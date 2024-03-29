@@ -56,7 +56,7 @@ class Memory {
     }
 
     removePlayer(playerID) {
-        if (!this.scores[playerID]) {
+        if (this.scores[playerID] === undefined) {
             return false;
         }
         // on le vire
