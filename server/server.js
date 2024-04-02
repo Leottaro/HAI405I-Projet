@@ -485,7 +485,10 @@ io.on("connection", function (socket) {
 
     async function finJeux(code) {
         const jeux = parties[code];
-
+        if (jeux === undefined) {
+            return;
+        }
+        
         if (!jeux.ended) {
             io.in(code).emit("goTo", "/profil");
             io.socketsLeave(code);
@@ -494,13 +497,14 @@ io.on("connection", function (socket) {
         }
 
         jeux.nextRound();
+        resPlayers(code);
+        resPlateau(code);
         switch (jeux.nomJeux) {
             case "bataille":
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
                 break;
             case "sixQuiPrend":
                 io.in(code).emit("goTo", "/Score");
-                await new Promise((r) => setTimeout(r, 100));
                 io.in(code).emit("winSix", {
                     gagnant: sockets[jeux.winner].compte,
                     joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
