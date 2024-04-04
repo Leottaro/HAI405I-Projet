@@ -14,7 +14,16 @@ function Score() {
             setListeJoueurs(json.joueurs);
             setScores(json.scores);
         });
-        return () => socket.off("winSix");
+
+        socket.on("winMemory", (json) => {
+            setGagnant(json.gagnant);
+            setListeJoueurs(json.joueurs);
+            setScores(json.scores);
+        });
+        return () => {
+            socket.off("winSix");
+            socket.off("winMemory");
+        };
     }, []);
 
     const navigate = useNavigate();

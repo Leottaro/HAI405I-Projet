@@ -504,6 +504,7 @@ io.on("connection", function (socket) {
             `INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`
         );
 
+        let json;
         switch (jeux.nomJeux) {
             case "bataille":
                 jeux.playersIDs.forEach((id) => {
@@ -520,7 +521,7 @@ io.on("connection", function (socket) {
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
                 io.socketsLeave(code);
                 delete parties[code];
-                return true;
+                break;
             case "sixQuiPrend":
                 jeux.playersIDs.forEach((id) => {
                     if (id == jeux.winner) {
@@ -535,7 +536,7 @@ io.on("connection", function (socket) {
                 });
 
                 io.in(code).emit("goTo", "/Score");
-                const json = {
+                json = {
                     gagnant: sockets[jeux.winner].compte,
                     joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
                     scores: Object.keys(jeux.scores).reduce((newScores, id) => {
@@ -551,7 +552,7 @@ io.on("connection", function (socket) {
                         .then((sockets) => sockets.map((socket) => socket.id));
                     io.socketsLeave(code);
                 }, 100);
-                return true;
+                break;
             case "memory":
                 jeux.playersIDs.forEach((id) => {
                     if (id == jeux.winner) {
@@ -564,11 +565,24 @@ io.on("connection", function (socket) {
                         );
                     }
                 });
-                io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
-
-                io.socketsLeave(code);
+                io.in(code).emit("goTo", "/Score");
+                json = {
+                    gagnant: sockets[jeux.winner].compte,
+                    joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
+                    scores: Object.keys(jeux.scores).reduce((newScores, id) => {
+                        newScores[sockets[id].compte] = jeux.scores[id];
+                        return newScores;
+                    }, {}),
+                };
                 delete parties[code];
-                return true;
+                setTimeout(() => {
+                    io.in(code).emit("winMemory", json);
+                    io.in(code)
+                        .fetchSockets()
+                        .then((sockets) => sockets.map((socket) => socket.id));
+                    io.socketsLeave(code);
+                }, 100);
+                break;
             default:
                 throw new Error("Nomjeux non adapté à la fin de partie");
         }
