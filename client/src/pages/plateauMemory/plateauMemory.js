@@ -138,7 +138,7 @@ function PlateauMemory() {
                 start={start}
                 save={save}
             />
-            {afficheSave && moi.isChoosing ? (
+            {moi.isChoosing ? (
                 <div
                     id={
                         timeLeft > nbCartesParLigne
