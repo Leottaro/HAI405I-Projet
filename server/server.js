@@ -181,7 +181,7 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         if (code && jeux) {
             jeux.removePlayer(socket.id);
-            socket.leave(code); 
+            socket.leave(code);
             if (!jeux.ended) {
                 resPlayers(code);
             }
@@ -268,10 +268,10 @@ io.on("connection", function (socket) {
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        socket.leave(code);
         if (jeux) {
             jeux.removePlayer(socket.id);
         }
+        socket.leave(code);
     });
 
     // MY GAMES
@@ -488,7 +488,7 @@ io.on("connection", function (socket) {
         if (jeux === undefined) {
             return;
         }
-        
+
         if (!jeux.ended) {
             io.in(code).emit("goTo", "/profil");
             io.socketsLeave(code);
@@ -499,70 +499,79 @@ io.on("connection", function (socket) {
         jeux.nextRound();
         resPlayers(code);
         resPlateau(code);
+
+        database.run(
+            `INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`
+        );
+
         switch (jeux.nomJeux) {
             case "bataille":
+                jeux.playersIDs.forEach((id) => {
+                    if (id == jeux.winner) {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`
+                        );
+                    } else {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`
+                        );
+                    }
+                });
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
-                break;
+                io.socketsLeave(code);
+                delete parties[code];
+                return true;
             case "sixQuiPrend":
+                jeux.playersIDs.forEach((id) => {
+                    if (id == jeux.winner) {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
+                        );
+                    } else {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
+                        );
+                    }
+                });
+
                 io.in(code).emit("goTo", "/Score");
-                io.in(code).emit("winSix", {
+                const json = {
                     gagnant: sockets[jeux.winner].compte,
                     joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
                     scores: Object.keys(jeux.scores).reduce((newScores, id) => {
                         newScores[sockets[id].compte] = jeux.scores[id];
                         return newScores;
                     }, {}),
-                });
-                break;
+                };
+                delete parties[code];
+                setTimeout(() => {
+                    io.in(code).emit("winSix", json);
+                    io.in(code)
+                        .fetchSockets()
+                        .then((sockets) => sockets.map((socket) => socket.id));
+                    io.socketsLeave(code);
+                }, 100);
+                return true;
             case "memory":
+                jeux.playersIDs.forEach((id) => {
+                    if (id == jeux.winner) {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
+                        );
+                    } else {
+                        database.run(
+                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
+                        );
+                    }
+                });
                 io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
-                break;
+
+                io.socketsLeave(code);
+                delete parties[code];
+                return true;
             default:
                 throw new Error("Nomjeux non adapté à la fin de partie");
         }
-
-        database.run(
-            `INSERT INTO partieFinie(code, nomJeux) VALUES ("${code}", "${jeux.nomJeux}")`
-        );
-        if (jeux.nomJeux === "bataille") {
-            jeux.playersIDs.forEach((id) => {
-                if (id == jeux.winner) {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`
-                    );
-                } else {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`
-                    );
-                }
-            });
-        } else if (jeux.nomJeux === "sixQuiPrend") {
-            jeux.playersIDs.forEach((id) => {
-                if (id == jeux.winner) {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
-                    );
-                } else {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
-                    );
-                }
-            });
-        } else if (jeux.nomJeux === "memory") {
-            jeux.playersIDs.forEach((id) => {
-                if (id == jeux.winner) {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
-                    );
-                } else {
-                    database.run(
-                        `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
-                    );
-                }
-            });
-        }
-
-        delete parties[code];
     }
 
     // Profil

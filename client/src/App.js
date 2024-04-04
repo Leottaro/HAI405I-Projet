@@ -28,7 +28,7 @@ function App() {
     useEffect(() => {
         const locationTitle = location.pathname.split("/")[1];
         document.title = locationTitle || "Home";
-        if (!locationTitle.startsWith("plateau")) {
+        if (!locationTitle.startsWith("plateau") && locationTitle !== "Score") {
             socket.emit("reqLeave");
         }
     }, [location]);

@@ -28,12 +28,12 @@ function Score() {
             <table id="customers">
                 <thead>
                     <tr>
-                        <th colspan="2">Tableau des scores</th>
+                        <th colSpan={2}>Tableau des scores</th>
                     </tr>
                 </thead>
                 <tbody>
                     {listeJoueurs.map((id) => (
-                        <tr>
+                        <tr key={id}>
                             <td>{id}</td>
                             <td>{scores[id]}</td>
                         </tr>
