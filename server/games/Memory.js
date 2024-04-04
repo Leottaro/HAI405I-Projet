@@ -110,8 +110,9 @@ class Memory {
     coup(playerID, carte, index) {
         if (
             this.ended ||
-            this.scores[playerID] === undefined ||
             playerID !== this.choosingPlayer ||
+            this.scores[playerID] === undefined ||
+            this.plateau[index] === undefined ||
             this.everyonePlayed()
         ) {
             return false;
