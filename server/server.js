@@ -270,6 +270,8 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         if (jeux) {
             jeux.removePlayer(socket.id);
+            resPlayers(code);
+            resPlateau(code);
         }
         socket.leave(code);
     });
