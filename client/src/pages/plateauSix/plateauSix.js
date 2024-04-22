@@ -12,15 +12,17 @@ import Audio from "../../component/Audio/Audio";
 function PlateauSix(props) {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
-    const [moi, setMoi] = useState({ nom: "", paquet: [] });
+    const [moi, setMoi] = useState({ isCreator: false, paquet: [], choosed: {}, score: 0 });
     const [afficheStart, setAfficheStart] = useState(false);
     const [afficheSave, setAfficheSave] = useState(false);
+    const [afficheBot, setAfficheBot] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
 
     useEffect(() => {
         socket.on("resPlayers", (json) => {
+            console.log(json);
             // {nom: {isCreator, paquet, choosed, score}, ...}
             setListeJoueurs(
                 Object.keys(json).reduce((filtered, player) => {
@@ -30,17 +32,20 @@ function PlateauSix(props) {
                     return filtered;
                 }, {})
             );
-            setMoi(json[account]);
-            setAfficheStart(
-                json[account].isCreator &&
-                    Object.keys(json).length >= 2 &&
-                    json[account].paquet.length === 0
-            );
-            setAfficheSave(
-                json[account].isCreator &&
-                    Object.keys(json).some((player) => json[player].paquet.length > 0)
-            );
             setEstFinDeTour(Object.keys(json).every((player) => json[player].choosed));
+            if (json[account]) {
+                setMoi(json[account]);
+                setAfficheStart(
+                    json[account].isCreator &&
+                        Object.keys(json).length >= 2 &&
+                        json[account].paquet.length === 0
+                );
+                setAfficheSave(
+                    json[account].isCreator &&
+                        Object.keys(json).some((player) => json[player].paquet.length > 0)
+                );
+                setAfficheBot(json[account].isCreator && json[account].paquet.length === 0);
+            }
         });
         socket.emit("reqPlayers");
 
@@ -72,6 +77,10 @@ function PlateauSix(props) {
 
     function save() {
         socket.emit("reqSave");
+    }
+
+    function addBot() {
+        socket.emit("reqAddBot");
     }
 
     return (
@@ -110,9 +119,11 @@ function PlateauSix(props) {
             <Start
                 afficheStart={afficheStart}
                 afficheSave={!afficheStart && afficheSave}
+                afficheBot={afficheBot}
                 code={code}
                 start={start}
                 save={save}
+                addBot={addBot}
             />
             <div id={timeLeft > 10 ? "divTimer" : timeLeft > 5 ? "divTimerOrange" : "divTimerRed"}>
                 <label id="timer">{timeLeft.toFixed(1)}</label>

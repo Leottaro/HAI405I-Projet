@@ -13,6 +13,7 @@ class SixQuiPrend {
         this.winner;
         this.maxPlayers = maxPlayers;
         this.playersIDs = [];
+        this.botIDs = [];
         this.paquets = {};
         this.choosed = {};
         this.endCallback;
@@ -61,6 +62,15 @@ class SixQuiPrend {
         return this.started;
     }
 
+    addBot() {
+        const botID = "Bot" + (this.botIDs.length + 1);
+        if (!this.addPlayer(botID)) {
+            return false;
+        }
+        this.botIDs.push(botID);
+        return true;
+    }
+
     addPlayer(playerID) {
         if (this.started || this.playersIDs.length >= this.maxPlayers) {
             return false;
@@ -85,6 +95,8 @@ class SixQuiPrend {
         // on supprime son paquet
         delete this.paquets[playerID];
         delete this.scores[playerID];
+        // si le joueur est un bot, on le supprime
+        delete this.botIDs[playerID];
         // si la game n'a plus assez de joueurs, on la supprime
         if (
             (this.started && this.playersIDs.length < 2) ||
@@ -157,9 +169,9 @@ class SixQuiPrend {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(
-            (playerID) => this.paquets[playerID].length == 0 || this.choosed[playerID]
-        );
+        return this.playersIDs
+            .filter((playerID) => !this.botIDs.includes(playerID))
+            .every((playerID) => this.paquets[playerID].length == 0 || this.choosed[playerID]);
     }
 
     carteScore(carte) {
@@ -181,6 +193,15 @@ class SixQuiPrend {
         if (this.ended || !this.everyonePlayed() || this.choosingPlayer) {
             return 0;
         }
+
+        // faire jouer tous les bots (ils jouent tous de manière random)
+        for (const botID of this.botIDs) {
+            if (!this.choosed[botID]) {
+                const i = Math.floor(Math.random() * this.paquets[botID].length);
+                this.coup(botID, this.paquets[botID][i]);
+            }
+        }
+
         const players = this.playersIDs.sort(
             (id1, id2) => this.choosed[id1].valeur - this.choosed[id2].valeur
         );
@@ -198,9 +219,14 @@ class SixQuiPrend {
                 }
             }
             if (!biggest.ligne) {
-                this.choosingPlayer = playerID;
-                this.playChoiceTimeout();
-                return 2;
+                if (this.botIDs.includes(playerID)) {
+                    // si c'est un bot, on prend une ligne random
+                    this.prends(playerID, Math.floor(Math.random() * 4));
+                } else {
+                    this.choosingPlayer = playerID;
+                    this.playChoiceTimeout();
+                    return 2;
+                }
             }
             if (this.plateau[biggest.ligne].length == 5) {
                 for (const carte of this.plateau[biggest.ligne]) {

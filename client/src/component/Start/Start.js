@@ -17,6 +17,12 @@ function Start(props) {
             >
                 save
             </button>
+            <button
+                hidden={!props.afficheBot}
+                onClick={props.addBot}
+            >
+                ajouter un bot
+            </button>
         </div>
     );
 }

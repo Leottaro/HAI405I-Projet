@@ -221,6 +221,19 @@ io.on("connection", function (socket) {
         socket.emit("goTo", parties[code].url);
     });
 
+    socket.on("reqAddBot", () => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (!jeux || jeux.nomJeux !== "sixQuiPrend" || !jeux.addBot()) {
+            return;
+        }
+        resPlayers(code);
+        resPlateau(code);
+    });
+
     // REJOINDRE
 
     socket.on("reqGames", (jeux) => {
@@ -327,10 +340,13 @@ io.on("connection", function (socket) {
     function resPlayers(code) {
         if (!parties[code]) return;
         const jeux = parties[code];
-        const socketsIDs = parties[code].playersIDs;
         const final = {};
-        for (const playerID of socketsIDs.filter((socketID) => sockets[socketID])) {
-            final[sockets[playerID].compte] = jeux.playerData(playerID);
+        for (const playerID of jeux.playersIDs) {
+            if (playerID in sockets) {
+                final[sockets[playerID].compte] = jeux.playerData(playerID);
+            } else {
+                final[playerID] = jeux.playerData(playerID);
+            }
         }
         io.in(code).emit("resPlayers", final);
     }
