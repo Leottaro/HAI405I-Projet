@@ -1,3 +1,4 @@
+from players.sampleBot import SampleBot
 from players.randomBot import RandomBot
 from players.carteMinBot import CarteMinBot
 from players.carteMaxBot import CarteMaxBot
@@ -25,7 +26,11 @@ def interactiveRun():
                 
             num_max_bots = int(input("Combien d'MaxBots ? "))
             for i in range(num_max_bots):
-                players.append(CarteMaxBot(f"maxBot{i+1}"))    
+                players.append(CarteMaxBot(f"maxBot{i+1}"))
+                
+            num_sample_bots = int(input("Combien de SampleBots ? "))
+            for i in range(num_sample_bots):
+                players.append(SampleBot(f"sampleBot{i+1}"))
                 
             game=NimmtGame(players)
             scores, winners=game.play()
