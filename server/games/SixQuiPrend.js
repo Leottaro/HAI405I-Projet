@@ -3,6 +3,7 @@ const Carte = require("./Carte");
 class SixQuiPrend {
     static roundDelays = { min: 5, default: 30, max: 60 };
     static choiceDelays = { min: 1, default: 5, max: 10 };
+    static botTypes = ["random"];
     static playersRange = [2, 10];
 
     constructor(creatorID, lien, maxPlayers, options) {
@@ -13,7 +14,7 @@ class SixQuiPrend {
         this.winner;
         this.maxPlayers = maxPlayers;
         this.playersIDs = [];
-        this.botIDs = [];
+        this.botIDs = {}; // the keys are the bot type
         this.paquets = {};
         this.choosed = {};
         this.endCallback;
@@ -62,12 +63,20 @@ class SixQuiPrend {
         return this.started;
     }
 
-    addBot() {
-        const botID = "Bot" + (this.botIDs.length + 1);
+    addBot(type) {
+        const botID = "Bot" + (Object.keys(this.botIDs).length + 1);
         if (!this.addPlayer(botID)) {
             return false;
         }
-        this.botIDs.push(botID);
+        this.botIDs[botID] = type;
+        return true;
+    }
+
+    setBotType(botID, type) {
+        if (this.botIDs[botID] === undefined) {
+            return false;
+        }
+        this.botIDs[botID] = type;
         return true;
     }
 
@@ -116,6 +125,7 @@ class SixQuiPrend {
             paquet: this.paquets[playerID],
             choosed: this.choosed[playerID],
             score: this.scores[playerID],
+            botType: this.botIDs[playerID],
         };
     }
 
@@ -170,7 +180,7 @@ class SixQuiPrend {
 
     everyonePlayed() {
         return this.playersIDs
-            .filter((playerID) => !this.botIDs.includes(playerID))
+            .filter((playerID) => this.botIDs[playerID] === undefined)
             .every((playerID) => this.paquets[playerID].length == 0 || this.choosed[playerID]);
     }
 
@@ -195,10 +205,18 @@ class SixQuiPrend {
         }
 
         // faire jouer tous les bots (ils jouent tous de manière random)
-        for (const botID of this.botIDs) {
+        for (const botID in this.botIDs) {
             if (!this.choosed[botID]) {
-                const i = Math.floor(Math.random() * this.paquets[botID].length);
-                this.coup(botID, this.paquets[botID][i]);
+                switch (this.botIDs[botID]) {
+                    case "random":
+                        const i = Math.floor(Math.random() * this.paquets[botID].length);
+                        this.coup(botID, this.paquets[botID][i]);
+                        break;
+                    default:
+                        throw new Error(
+                            `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[botID]}\" mais sa manière de choisir sa carte n'est pas implémentée.\n\n`
+                        );
+                }
             }
         }
 
@@ -219,9 +237,17 @@ class SixQuiPrend {
                 }
             }
             if (!biggest.ligne) {
-                if (this.botIDs.includes(playerID)) {
-                    // si c'est un bot, on prend une ligne random
-                    this.prends(playerID, Math.floor(Math.random() * 4));
+                if (this.botIDs[playerID] !== undefined) {
+                    // si c'est un bot, on prend une ligne de la manière définie
+                    switch (this.botIDs[playerID]) {
+                        case "random":
+                            this.prends(playerID, Math.floor(Math.random() * 4));
+                            break;
+                        default:
+                            throw new Error(
+                                `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[playerID]}\" mais sa manière de choisir une ligne n'est pas implémentée.\n\n`
+                            );
+                    }
                 } else {
                     this.choosingPlayer = playerID;
                     this.playChoiceTimeout();

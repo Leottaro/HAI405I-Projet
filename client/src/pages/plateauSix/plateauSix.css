@@ -100,3 +100,44 @@
     font-size: 2vh;
     color: #fff;
 }
+
+.botDiv {
+    height: min(10vh, calc(0.7 * 15vw));
+    width: 90%;
+    overflow-y: scroll;
+    background-color: #dedede;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.botType {
+    width: 100%;
+    height: 2vh;
+    font-size: 1.5vh;
+
+    display: flex;
+    text-align: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 5px;
+
+    color: #dedede;
+    padding: 2px;
+}
+
+.botType.light {
+    background: #444;
+}
+
+.botType.dark {
+    background: #666;
+}
+
+.botType:hover {
+    cursor: pointer;
+    background: #666;
+}

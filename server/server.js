@@ -221,17 +221,31 @@ io.on("connection", function (socket) {
         socket.emit("goTo", parties[code].url);
     });
 
-    socket.on("reqAddBot", () => {
+    // BOTS
+
+    socket.on("reqAddBot", (type) => {
         if (!sockets[socket.id]) {
             return;
         }
         const code = sockets[socket.id].partie;
         const jeux = parties[code];
-        if (!jeux || jeux.nomJeux !== "sixQuiPrend" || !jeux.addBot()) {
+        if (!jeux || jeux.nomJeux !== "sixQuiPrend" || !jeux.addBot(type)) {
             return;
         }
         resPlayers(code);
         resPlateau(code);
+    });
+
+    socket.on("reqBotType", (json) => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (!jeux || jeux.nomJeux !== "sixQuiPrend" || !jeux.setBotType(json.botID, json.botType)) {
+            return;
+        }
+        resPlayers(code);
     });
 
     // REJOINDRE
@@ -329,6 +343,7 @@ io.on("connection", function (socket) {
             socket.emit("resGamesInfos", {
                 roundDelays: SixQuiPrend.roundDelays,
                 choiceDelays: SixQuiPrend.choiceDelays,
+                botTypes: SixQuiPrend.botTypes,
             });
         } else if (jeux === "memory") {
             socket.emit("resGamesInfos", {

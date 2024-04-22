@@ -12,18 +12,24 @@ import Audio from "../../component/Audio/Audio";
 function PlateauSix(props) {
     const { code } = useParams();
     const [listeJoueurs, setListeJoueurs] = useState([]);
-    const [moi, setMoi] = useState({ isCreator: false, paquet: [], choosed: {}, score: 0 });
+    const [moi, setMoi] = useState({
+        isCreator: false,
+        paquet: [],
+        choosed: {},
+        score: 0,
+        botType: undefined,
+    });
     const [afficheStart, setAfficheStart] = useState(false);
     const [afficheSave, setAfficheSave] = useState(false);
     const [afficheBot, setAfficheBot] = useState(false);
     const [estFinDeTour, setEstFinDeTour] = useState(true);
     const [listePlateau, setListePlateau] = useState([[], [], [], []]);
     const [timeLeft, setTimeLeft] = useState(0);
+    const [botTypes, setBotTypes] = useState([]);
 
     useEffect(() => {
         socket.on("resPlayers", (json) => {
-            console.log(json);
-            // {nom: {isCreator, paquet, choosed, score}, ...}
+            // {nom: {isCreator, paquet, choosed, score, botType}, ...}
             setListeJoueurs(
                 Object.keys(json).reduce((filtered, player) => {
                     if (player !== account) {
@@ -63,10 +69,16 @@ function PlateauSix(props) {
             setTimeLeft((timeLeft) => (timeLeft > 0 ? timeLeft - 0.1 : 0));
         }, 100);
 
+        socket.on("resGamesInfos", (infoJson) => {
+            setBotTypes(infoJson.botTypes);
+        });
+        socket.emit("reqGamesInfos", "sixQuiPrend");
+
         return () => {
             socket.off("resPlayers");
             socket.off("resPlateau");
             socket.off("resTimeLeft");
+            socket.off("reqGamesInfos");
             clearInterval(interval);
         };
     }, []);
@@ -80,7 +92,7 @@ function PlateauSix(props) {
     }
 
     function addBot() {
-        socket.emit("reqAddBot");
+        socket.emit("reqAddBot", "random");
     }
 
     return (
@@ -89,15 +101,51 @@ function PlateauSix(props) {
             <div id="listeJoueurs">
                 {Object.keys(listeJoueurs)
                     .sort()
-                    .map((player, index) => (
-                        <JoueurSix
-                            pseudo={player}
-                            carte={listeJoueurs[player].choosed}
-                            carteVisible={estFinDeTour}
-                            score={listeJoueurs[player].score}
-                            key={"joueur" + index}
-                        />
-                    ))}
+                    .map((player, index) =>
+                        listeJoueurs[player].botType === undefined ? (
+                            <JoueurSix
+                                pseudo={player}
+                                carte={listeJoueurs[player].choosed}
+                                carteVisible={estFinDeTour}
+                                score={listeJoueurs[player].score}
+                                key={"joueur" + index}
+                            />
+                        ) : (
+                            <div className="joueurSix">
+                                <label className="labelJS">{player}</label>
+                                <label className="labelJS">
+                                    {listeJoueurs[player].score + " têtes de boeuf"}
+                                </label>
+                                {listeJoueurs[player].paquet.length === 0 ? (
+                                    <div className="botDiv">
+                                        {botTypes.map((botType, index) => (
+                                            <label
+                                                key={index}
+                                                className={
+                                                    "botType " +
+                                                    (botType === listeJoueurs[player].botType
+                                                        ? "dark"
+                                                        : "light")
+                                                }
+                                                onClick={() =>
+                                                    socket.emit("reqBotType", {
+                                                        botID: player,
+                                                        botType,
+                                                    })
+                                                }
+                                            >
+                                                {botType}
+                                            </label>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <label className="labelJS">
+                                        {listeJoueurs[player].botType}
+                                    </label>
+                                )}
+                            </div>
+                        )
+                    )}
             </div>
             <div id="tapis">
                 {listePlateau.map((liste, index) => (
