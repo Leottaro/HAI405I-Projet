@@ -1,6 +1,7 @@
 from players.randomBot import RandomBot
 from players.carteMinBot import CarteMinBot
 from players.carteMaxBot import CarteMaxBot
+from players.Profondeur1Bot import Profondeur1Bot
 from players.humanPlayer import HumanPlayer
 from game.nimmtGame import NimmtGame     
 
@@ -26,6 +27,10 @@ def interactiveRun():
             num_max_bots = int(input("Combien d'MaxBots ? "))
             for i in range(num_max_bots):
                 players.append(CarteMaxBot(f"maxBot{i+1}"))    
+                
+            num_Profondeur1_bots = int(input("Combien de Profondeur1Bots ? "))
+            for i in range(num_Profondeur1_bots):
+                players.append(Profondeur1Bot(f"profondeur1Bot{i+1}"))    
                 
             game=NimmtGame(players)
             scores, winners=game.play()
