@@ -1,4 +1,6 @@
 from players.randomBot import RandomBot
+from players.carteMinBot import CarteMinBot
+from players.carteMaxBot import CarteMaxBot
 from players.humanPlayer import HumanPlayer
 from game.nimmtGame import NimmtGame     
 
@@ -13,10 +15,18 @@ def interactiveRun():
                 name=input("Nom du joueur : ")
                 players.append(HumanPlayer(name))
 
-            num_bots = int(input("Combien de bots ? "))
-            for i in range(num_bots):
-                players.append(RandomBot(f"Bot{i+1}"))
-
+            num_random_bots = int(input("Combien de RandomBots ? "))
+            for i in range(num_random_bots):
+                players.append(RandomBot(f"randomBot{i+1}"))
+                
+            num_min_bots = int(input("Combien d'MinBots ? "))
+            for i in range(num_min_bots):
+                players.append(CarteMinBot(f"MinBot{i+1}"))
+                
+            num_max_bots = int(input("Combien d'MaxBots ? "))
+            for i in range(num_max_bots):
+                players.append(CarteMaxBot(f"maxBot{i+1}"))    
+                
             game=NimmtGame(players)
             scores, winners=game.play()
 

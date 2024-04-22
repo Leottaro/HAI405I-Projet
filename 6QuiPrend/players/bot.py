@@ -6,4 +6,4 @@ class Bot(Player):
         print("@"+self.name+" : ",message)
     
     def player_turn(self, game):
-        return Card(self.getCardToPlay())
+        return Card(self.getCardToPlay(game))
