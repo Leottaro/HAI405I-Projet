@@ -12,3 +12,7 @@ server/databases
 databases/
 
 .DS_Store
+
+# Pyton
+__pycache__
+*.pyc
