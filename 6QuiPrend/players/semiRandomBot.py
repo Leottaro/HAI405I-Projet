@@ -14,5 +14,5 @@ class SemiRandomBot(Bot):
                 index=i
         return index
 
-    def getCardToPlay(self): 
+    def getCardToPlay(self,game): 
         return self.hand[randint(0, len(self.hand)-1)].value
