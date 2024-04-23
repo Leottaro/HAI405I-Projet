@@ -99,6 +99,9 @@ httpServer.listen(port, () => {
 const sockets = {}; // clef: socket.id              valeur: {compte, partie}
 const parties = {}; // clef: code de la partie      valeur: instance de jeu
 
+const isBot = (id) => sockets[id] === undefined;
+const idToName = (id) => (sockets[id] !== undefined ? sockets[id].compte : id);
+
 io.on("connection", function (socket) {
     socket.emit("resAccount");
     socket.emit("goTo", "/");
@@ -311,9 +314,7 @@ io.on("connection", function (socket) {
             return;
         }
         const [err, rows] = await sqlRequest(
-            `SELECT * FROM partie WHERE createur="${
-                sockets[socket.id].compte
-            }" AND nomJeux="${jeux}"`
+            `SELECT * FROM partie WHERE createur="${idToName(socket.id)}" AND nomJeux="${jeux}"`
         );
         socket.emit(
             "resMyGames",
@@ -357,11 +358,7 @@ io.on("connection", function (socket) {
         const jeux = parties[code];
         const final = {};
         for (const playerID of jeux.playersIDs) {
-            if (playerID in sockets) {
-                final[sockets[playerID].compte] = jeux.playerData(playerID);
-            } else {
-                final[playerID] = jeux.playerData(playerID);
-            }
+            final[idToName(playerID)] = jeux.playerData(playerID);
         }
         io.in(code).emit("resPlayers", final);
     }
@@ -480,16 +477,15 @@ io.on("connection", function (socket) {
             return;
         }
         const code = sockets[socket.id].partie;
-        const createur = sockets[socket.id].compte;
         const jeux = parties[code];
         if (!jeux) {
             return;
         }
 
         database.run(
-            `INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${createur}", "${
-                jeux.nomJeux
-            }", "${JSON.stringify(jeux).replaceAll('"', "'")}")`
+            `INSERT INTO partie(code, createur, nomJeux, jeux) VALUES ("${code}", "${idToName(
+                socket.id
+            )}", "${jeux.nomJeux}", "${JSON.stringify(jeux).replaceAll('"', "'")}")`
         );
 
         io.in(code).emit("goTo", "/creerRejoindre/" + jeux.nomJeux);
@@ -540,40 +536,44 @@ io.on("connection", function (socket) {
         let json;
         switch (jeux.nomJeux) {
             case "bataille":
-                jeux.playersIDs.forEach((id) => {
-                    if (id == jeux.winner) {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`
-                        );
-                    } else {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`
-                        );
-                    }
-                });
-                io.in(code).emit("Gagnant", sockets[jeux.winner].compte);
+                jeux.playersIDs
+                    .filter((id) => !isBot(id))
+                    .forEach((id) => {
+                        if (id == jeux.winner) {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "1")`
+                            );
+                        } else {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place) VALUES ("${code}", "${sockets[id].compte}", "2")`
+                            );
+                        }
+                    });
+                io.in(code).emit("Gagnant", idToName(jeux.winner));
                 io.socketsLeave(code);
                 delete parties[code];
                 break;
             case "sixQuiPrend":
-                jeux.playersIDs.forEach((id) => {
-                    if (id == jeux.winner) {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
-                        );
-                    } else {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
-                        );
-                    }
-                });
+                jeux.playersIDs
+                    .filter((id) => !isBot(id))
+                    .forEach((id) => {
+                        if (id == jeux.winner) {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
+                            );
+                        } else {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
+                            );
+                        }
+                    });
 
                 io.in(code).emit("goTo", "/Score");
                 json = {
-                    gagnant: sockets[jeux.winner].compte,
-                    joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
+                    gagnant: idToName(jeux.winner),
+                    joueurs: jeux.playersIDs.map((id) => idToName(id)),
                     scores: Object.keys(jeux.scores).reduce((newScores, id) => {
-                        newScores[sockets[id].compte] = jeux.scores[id];
+                        newScores[idToName(id)] = jeux.scores[id];
                         return newScores;
                     }, {}),
                 };
@@ -587,23 +587,25 @@ io.on("connection", function (socket) {
                 }, 100);
                 break;
             case "memory":
-                jeux.playersIDs.forEach((id) => {
-                    if (id == jeux.winner) {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
-                        );
-                    } else {
-                        database.run(
-                            `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
-                        );
-                    }
-                });
+                jeux.playersIDs
+                    .filter((id) => !isBot(id))
+                    .forEach((id) => {
+                        if (id == jeux.winner) {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "1",${jeux.scores[id]})`
+                            );
+                        } else {
+                            database.run(
+                                `INSERT INTO aJoue(codeR, nom, place, points) VALUES ("${code}", "${sockets[id].compte}", "2",${jeux.scores[id]})`
+                            );
+                        }
+                    });
                 io.in(code).emit("goTo", "/Score");
                 json = {
-                    gagnant: sockets[jeux.winner].compte,
-                    joueurs: jeux.playersIDs.map((id) => sockets[id].compte),
+                    gagnant: idToName(jeux.winner),
+                    joueurs: jeux.playersIDs.map((id) => idToName(id)),
                     scores: Object.keys(jeux.scores).reduce((newScores, id) => {
-                        newScores[sockets[id].compte] = jeux.scores[id];
+                        newScores[idToName(id)] = jeux.scores[id];
                         return newScores;
                     }, {}),
                 };
