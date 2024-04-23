@@ -55,7 +55,14 @@ class MinMaxBot(Bot):
 
 
     def getLineToRemove(self, game):
-        return randint(1, 4)
+        min=game.total_cows(game.table[0])
+        index=0
+        for i in range(1,4):
+            cow=game.total_cows(game.table[i])
+            if cow<min:
+                min=cow
+                index=i
+        return index
 
     def getCardToPlay(self, game):
         profondeur = 1
