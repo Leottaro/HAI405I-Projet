@@ -29,7 +29,6 @@ class DistanceMinBot(Bot):
                 else:
                     diff.append(105)
             score.append(min(diff))
-            print(score)
         val=min(score)
         cardChoose=self.hand[score.index(val)]
         
