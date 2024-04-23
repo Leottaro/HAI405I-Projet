@@ -14,7 +14,7 @@ BotsClasses = [
     CarteMaxBot,
     CarteMinBot,
     DistanceMinBot,
-    MinMaxBot,
+    # MinMaxBot,
     RandomBot,
     SampleBot,
     SemiRandomBot
@@ -26,13 +26,13 @@ def interactiveRun():
         try:
             players=[]
 
-            num_players = int(input("Combien de joueurs ? "))
+            num_players = int(input("Combien de joueurs ? ") or "0")
             for i in range(num_players):
                 name=input("Nom du joueur : ")
                 players.append(HumanPlayer(name))
             
             for botClass in BotsClasses:
-                num_bot = int(input(f"Combien de {botClass.__name__} ? "))
+                num_bot = int(input(f"Combien de {botClass.__name__} ? ") or "0")
                 for i in range(num_bot):
                     players.append(botClass(f"{botClass.__name__}{i+1}", displayInfo=True))
 
@@ -58,14 +58,15 @@ def statsBots():
             if bot1 == bot2:
                 continue
             print(f"\n{bot1.name} vs {bot2.name}")
-            for i in range(1):
+            for i in range(10):
                 print(f"Partie {i+1}: ", end="")
                 game = NimmtGame([bot1, bot2])
                 scores, winners = game.play()
                 scoresTotaux[bot1.name].append(scores[bot1.name])
                 scoresTotaux[bot2.name].append(scores[bot2.name])
-                print("Gagnant(s):", ", ".join([player.name for player in winners]), "\n")
-    print("\nScores totaux:", scoresTotaux)
+                print("Gagnant(s):", ", ".join([player.name for player in winners]))
+    
+    print("\nScores totaux:\n  ", "\n  ".join([f"{bot}: {sum(scores)}" for bot, scores in scoresTotaux.items()]))
 
 if __name__ == "__main__":
     while True:
@@ -76,9 +77,7 @@ if __name__ == "__main__":
             elif choix == 2:
                 statsBots()
             else: 
-                Exception("Veuillez entrer 1 ou 2.")
+                ValueError("Veuillez entrer un nombre entier entre 1 et 2")
             break
         except ValueError:
-            print("Veuillez entrer un nombre entier.")
-        except Exception as e:
-            print(e)
+            print("Veuillez entrer un nombre entier indiqué au dessus")
