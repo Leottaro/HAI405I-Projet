@@ -3,7 +3,11 @@ from players.bot import Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
-class Profondeur1Bot(Bot):
+"""ce bot notes chacune de ses cartes et choisis celle qui a la plus petite distance
+positive avac la derniere carte de chaque ligne, il met la note max lorsque la ligne
+posssede 5 cartes. il choisit la colone qui possede lemoins de points lorsqu il doit 
+faire un choix de colone"""
+class DistanceMinBot(Bot):
     def getLineToRemove(self, game):
         min=NimmtGame.total_cows(game.table[0])
         index=0
@@ -17,7 +21,7 @@ class Profondeur1Bot(Bot):
     def getCardToPlay(self,game): 
         cardChoose=self.hand[0]
         score=[]
-        for card in self.hand:
+        for card in self.hand:  
             diff=[]
             for i in range(4):
                 if game.table[i][-1].value<card.value and len(game.table[i]) != 5:
@@ -25,7 +29,7 @@ class Profondeur1Bot(Bot):
                 else:
                     diff.append(105)
             score.append(min(diff))
-        print(score)
+            print(score)
         val=min(score)
         cardChoose=self.hand[score.index(val)]
         

@@ -2,7 +2,7 @@ from players.sampleBot import SampleBot
 from players.randomBot import RandomBot
 from players.carteMinBot import CarteMinBot
 from players.carteMaxBot import CarteMaxBot
-from players.Profondeur1Bot import Profondeur1Bot
+from players.distanceMinBot import DistanceMinBot
 from players.humanPlayer import HumanPlayer
 from game.nimmtGame import NimmtGame     
 
@@ -33,9 +33,9 @@ def interactiveRun():
             for i in range(num_sample_bots):
                 players.append(SampleBot(f"sampleBot{i+1}"))
                 
-            num_Profondeur1_bots = int(input("Combien de Profondeur1Bots ? "))
-            for i in range(num_Profondeur1_bots):
-                players.append(Profondeur1Bot(f"profondeur1Bot{i+1}"))    
+            num_distanceMin_bots = int(input("Combien de DistanceMinBot ? "))
+            for i in range(num_distanceMin_bots):
+                players.append(DistanceMinBot(f"distanceMinBot{i+1}"))    
                 
             game=NimmtGame(players)
             scores, winners=game.play()
