@@ -33,8 +33,7 @@ class DistanceMinBot(Bot):
             for i in range(len(diff)):
                 if diff[i]==-1:
                     diff[i]=106
-            score.append(min(diff))        
-        print(score)
+            score.append(min(diff))    
         val=min(score)
         cardChoose=self.hand[score.index(val)]
         
