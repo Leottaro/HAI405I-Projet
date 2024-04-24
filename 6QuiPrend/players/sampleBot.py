@@ -1,19 +1,10 @@
+from math import sqrt
 from random import randint
 from players.bot import Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
 class SampleBot(Bot):
-    def getLineToRemove(self, game):
-        min=NimmtGame.total_cows(game.table[0])
-        index=0
-        for i in range(1,4):
-            cow=NimmtGame.total_cows(game.table[i])
-            if cow<min:
-                min=cow
-                index=i
-        return index
-
     def getCardToPlay(self,game):
         deck=[Card(c) for c in range(1, 105)]
         cartePossibles=[carte for carte in deck if carte not in self.hand and carte not in game.alreadyPlayedCards]

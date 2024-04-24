@@ -7,16 +7,6 @@ from game.nimmtGame import NimmtGame
 positive avac la derniere carte de chaque ligne, il met la note max lorsque la ligne
 posssede 5 cartes. il choisit la colone qui possede le moins de points lorsqu il doit faire un choix de colone"""
 class DistanceMinBot(Bot):
-    def getLineToRemove(self, game):
-        min=NimmtGame.total_cows(game.table[0])
-        index=0
-        for i in range(1,4):
-            cow=NimmtGame.total_cows(game.table[i])
-            if cow<min:
-                min=cow
-                index=i
-        return index
-
     def getCardToPlay(self,game): 
         cardChoose=self.hand[0]
         score=[]

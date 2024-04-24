@@ -60,17 +60,6 @@ class MinMaxBot(Bot):
                 return [min,minCard]
         return [min,minCard]
 
-
-    def getLineToRemove(self, game):
-        min=game.total_cows(game.table[0])
-        index=0
-        for i in range(1,4):
-            cow=game.total_cows(game.table[i])
-            if cow<min:
-                min=cow
-                index=i
-        return index+1
-
     def getCardToPlay(self, game):
         profondeur = 3
         retour = self.parcours(self.hand, game.alreadyPlayedCards, game.table, profondeur)
