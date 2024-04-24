@@ -1,3 +1,5 @@
+import os
+from itertools import combinations
 from players.basicBot import BasicBot
 from players.carteMaxBot import CarteMaxBot
 from players.carteMinBot import CarteMinBot
@@ -16,7 +18,7 @@ BotsClasses = [
     DistanceMinBot,
     # MinMaxBot,
     RandomBot,
-    SampleBot,
+    # SampleBot,
     SemiRandomBot
 ]
 
@@ -50,23 +52,41 @@ def interactiveRun():
             print("Veuillez entrer un nombre entier.")
 
 def statsBots():
-    bots = [botClass(botClass.__name__) for botClass in BotsClasses]
-    scoresTotaux = {bot.name: [] for bot in bots}
-    # 1v1
-    for bot1 in bots:
-        for bot2 in bots:
-            if bot1 == bot2:
-                continue
-            print(f"\n{bot1.name} vs {bot2.name}")
-            for i in range(10):
-                print(f"Partie {i+1}: ", end="")
-                game = NimmtGame([bot1, bot2])
-                scores, winners = game.play()
-                scoresTotaux[bot1.name].append(scores[bot1.name])
-                scoresTotaux[bot2.name].append(scores[bot2.name])
-                print("Gagnant(s):", ", ".join([player.name for player in winners]))
+    NbPlayersGames = [[], []]
+    for i in range(2, len(BotsClasses)+1):
+        NbPlayersGames.append(list(combinations([_ for _ in range(len(BotsClasses))], i)))
     
-    print("\nScores totaux:\n  ", "\n  ".join([f"{bot}: {sum(scores)}" for bot, scores in scoresTotaux.items()]))
+    bots = [botClass(botClass.__name__) for botClass in BotsClasses]
+    
+    scoresTotaux = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
+    winTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
+    partiesTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
+
+    for NbrPlayers in range(len(NbPlayersGames)):
+        for game in NbPlayersGames[NbrPlayers]:
+            players = [BotsClasses[i](BotsClasses[i].__name__) for i in game]
+            for i in range(1000):
+                partie = NimmtGame(players)
+                scores, winners = partie.play()
+                for bot in players:
+                    scoresTotaux[bot.name][NbrPlayers] += scores[bot.name]
+                    partiesTotals[bot.name][NbrPlayers] += 1
+                for winner in winners:
+                    winTotals[winner.name][NbrPlayers] += 1
+                
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(f"{NbrPlayers} players games:")
+                for bot in bots:
+                    print(f"{bot.name}:\t{round(100*winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) if partiesTotals[bot.name][NbrPlayers] != 0 else 0}% winrate")
+                print(f"currently players {" vs ".join([player.name for player in players])} (game {i+1})")
+    
+    os.system('cls' if os.name == 'nt' else 'clear')
+    for NbrPlayers in range(2, len(NbPlayersGames)):
+        print(f"\n{NbrPlayers} players games:")
+        for bot in bots:
+            print(f"{bot.name}:\t{round(100*winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) if partiesTotals[bot.name][NbrPlayers] != 0 else 0}% winrate")
+    
+
 
 if __name__ == "__main__":
     while True:
