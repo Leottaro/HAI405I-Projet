@@ -3,6 +3,8 @@ from players.bot import Bot
 from game.card import Card
 
 class MinMaxBot(Bot):
+    def __init__(self, name):
+        super().__init__(name)
 
     def update_table(self, table, cards, myCard):
         """
@@ -41,16 +43,21 @@ class MinMaxBot(Bot):
         minCard=baseHand[0]
         for myCard in baseHand:
             max=0
-            for enemyCard in [Card(c) for c in range(1,105) if (Card(c) not in basePlayedCards) and (Card(c) not in baseHand)]:
+            for enemyCard in [Card(c) for c in range(1,105,4) if (Card(c) not in basePlayedCards) and (Card(c) not in baseHand)]:
+                
                 tempTable=[[carte for carte in ligne] for ligne in baseTable]
-                monScore=self.update_table(tempTable, [myCard, enemyCard], myCard)
-                if len(baseHand)!=1 and iterationsLeft!=0:
+                monScore = self.update_table(tempTable, [myCard, enemyCard], myCard)
+                if len(baseHand)!=1 and iterationsLeft!=1:
                     monScore+=self.parcours([c for c in baseHand if c!=myCard],[c for c in basePlayedCards if c!=myCard and c!=enemyCard], tempTable, iterationsLeft-1)[0]
                 if monScore>max:
                     max=monScore
+                    if max>=min:
+                        break
             if max<min:
                 min=max
                 minCard=myCard
+            if min==0:
+                return [min,minCard]
         return [min,minCard]
 
 
@@ -62,9 +69,9 @@ class MinMaxBot(Bot):
             if cow<min:
                 min=cow
                 index=i
-        return index
+        return index+1
 
     def getCardToPlay(self, game):
-        profondeur = 1
+        profondeur = 3
         retour = self.parcours(self.hand, game.alreadyPlayedCards, game.table, profondeur)
         return retour[1].value
