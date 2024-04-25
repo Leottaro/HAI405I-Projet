@@ -1,28 +1,29 @@
-import os
 from itertools import combinations
 from matplotlib import pyplot as plt
 from players.basicBot import BasicBot
 from players.carteMaxBot import CarteMaxBot
 from players.carteMinBot import CarteMinBot
 from players.distanceMinBot import DistanceMinBot
+from players.distanceMinV2Bot import DistanceMinV2Bot
 from players.minMaxBot import MinMaxBot
-from players.randomBot import RandomBot
 from players.queLaLose import QueLaLose
+from players.randomBot import RandomBot
 from players.sampleBot import SampleBot
 from players.semiRandomBot import SemiRandomBot
 from players.humanPlayer import HumanPlayer
 from game.nimmtGame import NimmtGame
 
 BotsClasses = [
-    CarteMaxBot,
     BasicBot,
+    CarteMaxBot,
     CarteMinBot,
     DistanceMinBot,
-    MinMaxBot,
+    DistanceMinV2Bot,
+    # MinMaxBot,
+    QueLaLose,
     RandomBot,
-    SampleBot,
+    # SampleBot,
     SemiRandomBot,
-    QueLaLose
 ]
 
 def interactiveRun():
