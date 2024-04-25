@@ -6,6 +6,9 @@ class SixQuiPrend {
     static botTypes = {
         random: { joue: randomJoue, prends: randomPrends },
         semiRandom: { joue: randomJoue, prends: prendsOpti },
+        carteMin: { joue: carteMinJoue, prends: prendsOpti},
+        carteMax: { joue: carteMaxJoue, prends: prendsOpti},
+        distanceMin: { joue: distanceMinJoue, prends: prendsOpti},
     };
     static playersRange = [2, 10];
 
@@ -253,7 +256,9 @@ class SixQuiPrend {
                     const lineChoosed = SixQuiPrend.botTypes[this.botIDs[playerID]].prends(
                         this.plateau
                     );
+                    this.choosingPlayer = playerID;
                     this.prends(playerID, lineChoosed);
+                    return 2;
                 } else {
                     this.choosingPlayer = playerID;
                     this.playChoiceTimeout();
@@ -338,4 +343,38 @@ function randomJoue(plateau, paquet) {
 
 function randomPrends(plateau) {
     return Math.floor(Math.random() * 4);
+}
+
+function carteMinJoue(plateau, paquet) {
+    return [paquet[0], 0];
+}
+
+function carteMaxJoue(plateau, paquet) {
+    return [paquet[paquet.length-1], 0];
+}
+
+function distanceMinJoue(plateau, paquet){
+    cardChoose = paquet[0];
+    score=[];
+    paquet.forEach(card => {
+        diff=[];
+        for(i=0;i<4;i++){
+            if(plateau[i][plateau[i].length-1].valeur<card.valeur){
+                if(plateau[i].length == 5){
+                    diff.push(106);
+                }
+                else{
+                    diff.push(card.valeur-plateau[i][plateau[i].length-1].valeur);
+                }
+            }
+            else{
+                diff.push(105);
+            }
+        }
+        score.push(Math.min(...diff));
+    });
+    
+    val=Math.min(...score);
+    cardChoose=paquet[score.indexOf(val)];
+    return [paquet[score.indexOf(val)], score.indexOf(val)];
 }
