@@ -106,6 +106,50 @@ def statsBots(factor):
     plt.grid()
     plt.show()
 
+
+def stats1v1(factor){
+    totalGames = 0
+    iemeGame = 0
+    bot1 = BotsClasses[0]
+    combatsPossibles = []
+    winrates = [0 for i in range(1,len(BotsClasses))]
+
+    for i in range(len(1,BotsClasses)):
+        combatsPossibles.append(BotsClasses[i])
+        totalGames+=1
+
+    totalGames*=factor
+
+    bots = [botClass(botClass.__name__) for botClass in BotsClasses[1:]]
+
+    for adversaire in in range(combatsPossibles):
+        win=0
+        for i in range(factor):
+            iemeGame += 1
+            partie = NimmtGame([bot1,combatsPossibles[adversaire]])
+            scores, winners = partie.play()
+            if winners[0].name == bot1.name:
+                win+=1
+            print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) : {" vs ".join([player.name for player in players])} ", end="\r")
+        winrates[adversaire] = win/factor
+
+    #affichage
+
+    plt.title('Win Percentage by Bot')
+    plt.xlabel('Bot')
+    plt.xticks(BotsClasses[1:], [bot.name for bot in BotsClasses[1:]], fontsize=10)
+    plt.ylabel('Winrate (%)')
+    plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
+
+    for bot in BotsClasses[1:]:
+        plt.plot(BotsClasses[1:], winrates, label=bot.name)
+
+    plt.legend()
+    plt.grid()
+    plt.show()
+    }
+
+
 if __name__ == "__main__":
     while True:
         try:
