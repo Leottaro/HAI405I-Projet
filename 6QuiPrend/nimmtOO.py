@@ -108,22 +108,20 @@ def statsBots(factor):
     plt.show()
 
 
-def stats1v1(factor){
+def stats1v1(factor):
     totalGames = 0
     iemeGame = 0
-    bot1 = BotsClasses[0]
+    bot1 = BotsClasses[0](BotsClasses[0].__name__)
     combatsPossibles = []
     winrates = [0 for i in range(1,len(BotsClasses))]
 
-    for i in range(len(1,BotsClasses)):
-        combatsPossibles.append(BotsClasses[i])
+    for i in range(1,len(BotsClasses)):
+        combatsPossibles.append(BotsClasses[i](BotsClasses[i].__name__))
         totalGames+=1
 
     totalGames*=factor
 
-    bots = [botClass(botClass.__name__) for botClass in BotsClasses[1:]]
-
-    for adversaire in in range(combatsPossibles):
+    for adversaire in range(len(combatsPossibles)):
         win=0
         for i in range(factor):
             iemeGame += 1
@@ -131,30 +129,29 @@ def stats1v1(factor){
             scores, winners = partie.play()
             if winners[0].name == bot1.name:
                 win+=1
-            print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) : {" vs ".join([player.name for player in players])} ", end="\r")
+            print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) :  vs {combatsPossibles[adversaire]} ", end="\r")
         winrates[adversaire] = win/factor
 
     #affichage
 
     plt.title('Win Percentage by Bot')
     plt.xlabel('Bot')
-    plt.xticks(BotsClasses[1:], [bot.name for bot in BotsClasses[1:]], fontsize=10)
+    plt.xticks(range(len(BotsClasses[1:])), [bot.__name__ for bot in BotsClasses[1:]], fontsize=10)
     plt.ylabel('Winrate (%)')
     plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
 
-    for bot in BotsClasses[1:]:
-        plt.plot(BotsClasses[1:], winrates, label=bot.name)
+
+    plt.plot(range(len(BotsClasses[1:])), winrates, label=bot1.name)
 
     plt.legend()
     plt.grid()
     plt.show()
-    }
 
 
 if __name__ == "__main__":
     while True:
         try:
-            choix = int(input("\nque veux-tu faire ?\n  1: partie interactive\n  2: stats de bots\n"))
+            choix = int(input("\nque veux-tu faire ?\n  1: partie interactive\n  2: stats de bots\n  3: Stats 1vs1\n"))
             if choix == 1:
                 interactiveRun()
             elif choix == 2:
@@ -164,6 +161,16 @@ if __name__ == "__main__":
                         if factor <= 0:
                             raise ValueError
                         statsBots(factor)
+                        break
+                    except ValueError:
+                        print("Veuillez entrer un nombre entier positif.")
+            elif choix==3:
+                while True:
+                    try:
+                        factor = int(input("Combien de fois voulez-vous jouer chaque combinaison de bots ? ") or "0")
+                        if factor <= 0:
+                            raise ValueError
+                        stats1v1(factor)
                         break
                     except ValueError:
                         print("Veuillez entrer un nombre entier positif.")
