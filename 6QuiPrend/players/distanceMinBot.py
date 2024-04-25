@@ -14,13 +14,19 @@ class DistanceMinBot(Bot):
             diff=[]
             for i in range(4):
                 if game.table[i][-1].value<card.value :
-                    if len(game.table[i]) == 5:
-                        diff.append(106)
-                    else:
-                        diff.append(card.value-game.table[i][-1].value)
+                    diff.append(card.value-game.table[i][-1].value)
                 else:
                     diff.append(105)
-            score.append(min(diff))    
+            score.append(min(diff))
+        for i in range(4):
+            if len(game.table[i]) == 5:
+                index=0
+                for card in self.hand:
+                    if card.value>game.table[i][-1].value :
+                        for j in range(3):
+                            if card.value<game.table[i-j-1][-1].value:
+                                score[index]=106
+                        index+=1
         val=min(score)
         cardChoose=self.hand[score.index(val)]
         

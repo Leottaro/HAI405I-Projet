@@ -23,7 +23,7 @@ class QueLaLose(Bot):
             for i in range(4):
                 if game.table[i][-1].value<card.value :
                     if len(game.table[i]) == 5:
-                        diff.append(106)
+                        diff.append(106+card.value-game.table[i][-1].value)
                     else:
                         diff.append(card.value-game.table[i][-1].value)
                 else:
