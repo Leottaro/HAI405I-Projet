@@ -24,7 +24,6 @@ BotsClasses = [
     RandomBot,
     SampleBot,
     SemiRandomBot,
-    HumanPlayer,
 ]
 
 def interactiveRun():
