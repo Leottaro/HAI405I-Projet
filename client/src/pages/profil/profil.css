@@ -67,7 +67,7 @@
 #profilSix {
     position: relative;
     width: calc(100% - 20px);
-    min-height: 200px;
+    min-height: 210px;
     margin: 10px;
     background: #573b8a;
     border-radius: 10px;
@@ -87,9 +87,6 @@
 
 .stat {
     width: calc(100% - 200px);
-
-    overflow-y: scroll;
-    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;
