@@ -344,7 +344,7 @@ io.on("connection", function (socket) {
             socket.emit("resGamesInfos", {
                 roundDelays: SixQuiPrend.roundDelays,
                 choiceDelays: SixQuiPrend.choiceDelays,
-                botTypes: SixQuiPrend.botTypes,
+                botTypes: Object.keys(SixQuiPrend.botTypes),
             });
         } else if (jeux === "memory") {
             socket.emit("resGamesInfos", {

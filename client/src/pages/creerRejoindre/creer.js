@@ -5,17 +5,22 @@ import OptionalParam from "./OptionalParam/OptionalParam";
 
 function Creer() {
     const { jeux } = useParams();
-    const [nbrJoueursMax, setNbrJoueursMax] = useState(2);
+    const [nbrJoueursMax, setNbrJoueursMax] = useState(10);
     const [optionalParams, setOptionalParams] = useState({});
 
     useEffect(() => {
         socket.emit("reqGamesInfos", jeux);
     }, [jeux]);
 
-    socket.on("resGamesInfos", (json) => {
-        // quand jeux === sixQuiPrend { roundDelays: {min, default, max}, choiceDelays: {min, default, max} }
-        setOptionalParams(json);
-    });
+    useEffect(() => {
+        socket.on("resGamesInfos", (json) => {
+            // quand jeux === sixQuiPrend { roundDelays: {min, default, max}, choiceDelays: {min, default, max} }
+            setOptionalParams(json);
+        });
+        return () => {
+            socket.off("resGamesInfos");
+        };
+    }, []);
 
     function valider() {
         socket.emit("reqCreate", { nbrJoueursMax, jeux, options });
@@ -27,7 +32,7 @@ function Creer() {
             <label className="CRtitle">Nombre de joueurs max dans la partie:</label>
             <input
                 className="CRinput"
-                defaultValue={2}
+                defaultValue={10}
                 type="number"
                 min={2}
                 max={10}

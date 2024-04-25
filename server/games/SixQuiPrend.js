@@ -3,8 +3,25 @@ const Carte = require("./Carte");
 class SixQuiPrend {
     static roundDelays = { min: 5, default: 30, max: 60 };
     static choiceDelays = { min: 1, default: 5, max: 10 };
-    static botTypes = ["random"];
+    static botTypes = {
+        random: { joue: randomJoue, prends: randomPrends },
+        semiRandom: { joue: randomJoue, prends: prendsOpti },
+    };
     static playersRange = [2, 10];
+
+    static carteScore(carte) {
+        let score = 1;
+        if (carte.valeur % 5 == 0) {
+            score += 1;
+        }
+        if (carte.valeur % 10 == 0) {
+            score += 1;
+        }
+        if (carte.valeur % 11 == 0) {
+            score += 4;
+        }
+        return score;
+    }
 
     constructor(creatorID, lien, maxPlayers, options) {
         this.nomJeux = "sixQuiPrend";
@@ -165,6 +182,9 @@ class SixQuiPrend {
     }
 
     coup(playerID, carte, index) {
+        if (carte === null || carte === undefined) {
+            carte = this.paquets[playerID][index];
+        }
         if (
             this.ended ||
             this.choosed[playerID] ||
@@ -184,20 +204,6 @@ class SixQuiPrend {
             .every((playerID) => this.paquets[playerID].length == 0 || this.choosed[playerID]);
     }
 
-    carteScore(carte) {
-        let score = 1;
-        if (carte.valeur % 5 == 0) {
-            score += 1;
-        }
-        if (carte.valeur % 10 == 0) {
-            score += 1;
-        }
-        if (carte.valeur % 11 == 0) {
-            score += 4;
-        }
-        return score;
-    }
-
     nextRound() {
         // return 0 si il y a un problème, 1 si tout va bien et 2 si un joueur doit choisir une carte
         if (this.ended || !this.everyonePlayed() || this.choosingPlayer) {
@@ -207,16 +213,16 @@ class SixQuiPrend {
         // faire jouer tous les bots (ils jouent tous de manière random)
         for (const botID in this.botIDs) {
             if (!this.choosed[botID]) {
-                switch (this.botIDs[botID]) {
-                    case "random":
-                        const i = Math.floor(Math.random() * this.paquets[botID].length);
-                        this.coup(botID, this.paquets[botID][i]);
-                        break;
-                    default:
-                        throw new Error(
-                            `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[botID]}\" mais sa manière de choisir sa carte n'est pas implémentée.\n\n`
-                        );
+                if (SixQuiPrend.botTypes[this.botIDs[botID]] === undefined) {
+                    throw new Error(
+                        `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[botID]}\" mais sa manière de choisir sa carte n'est pas implémentée.\n\n`
+                    );
                 }
+                const [carteJouee, carteID] = SixQuiPrend.botTypes[this.botIDs[botID]].joue(
+                    this.plateau,
+                    this.paquets[botID]
+                );
+                this.coup(botID, carteJouee, carteID);
             }
         }
 
@@ -239,15 +245,15 @@ class SixQuiPrend {
             if (!biggest.ligne) {
                 if (this.botIDs[playerID] !== undefined) {
                     // si c'est un bot, on prend une ligne de la manière définie
-                    switch (this.botIDs[playerID]) {
-                        case "random":
-                            this.prends(playerID, Math.floor(Math.random() * 4));
-                            break;
-                        default:
-                            throw new Error(
-                                `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[playerID]}\" mais sa manière de choisir une ligne n'est pas implémentée.\n\n`
-                            );
+                    if (SixQuiPrend.botTypes[this.botIDs[playerID]] === undefined) {
+                        throw new Error(
+                            `\n\nLÉO À ÉCRIT CETTE ERREUR:\n Un bot est de type \"${this.botIDs[playerID]}\" mais sa manière de choisir une ligne n'est pas implémentée.\n\n`
+                        );
                     }
+                    const lineChoosed = SixQuiPrend.botTypes[this.botIDs[playerID]].prends(
+                        this.plateau
+                    );
+                    this.prends(playerID, lineChoosed);
                 } else {
                     this.choosingPlayer = playerID;
                     this.playChoiceTimeout();
@@ -256,7 +262,7 @@ class SixQuiPrend {
             }
             if (this.plateau[biggest.ligne].length == 5) {
                 for (const carte of this.plateau[biggest.ligne]) {
-                    this.scores[playerID] += this.carteScore(carte);
+                    this.scores[playerID] += SixQuiPrend.carteScore(carte);
                 }
                 this.plateau[biggest.ligne] = [];
             }
@@ -290,7 +296,7 @@ class SixQuiPrend {
             return false;
         }
         for (const carte of this.plateau[ligne]) {
-            this.scores[playerID] += this.carteScore(carte);
+            this.scores[playerID] += SixQuiPrend.carteScore(carte);
         }
         this.plateau[ligne] = [];
         delete this.choosingPlayer;
@@ -299,3 +305,37 @@ class SixQuiPrend {
     }
 }
 module.exports = SixQuiPrend;
+
+// PARTIE BOTS
+// Une fonction joue prends le plateau et le paquet en arguments et retourne un tuple: [carte, id] (on a besoin que d'une des deux, si on a que l'id, retourner (null, id)).
+// Une fonction prends prends le plateau argument et retourne l'id de la ligne qu'il veut prendre (entre 0 et 3).
+// Si vous comprenez pas trop, regardez la section Random bot juste en dessous
+
+// Global functions
+function totalCows(ligne) {
+    return ligne.reduce((sum, carte) => sum + SixQuiPrend.carteScore(carte), 0);
+}
+
+function prendsOpti(plateau) {
+    let min = totalCows(plateau[0]);
+    let index = 0;
+    for (let i = 1; i < 4; i++) {
+        cow = totalCows(plateau[i]);
+        if (cow < min) {
+            min = cow;
+            index = i;
+        }
+    }
+    return index;
+}
+
+// Random bot
+
+function randomJoue(plateau, paquet) {
+    const i = Math.floor(Math.random() * paquet.length);
+    return [paquet[i], i];
+}
+
+function randomPrends(plateau) {
+    return Math.floor(Math.random() * 4);
+}
