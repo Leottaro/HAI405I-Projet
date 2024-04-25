@@ -5,7 +5,6 @@ from game.card import Card
 
 class MinMaxBot(Bot):
     def __init__(self, name, displayInfo=False) -> None:
-        super().__init__(name)
         while True:
             try:
                 self.profondeur = int(
@@ -16,6 +15,7 @@ class MinMaxBot(Bot):
                 break
             except ValueError:
                 print("Veuillez entrer un nombre entier >0.")
+        super().__init__(name+f"_p{self.profondeur}", displayInfo)
 
     def update_table(self, table, cards, myCard):
         """

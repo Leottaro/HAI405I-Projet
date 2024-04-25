@@ -1,3 +1,4 @@
+import os, csv
 from itertools import combinations
 from matplotlib import pyplot as plt
 from players.basicBot import BasicBot
@@ -56,52 +57,100 @@ def interactiveRun():
             print("Veuillez entrer un nombre entier.")
 
 def statsBots(factor):
-    totalGames = 0
-    iemeGame = 0
+    if not os.path.exists("stats.csv"):
+        f = open("stats.csv", "w")
+        f.write("participants;têtes de boeuf;winners\n")
+    else :
+        f = open("stats.csv", "a")
+    writer = csv.writer(f, delimiter=";")
 
-    NbPlayersGames = [[], []]
+    totalGames = 0
+    NbPlayersGames = []
     for i in range(2, len(BotsClasses)+1):
         NbPlayersGames.append(list(combinations([_ for _ in range(len(BotsClasses))], i)))
         totalGames += len(NbPlayersGames[-1])
     totalGames *= factor
-    
-    bots = [botClass(botClass.__name__) for botClass in BotsClasses]
-    scoresTotaux = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
-    winTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
-    partiesTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
 
-    for NbrPlayers in range(len(NbPlayersGames)):
-        for game in NbPlayersGames[NbrPlayers]:
-            players = [bots[i] for i in game]
-            for i in range(factor):
-                iemeGame += 1
-                partie = NimmtGame(players)
-                scores, winners = partie.play()
-                for bot in players:
-                    scoresTotaux[bot.name][NbrPlayers] += scores[bot.name]
-                    partiesTotals[bot.name][NbrPlayers] += 1
-                for winner in winners:
-                    winTotals[winner.name][NbrPlayers] += 1
-                
-                print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) : {" vs ".join([player.name for player in players])}          ", end="\r")
-    print(f"game {iemeGame} / {totalGames} ({round(100*iemeGame/totalGames, 2)}%)\n")
+    iemeGame = 1
+    bots = [botClass(botClass.__name__) for botClass in BotsClasses]
+    try:
+        for i in range(factor):
+            for NbrPlayers in range(len(NbPlayersGames)):
+                for game in NbPlayersGames[NbrPlayers]:
+                    players = [bots[i] for i in game]
+                    print(f"game {iemeGame} / {totalGames} ({round(100*iemeGame/totalGames, 2)}%)", end="\r")
+                    iemeGame += 1
+                    partie = NimmtGame(players)
+                    scores, winners = partie.play()
+                    writer.writerow([
+                        ",".join([bot.name for bot in players]),
+                        ",".join([f"{bot}:{scores[bot]}" for bot in scores]), 
+                        ",".join([bot.name for bot in winners])
+                    ])
+    finally:
+        f.close()
+
+def readStats():
+    if not os.path.exists("stats.csv"):
+        print("Pas de fichier de stats")
+        exit(2)
+    f = open("stats.csv", "r")
+    reader = csv.reader(f, delimiter=";")
+    next(reader)  # Skip la 1ere ligne
+
+    NbrPlayersGames = []
+    bots = []
+    partiesTotals = {}
+    scoresTotaux = {}
+    winTotals = {}
+
+    for row in reader:
+        players, scores, winners = [col.split(",") for col in row]
+        scores = [score.split(":") for score in scores]
+        scores = {score[0]:int(score[1]) for score in scores}
+
+        nbPlayers = len(players)
+        for bot in players:
+            if bot not in bots:
+                bots.append(bot)
+                partiesTotals[bot] = {nb:0 for nb in NbrPlayersGames}
+                scoresTotaux[bot] = {nb:0 for nb in NbrPlayersGames}
+                winTotals[bot] = {nb:0 for nb in NbrPlayersGames}
+            if nbPlayers not in NbrPlayersGames:
+                NbrPlayersGames.append(nbPlayers)
+                for registeredBots in bots:
+                    partiesTotals[registeredBots][nbPlayers] = 0
+                    scoresTotaux[registeredBots][nbPlayers] = 0
+                    winTotals[registeredBots][nbPlayers] = 0
+            
+            partiesTotals[bot][nbPlayers] += 1
+            scoresTotaux[bot][nbPlayers] += scores[bot]
+            if bot in winners:
+                winTotals[bot][nbPlayers] += 1
+    NbrPlayersGames.sort()
+
+    print("bots: ", bots)
+    print("NbrPlayersGames: ", NbrPlayersGames)
+    print("\npartiesTotals: ", partiesTotals)
+    print("scoresTotaux: ", scoresTotaux)
+    print("winTotals: ", winTotals)
 
     # print le winrate de chaque bot
-    for NbrPlayers in range(2, len(NbPlayersGames)):
+    for NbrPlayers in NbrPlayersGames:
         print(f"\n{NbrPlayers} players games:")
         for bot in bots:
-            print(f"{bot.name}:\t{round(100*winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) if partiesTotals[bot.name][NbrPlayers] != 0 else 0}% winrate")
+            print(f"{bot}:\t{round(100*winTotals[bot][NbrPlayers] / partiesTotals[bot][NbrPlayers], 2) if partiesTotals[bot][NbrPlayers] != 0 else 0}% winrate")
 
     # afficher le winrate de chaque bot
     plt.title('Win Percentage by Bot')
     plt.xlabel('Nombre de joueurs')
-    plt.xticks(range(2, len(NbPlayersGames)), [str(i) for i in range(2, len(NbPlayersGames))], fontsize=10)
+    plt.xticks(NbrPlayersGames, [str(i) for i in NbrPlayersGames], fontsize=10)
     plt.ylabel('Winrate (%)')
     plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
 
     for bot in bots:
-        win_rates = [round(100 * winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) for NbrPlayers in range(2, len(NbPlayersGames))]
-        plt.plot(range(2, len(NbPlayersGames)), win_rates, label=bot.name)
+        win_rates = [round(100 * winTotals[bot][NbrPlayers] / partiesTotals[bot][NbrPlayers], 2) for NbrPlayers in NbrPlayersGames]
+        plt.plot(NbrPlayersGames, win_rates, label=bot)
     
     plt.legend()
     plt.grid()
@@ -151,7 +200,7 @@ def stats1v1(factor):
 if __name__ == "__main__":
     while True:
         try:
-            choix = int(input("\nque veux-tu faire ?\n  1: partie interactive\n  2: stats de bots\n  3: Stats 1vs1\n"))
+            choix = int(input("\nque veux-tu faire ?\n  1: partie interactive\n  2: écrire stats de bots\n  3: Stats 1vs1\n  4: Lire stats de bots\n  "))
             if choix == 1:
                 interactiveRun()
             elif choix == 2:
@@ -164,6 +213,9 @@ if __name__ == "__main__":
                         break
                     except ValueError:
                         print("Veuillez entrer un nombre entier positif.")
+                
+                if input("afficher les résultats ? (ne rien répondre pour oui)") == "":
+                    readStats()
             elif choix==3:
                 while True:
                     try:
@@ -174,6 +226,8 @@ if __name__ == "__main__":
                         break
                     except ValueError:
                         print("Veuillez entrer un nombre entier positif.")
+            elif choix == 4:
+                readStats()
             else: 
                 ValueError("Veuillez entrer un nombre entier entre 1 et 2")
             break

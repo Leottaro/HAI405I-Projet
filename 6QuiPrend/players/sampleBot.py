@@ -7,19 +7,18 @@ from game.nimmtGame import NimmtGame
 
 class SampleBot(Bot):
     def __init__(self, name, displayInfo=False):
-        super().__init__(name, displayInfo)
-        # essai
         while True:
             try:
                 self.nEchantillons = int(
-                    input(f"nombre d'échantillons de {name} (500 par défaut) : ")
-                    or "500"
+                    input(f"nombre d'échantillons de {name} (250 par défaut) : ")
+                    or "250"
                 )
                 if self.nEchantillons < 0:
                     raise ValueError
                 break
             except ValueError:
                 print("Veuillez entrer un nombre entier >0.")
+        super().__init__(name+f"_s{self.nEchantillons}", displayInfo)
 
     def getCardToPlay(self, game):
         deck = [Card(c) for c in range(1, 105)]
