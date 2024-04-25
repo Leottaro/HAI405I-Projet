@@ -109,8 +109,8 @@ class NimmtGame:
         """
         Effectue un round de jeu complet.
         """
-        
-        for _ in range(10):
+        nbCartes=len(self.players[0].hand)
+        for _ in range(nbCartes):
             plays = []
 
             for player in self.players:
