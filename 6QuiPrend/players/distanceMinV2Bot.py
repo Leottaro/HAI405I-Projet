@@ -20,7 +20,7 @@ class DistanceMinV2Bot(Bot):
                     if len(game.table[i]) == 5:
                         score = 104
                     else:
-                        score = len(game.table[i])*len(game.players) + card.value - game.table[i][-1].value
+                        score = card.value - game.table[i][-1].value
                     index = i
                     break
             
