@@ -7,20 +7,22 @@ from players.carteMinBot import CarteMinBot
 from players.distanceMinBot import DistanceMinBot
 from players.minMaxBot import MinMaxBot
 from players.randomBot import RandomBot
+from players.queLaLose import QueLaLose
 from players.sampleBot import SampleBot
 from players.semiRandomBot import SemiRandomBot
 from players.humanPlayer import HumanPlayer
 from game.nimmtGame import NimmtGame
 
 BotsClasses = [
-    BasicBot,
     CarteMaxBot,
+    BasicBot,
     CarteMinBot,
     DistanceMinBot,
     MinMaxBot,
     RandomBot,
     SampleBot,
-    SemiRandomBot
+    SemiRandomBot,
+    QueLaLose
 ]
 
 def interactiveRun():
