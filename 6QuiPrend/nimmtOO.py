@@ -1,5 +1,6 @@
 import os
 from itertools import combinations
+from matplotlib import pyplot as plt
 from players.basicBot import BasicBot
 from players.carteMaxBot import CarteMaxBot
 from players.carteMinBot import CarteMinBot
@@ -16,9 +17,9 @@ BotsClasses = [
     CarteMaxBot,
     CarteMinBot,
     DistanceMinBot,
-    # MinMaxBot,
+    MinMaxBot,
     RandomBot,
-    # SampleBot,
+    SampleBot,
     SemiRandomBot
 ]
 
@@ -51,21 +52,26 @@ def interactiveRun():
         except ValueError:
             print("Veuillez entrer un nombre entier.")
 
-def statsBots():
+def statsBots(factor):
+    totalGames = 0
+    iemeGame = 0
+
     NbPlayersGames = [[], []]
     for i in range(2, len(BotsClasses)+1):
         NbPlayersGames.append(list(combinations([_ for _ in range(len(BotsClasses))], i)))
+        totalGames += len(NbPlayersGames[-1])
+    totalGames *= factor
     
     bots = [botClass(botClass.__name__) for botClass in BotsClasses]
-    
     scoresTotaux = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
     winTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
     partiesTotals = {bot.name: [0 for _ in NbPlayersGames] for bot in bots}
 
     for NbrPlayers in range(len(NbPlayersGames)):
         for game in NbPlayersGames[NbrPlayers]:
-            players = [BotsClasses[i](BotsClasses[i].__name__) for i in game]
-            for i in range(1000):
+            players = [bots[i] for i in game]
+            for i in range(factor):
+                iemeGame += 1
                 partie = NimmtGame(players)
                 scores, winners = partie.play()
                 for bot in players:
@@ -74,19 +80,29 @@ def statsBots():
                 for winner in winners:
                     winTotals[winner.name][NbrPlayers] += 1
                 
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print(f"{NbrPlayers} players games:")
-                for bot in bots:
-                    print(f"{bot.name}:\t{round(100*winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) if partiesTotals[bot.name][NbrPlayers] != 0 else 0}% winrate")
-                print(f"currently players {" vs ".join([player.name for player in players])} (game {i+1})")
-    
-    os.system('cls' if os.name == 'nt' else 'clear')
+                print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) : {" vs ".join([player.name for player in players])}          ", end="\r")
+    print(f"game {iemeGame} / {totalGames} ({round(100*iemeGame/totalGames, 2)}%)\n")
+
+    # print le winrate de chaque bot
     for NbrPlayers in range(2, len(NbPlayersGames)):
         print(f"\n{NbrPlayers} players games:")
         for bot in bots:
             print(f"{bot.name}:\t{round(100*winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) if partiesTotals[bot.name][NbrPlayers] != 0 else 0}% winrate")
-    
 
+    # afficher le winrate de chaque bot
+    plt.title('Win Percentage by Bot')
+    plt.xlabel('Nombre de joueurs')
+    plt.xticks(range(2, len(NbPlayersGames)), [str(i) for i in range(2, len(NbPlayersGames))], fontsize=10)
+    plt.ylabel('Winrate (%)')
+    plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
+
+    for bot in bots:
+        win_rates = [round(100 * winTotals[bot.name][NbrPlayers] / partiesTotals[bot.name][NbrPlayers], 2) for NbrPlayers in range(2, len(NbPlayersGames))]
+        plt.plot(range(2, len(NbPlayersGames)), win_rates, label=bot.name)
+    
+    plt.legend()
+    plt.grid()
+    plt.show()
 
 if __name__ == "__main__":
     while True:
@@ -95,7 +111,15 @@ if __name__ == "__main__":
             if choix == 1:
                 interactiveRun()
             elif choix == 2:
-                statsBots()
+                while True:
+                    try:
+                        factor = int(input("Combien de fois voulez-vous jouer chaque combinaison de bots ? ") or "0")
+                        if factor <= 0:
+                            raise ValueError
+                        statsBots(factor)
+                        break
+                    except ValueError:
+                        print("Veuillez entrer un nombre entier positif.")
             else: 
                 ValueError("Veuillez entrer un nombre entier entre 1 et 2")
             break

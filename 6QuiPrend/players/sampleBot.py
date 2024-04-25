@@ -5,14 +5,25 @@ from game.card import Card
 from game.nimmtGame import NimmtGame
 
 class SampleBot(Bot):
+    def __init__(self, name, displayInfo=False):
+        super().__init__(name, displayInfo)
+        # essai
+        while True:
+            try:
+                self.nEchantillons = int(input(f"nombre d'échantillons de {name} (500 par défaut) : ") or "500")
+                if (self.nEchantillons < 0):
+                    raise ValueError
+                break
+            except ValueError:
+                print("Veuillez entrer un nombre entier >0.")
+
     def getCardToPlay(self,game):
         deck=[Card(c) for c in range(1, 105)]
         cartePossibles=[carte for carte in deck if carte not in self.hand and carte not in game.alreadyPlayedCards]
         scoreCartes=[0 for _ in self.hand]
-        for essai in range(10000):
-            
+        for echantillon in range(self.nEchantillons):
             # si on a déjà une carte qui est clairement meilleure que les autres, on arrête
-            if (essai > 100 and min(scoreCartes) < sum(scoreCartes)/(len(scoreCartes)*2)): 
+            if (echantillon > 104 and 2*min(scoreCartes) < sum(scoreCartes)/len(scoreCartes)): 
                 break
 
             coupsAdverse=[]

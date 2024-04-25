@@ -3,8 +3,16 @@ from players.bot import Bot
 from game.card import Card
 
 class MinMaxBot(Bot):
-    def __init__(self, name):
+    def __init__(self, name, displayInfo=False) -> None:
         super().__init__(name)
+        while True:
+            try:
+                self.profondeur = int(input(f"Profondeur de recherche de {name} (1 par défaut) : ") or "1")
+                if (self.profondeur<1):
+                    raise ValueError()
+                break
+            except ValueError:
+                print("Veuillez entrer un nombre entier >0.")
 
     def update_table(self, table, cards, myCard):
         """
@@ -61,6 +69,5 @@ class MinMaxBot(Bot):
         return [min,minCard]
 
     def getCardToPlay(self, game):
-        profondeur = 3
-        retour = self.parcours(self.hand, game.alreadyPlayedCards, game.table, profondeur)
+        retour = self.parcours(self.hand, game.alreadyPlayedCards, game.table, self.profondeur)
         return retour[1].value
