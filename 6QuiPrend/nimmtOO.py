@@ -19,11 +19,12 @@ BotsClasses = [
     CarteMinBot,
     DistanceMinBot,
     DistanceMinV2Bot,
-    # MinMaxBot,
+    MinMaxBot,
     QueLaLose,
     RandomBot,
-    # SampleBot,
+    SampleBot,
     SemiRandomBot,
+    HumanPlayer,
 ]
 
 def interactiveRun():
@@ -105,8 +106,8 @@ def statsBots(factor):
     
     plt.legend()
     plt.grid()
+    plt.ylim(0, 105)
     plt.show()
-
 
 def stats1v1(factor):
     totalGames = 0
@@ -130,21 +131,21 @@ def stats1v1(factor):
             if winners[0].name == bot1.name:
                 win+=1
             print(f"game {iemeGame} sur {totalGames} ({round(100*iemeGame/totalGames, 2)}%) :  vs {combatsPossibles[adversaire]} ", end="\r")
-        winrates[adversaire] = win/factor
+        winrates[adversaire] = 100*win/factor
 
     #affichage
 
-    plt.title('Win Percentage by Bot')
+    plt.title('Win Percentage against each bot')
     plt.xlabel('Bot')
     plt.xticks(range(len(BotsClasses[1:])), [bot.__name__ for bot in BotsClasses[1:]], fontsize=10)
     plt.ylabel('Winrate (%)')
     plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
 
-
-    plt.plot(range(len(BotsClasses[1:])), winrates, label=bot1.name)
+    plt.bar(range(len(BotsClasses[1:])), winrates, label=bot1.name, color='blue')
 
     plt.legend()
-    plt.grid()
+    plt.grid(axis='y')
+    plt.ylim(0, 105)
     plt.show()
 
 

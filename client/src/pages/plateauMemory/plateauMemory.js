@@ -144,8 +144,8 @@ function PlateauMemory() {
                         timeLeft > nbCartesParLigne
                             ? "divTimer"
                             : timeLeft > 5
-                            ? "divTimerOrange"
-                            : "divTimerRed"
+                              ? "divTimerOrange"
+                              : "divTimerRed"
                     }
                 >
                     <label id="timer">{timeLeft.toFixed(1)}</label>
