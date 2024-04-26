@@ -5,7 +5,8 @@ from game.nimmtGame import NimmtGame
 
 """ce bot notes chacune de ses cartes et choisis celle qui a la plus petite distance
 positive avac la derniere carte de chaque ligne, il met la note max lorsque la ligne
-posssede 5 cartes. il choisit la colone qui possede le moins de points lorsqu il doit faire un choix de colone"""
+posssede 5 cartes.il choisit la ligne qui possède le moins de points lorsqu'il
+doit faire un choix de ligne"""
 
 
 class DistanceMinBot(Bot):

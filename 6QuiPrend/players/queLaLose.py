@@ -4,7 +4,7 @@ from game.card import Card
 from game.nimmtGame import NimmtGame
 
 
-"""ce bot pue la défaite"""
+"""ce bot pue la défaite, il arrive même pas a être toujours dernier."""
 
 
 class QueLaLose(Bot):
