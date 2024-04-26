@@ -57,11 +57,13 @@ def interactiveRun():
             print("Veuillez entrer un nombre entier.")
 
 def statsBots(factor):
-    if not os.path.exists("stats.csv"):
+    if os.path.exists("stats.csv"):
+        f = open("stats.csv", "a")
+    elif os.path.exists("./6QuiPrend/stats.csv"):
+        f = open("./6QuiPrend/stats.csv", "a")
+    else:
         f = open("stats.csv", "w")
         f.write("participants;têtes de boeuf;winners\n")
-    else :
-        f = open("stats.csv", "a")
     writer = csv.writer(f, delimiter=";")
 
     totalGames = 0
@@ -91,10 +93,13 @@ def statsBots(factor):
         f.close()
 
 def readStats():
-    if not os.path.exists("stats.csv"):
+    if os.path.exists("stats.csv"):
+        f = open("stats.csv", "r")
+    elif os.path.exists("./6QuiPrend/stats.csv"):
+        f = open("./6QuiPrend/stats.csv", "r")
+    else:
         print("Pas de fichier de stats")
         exit(2)
-    f = open("stats.csv", "r")
     reader = csv.reader(f, delimiter=";")
     next(reader)  # Skip la 1ere ligne
 
@@ -149,7 +154,7 @@ def readStats():
     plt.yticks(range(0, 101, 10), range(0, 101, 10), fontsize=10)
 
     for bot in bots:
-        win_rates = [round(100 * winTotals[bot][NbrPlayers] / partiesTotals[bot][NbrPlayers], 2) for NbrPlayers in NbrPlayersGames]
+        win_rates = [round(NbrPlayers / 3 *100 * winTotals[bot][NbrPlayers] / partiesTotals[bot][NbrPlayers], 2) for NbrPlayers in NbrPlayersGames]
         plt.plot(NbrPlayersGames, win_rates, label=bot)
     
     plt.legend()
