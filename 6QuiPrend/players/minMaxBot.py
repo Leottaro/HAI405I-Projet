@@ -2,6 +2,13 @@ from random import randint
 from players.bot import Bot
 from game.card import Card
 
+"""
+Ce bot regarde l'arbre des possibilités de coups pour lui et son adversaire (sur une certaine profondeur)
+puis choisit la carte qui mène au sous arbre dont la pire issue est la meilleure de tous les sous arbres
+
+
+il choisit ligne qui possède le moins le points lorsqu'il doit faire un choix de ligne
+"""
 
 class MinMaxBot(Bot):
     def __init__(self, name, displayInfo=False) -> None:
@@ -40,12 +47,17 @@ class MinMaxBot(Bot):
                     break
             if not placed:
 
-                line = 1
+                min = sum(card.cowsNb for card in table[0])
+                index = 0
+                for i in range(1, 4):
+                    cow = sum(card.cowsNb for card in table[i])
+                    if cow < min:
+                        min = cow
+                        index = i
 
-                cows = sum(card.cowsNb for card in table[line - 1])
                 if card == myCard:
-                    monScore += cows
-                table[line - 1] = [card]
+                    monScore += cow
+                table[i] = [card]
                 table.sort(key=lambda x: x[-1])
         return monScore
 

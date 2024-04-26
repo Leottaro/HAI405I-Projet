@@ -4,6 +4,10 @@ from players.bot import Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
+"""
+Ce bot génère aléatoirement des cartes pour chacun de ses adversaire sur un grand nombre d'iteration
+et prends la carte avec la meilleure moyenne
+"""
 
 class SampleBot(Bot):
     def __init__(self, name, displayInfo=False):
