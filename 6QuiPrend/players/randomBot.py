@@ -1,14 +1,14 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 
 """
-Ce bot choisit une carte au hasard
+Ce Bot choisit une carte au hasard
 
 il choisit aussi la ligne au hasard
 """
 
-class RandomBot(Bot):
+class RandomBot(G16Bot):
     def getLineToRemove(self, game):
         return randint(1, 4)
 

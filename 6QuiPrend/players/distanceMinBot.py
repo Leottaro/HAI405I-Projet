@@ -1,15 +1,15 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
-"""ce bot notes chacune de ses cartes et choisis celle qui a la plus petite distance
+"""ce Bot notes chacune de ses cartes et choisis celle qui a la plus petite distance
 positive avac la derniere carte de chaque ligne, il met la note max lorsque la ligne
 posssede 5 cartes.il choisit la ligne qui possède le moins de points lorsqu'il
 doit faire un choix de ligne"""
 
 
-class DistanceMinBot(Bot):
+class DistanceMinBot(G16Bot):
     def getCardToPlay(self, game):
         cardChoose = self.hand[0]
         score = []

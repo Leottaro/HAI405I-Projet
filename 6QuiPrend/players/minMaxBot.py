@@ -1,16 +1,16 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 
 """
-Ce bot regarde l'arbre des possibilités de coups pour lui et son adversaire (sur une certaine profondeur)
+Ce Bot regarde l'arbre des possibilités de coups pour lui et son adversaire (sur une certaine profondeur)
 puis choisit la carte qui mène au sous arbre dont la pire issue est la meilleure de tous les sous arbres
 
 
 il choisit ligne qui possède le moins le points lorsqu'il doit faire un choix de ligne
 """
 
-class MinMaxBot(Bot):
+class MinMaxBot(G16Bot):
     def __init__(self, name, displayInfo=False) -> None:
         while True:
             try:

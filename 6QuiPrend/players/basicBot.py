@@ -1,9 +1,9 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 
 
-class BasicBot(Bot):
+class BasicBot(G16Bot):
     def getCardToPlay(self, game):
 
         min = 1000

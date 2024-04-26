@@ -5,7 +5,7 @@ from players.basicBot import BasicBot
 from players.carteMaxBot import CarteMaxBot
 from players.carteMinBot import CarteMinBot
 from players.distanceMinBot import DistanceMinBot
-from players.distanceMinV2Bot import DistanceMinV2Bot
+from players.G16distanceMinV2Bot import G16DistanceMinV2Bot
 from players.minMaxBot import MinMaxBot
 from players.queLaLose import QueLaLose
 from players.randomBot import RandomBot
@@ -19,7 +19,7 @@ BotsClasses = [
     CarteMaxBot,
     CarteMinBot,
     DistanceMinBot,
-    DistanceMinV2Bot,
+    G16DistanceMinV2Bot,
     MinMaxBot,
     QueLaLose,
     RandomBot,

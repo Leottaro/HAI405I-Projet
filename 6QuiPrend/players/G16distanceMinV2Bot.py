@@ -1,5 +1,5 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 
 """
 ce bot choisis en fonction de la distance avec la derniere carte de la ligne ou elle sera posée.
@@ -8,7 +8,7 @@ en particulier si cette carte ne nous permets pas de choisir cette ligne (si ell
 """
 
 
-class DistanceMinV2Bot(Bot):
+class G16DistanceMinV2Bot(G16Bot):
     def getCardToPlay(self, game):
         valeursJouées = [carte.value for carte in game.alreadyPlayedCards]
         valsEntre = []

@@ -3,7 +3,7 @@ from players.player import Player
 from game.nimmtGame import NimmtGame
 
 
-class Bot(Player):
+class G16Bot(Player):
     def __init__(self, name, displayInfo=False) -> None:
         super().__init__(name)
         self.displayInfo = displayInfo

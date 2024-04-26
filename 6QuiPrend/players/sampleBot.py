@@ -1,15 +1,15 @@
 from math import sqrt
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
 """
-Ce bot génère aléatoirement des cartes pour chacun de ses adversaire sur un grand nombre d'iteration
+Ce Bot génère aléatoirement des cartes pour chacun de ses adversaire sur un grand nombre d'iteration
 et prends la carte avec la meilleure moyenne
 """
 
-class SampleBot(Bot):
+class SampleBot(G16Bot):
     def __init__(self, name, displayInfo=False):
         while True:
             try:

@@ -1,13 +1,13 @@
 from random import randint
-from players.bot import Bot
+from players.G16Bot import G16Bot
 from game.card import Card
 from game.nimmtGame import NimmtGame
 
 
-"""ce bot pue la défaite, il arrive même pas a être toujours dernier."""
+"""ce Bot pue la défaite, il arrive même pas a être toujours dernier."""
 
 
-class QueLaLose(Bot):
+class QueLaLose(G16Bot):
     def getLineToRemove(self, game):
         max = NimmtGame.total_cows(game.table[0])
         index = 0
