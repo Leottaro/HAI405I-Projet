@@ -3,17 +3,36 @@ name: Deploy to Breadberry Pi
 on:
     push:
         branches:
-            - using-docker
             - main
     # You can deploy on any branch if needed in the Actions tab
     workflow_dispatch:
 
 jobs:
-    deploy-docker:
-        runs-on: self-hosted
+    docker:
+        runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - name: Build docker compose
-              run: docker compose up --force-recreate --build -d
-            - name: clear old docker images
-              run: docker image prune -f
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Build and push
+              run: docker compose build && docker compose push
+
+    deploy:
+        runs-on: self-hosted
+        needs: docker
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Pull image
+              run: docker compose pull
+            - name: Run container
+              run: docker compose up -d
