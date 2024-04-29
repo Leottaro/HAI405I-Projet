@@ -8,22 +8,11 @@ on:
     workflow_dispatch:
 
 jobs:
-    build:
+    deploy-docker:
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v3
-            - name: Build client & server
-              run: | # CI=false to ignore warnings and not fail the build
-                  export CI=false 
-                  cd client && npm install && npm run build
-                  cd ..
-                  cd server && npm install
-                  cd ..
-
-    deploy:
-        runs-on: self-hosted
-        needs: build
-        steps:
-            - name: Start client & server
-              run: |
-                  pm2 start HAI405I-BACK
+            - name: Build docker compose
+              run: docker-compose up --force-recreate --build -d
+            - name: clear old docker images
+              run: docker image prune -f

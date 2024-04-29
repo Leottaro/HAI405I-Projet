@@ -1,0 +1,26 @@
+services:
+  client:
+    build:
+      context: ./client
+    depends_on:
+      - server
+    ports:
+      - 9090:9090
+    develop:
+      watch:
+        - path: ./client/package.json
+          action: rebuild
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - 3001:3001
+    volumes:
+      - databases:/server/databases
+    develop:
+      watch:
+        - path: ./server/package.json
+          action: rebuild
+volumes:
+  databases:
