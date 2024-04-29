@@ -3,6 +3,7 @@ name: Deploy to Breadberry Pi
 on:
     push:
         branches:
+            - using-docker
             - main
     # You can deploy on any branch if needed in the Actions tab
     workflow_dispatch:
