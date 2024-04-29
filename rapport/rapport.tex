@@ -1,0 +1,284 @@
+% Une ligne commentaire débute par le caractère « % »
+
+\documentclass[a4paper]{article}
+
+% Options possibles : 10pt, 11pt, 12pt (taille de la fonte)
+%                     oneside, twoside (recto simple, recto-verso)
+%                     draft, final (stade de développement)
+
+\usepackage[utf8]{inputenc}   % LaTeX, comprends les accents !
+\usepackage[T1]{fontenc}      % Police contenant les caractères français
+\usepackage[francais]{babel}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{pgfgantt}
+\usepackage{amsmath}
+\usepackage{listings}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\usepackage[a4paper,left=2cm,right=2cm]{geometry}% Format de la page, réduction des marges
+\usepackage{graphicx}  % pour inclure des images
+\usepackage{titlesec}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue}
+\urlstyle{same}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{0.5cm}
+{\scshape\LARGE Université de Montpellier \par}
+\vspace{1cm}
+{\scshape\Large Faculté des Sciences \par}
+\vspace{1.5cm}
+{\scshape\Huge HAI405I - Projet de programmation \par}
+\vspace{2cm}
+{\Large\itshape Groupe 16 \par}
+\vspace{1cm}
+{\Large Roman Chris \par}
+{\Large Garcia Charly \par}
+{\Large Bonnafé Rémi \par}
+{\Large Hafdane Léo \par}
+\vfill
+L2 Informatique\par
+\end{titlepage}
+
+\section{Introduction}
+
+Notre équipe, composée de Léo, Rémi, Chris et Charly, a développé au cours de ces deux dernières semaines un site de jeux de cartes en utilisant React, un framework JavaScript destiné à la création d'interfaces utilisateurs interactives.
+
+Lors de la première semaine, notre objectif principal était de mettre en place le site avec un jeu : la bataille. Nous avons commencé par définir le schéma visuel de chaque page, puis nous avons procédé à la mise en place du serveur. Les tâches ont été réparties entre les membres de l'équipe.
+
+Au cours de la deuxième semaine, nous avons accueilli Charly au sein de notre équipe. Ensemble, nous avons ajouté le jeu "six qui prend" et avons amélioré diverses fonctionnalités.
+
+Dans ce rapport, nous présenterons l'architecture de notre projet, notre utilisation de React pour la création de composants réutilisables, ainsi que notre protocole de communication et d'échange de données. Enfin, nous dresserons un bilan de notre expérience et des accomplissements réalisés au cours de ces deux semaines de travail intense et collaboratif.
+
+\section{Organisation}
+
+\subsection{Semaine 1}
+
+Au cours de la première semaine, le groupe a découvert React, a construit le schéma visuel de chaque page et a mis en place le serveur. Voici la répartition des tâches :
+
+\begin{itemize}
+\item Léo s'est principalement occupé du serveur, notamment la mise en place des sockets pour assurer la communication avec le client.
+\item Rémi s'occupait de la page « plateau bataille » et de ses composants : « Carte », « JoueurBataille », « Start » et « MonJeux ».
+\item Chris a travaillé sur la page « créer/rejoindre » et ses composants.
+\item Léo a mis en place la base de données pour gérer les comptes utilisateurs.
+\item Chris s'est occupé des fichiers PNG.
+\item Rémi et Chris se sont occupés de la mise en forme CSS et de la liaison avec le serveur des pages existantes et ont également créé les composants : « chat » et « sélection jeux ».
+\item Léo a créé les classes des jeux et a complété celle de la bataille.
+\end{itemize}
+
+\subsection{Semaine 2}
+
+Charly a rejoint le groupe au cours de la deuxième semaine. Il a découvert React et le projet. Voici la répartition des tâches :
+
+\begin{itemize}
+\item Léo a créé la classe "6 qui prend" pendant que Chris et Rémi ont développé la page associée et ses composants, en modifiant : « carte » et « chat ».
+\item Charly a créé le tableau des scores en fin de partie.
+\item Rémi s'est occupé d'enregistrer les scores et les parties dans la base de données pour les utiliser dans le « profil » et le « leaderboard » créé avec Chris.
+\item Chris a créé l'audio et Léo a réglé des problèmes d'historique, fait une navbar et créé des SVG très jolis pour le chat, la navbar et l'audio pour une meilleure expérience utilisateur.
+\item Léo et Rémi ont créé un timer pour le choix de la carte ou de la colonne.
+\item Chris a créé un rang dans le profil.
+\end{itemize}
+
+\newpage
+\definecolor{barblue}{RGB}{153,204,254}
+\definecolor{linkred}{RGB}{165,0,33}
+
+\begin{center}
+\begin{ganttchart} [vgrid, hgrid] {1}{14}
+  \gantttitle{Organigramme du projet}{14} \\
+  \gantttitlelist{1,...,14}{1} \\
+\ganttgroup{Rémi} {1} {14} \\
+
+\ganttbar{Découverte de React} {1}{2} 
+\ganttnewline
+\ganttbar {Développement des composants "bataille"} {2}{7} 
+\ganttnewline
+\ganttbar {Mise en forme CSS} {3} {14} 
+\ganttnewline
+\ganttbar {Mise en place des fichiers PNG} {8} {8} 
+\ganttnewline
+\ganttbar {Développement des composants "6 qui prend"} {8} {14} 
+\ganttnewline
+\ganttgroup{Léo} {1} {14} \\
+
+\ganttbar {Découverte de React} {1}{2}  
+\ganttnewline
+\ganttbar {Installation serveur} {2} {3} 
+\ganttnewline
+\ganttbar {Création de la base de données}{3}{5} 
+\ganttnewline
+\ganttbar {Mise en forme CSS} {3} {14} 
+\ganttnewline
+\ganttbar {Création des classes jeux}{4}{7} 
+\ganttnewline
+\ganttbar {Création de la classe "6 qui prend"}{8}{9} 
+\ganttnewline
+\ganttbar {Développement des composants globaux} {10} {14} 
+\ganttnewline
+\ganttgroup{Chris} {1} {14} \\
+
+\ganttbar {Découverte de React} {1}{2} 
+\ganttnewline
+\ganttbar {Mise en place des fichiers PNG} {2} {2} 
+\ganttnewline
+\ganttbar {Développement des composants "bataille"} {2} {7} 
+\ganttnewline
+\ganttbar {Mise en forme CSS} {3} {14} 
+\ganttnewline
+\ganttbar {Développement des composants "6 qui prend"} {8} {14} 
+\ganttnewline
+\ganttgroup{Charly} {1} {14} \\
+\ganttbar {Découverte de React} {8}{9} 
+\ganttnewline
+\ganttbar {Création du tableau fin de partie} {10}{14}
+\end{ganttchart}
+\end{center}
+
+\section{Architecture, protocole de communication et échange de données}
+
+Dans notre projet, trois grandes entités communiquent : le client, le serveur React et le serveur Node.
+
+Le serveur React et le serveur Node communiquent avec le protocole WebSocket (nous n'utilisons pas HTTP). WebSocket permet d'échanger des variables et des listes de variables via une requête. Le protocole HTTP pourrait être utilisé, par exemple, pour les "room", où le lien de la partie pourrait être l'objet d'une requête HTTP.
+
+Voici comment nous avons mis en place les sockets :
+\begin{lstlisting}
+const express = require("express");
+const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
+app.use(cors());
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+});
+const port = process.env.HAI405I_PORT || 3001;
+httpServer.listen(port, () => {
+    console.log(`server running on port http://localhost:${port}/`);
+});
+
+const sockets = {}; // clef: socket.id              valeur: {compte, partie}
+const parties = {}; // clef: code de la partie      valeur: instance de jeu
+\end{lstlisting}
+
+Voici un exemple d'utilisation des sockets :
+
+Émission de la requête :
+\begin{lstlisting}
+    function carteClick() {
+        socket.emit("reqCoup", { carte: { valeur: valeur, type: type }, index: props.index });
+    }
+\end{lstlisting}
+
+Réception de la requête :
+\begin{lstlisting}
+    socket.on("reqCoup", async (json) => {
+        if (!sockets[socket.id]) {
+            return;
+        }
+        const carte = json.carte;
+        const index = json.index;
+        const code = sockets[socket.id].partie;
+        const jeux = parties[code];
+        if (!jeux || !jeux.coup(socket.id, carte, index)) {
+            return;
+        }
+        resPlayers(code);
+        resPlateau(code);
+        if (jeux.everyonePlayed()) {
+            if (jeux.nextRound()) {
+                await new Promise((r) => setTimeout(r, 1000));
+                resPlayers(code);
+                resPlateau(code);
+            }
+        }
+    });
+\end{lstlisting}
+
+\section{Utilisation de React}
+
+React est un framework qui permet la création de composants autonomes et réutilisables retournant du HTML. Ces composants peuvent être associés pour créer des pages complexes.
+
+Cette architecture nous a permis, par exemple, de créer un composant "carte" utilisé dans toutes les pages "in-game". Nous pouvons également créer des composants avec des paramètres :
+
+\begin{lstlisting}
+import "./Start.css";
+
+function Start(props) {
+    return (
+        <div id="divStart">
+            <label className="code">code de la partie:</label>
+            <label className="code">{props.code}</label>
+            <button
+                hidden={!props.afficheStart}
+                onClick={props.start}
+            >
+                commencer
+            </button>
+            <button
+                hidden={!props.afficheSave}
+                onClick={props.save}
+            >
+                save
+            </button>
+        </div>
+    );
+}
+export default Start;
+\end{lstlisting}
+
+Ce composant peut être utilisé dans n'importe quel autre composant ou page avec la balise :
+\begin{lstlisting}
+import Carte from "../../../component/Carte/Carte";
+
+<Carte visible={...}>
+\end{lstlisting}
+
+\section{Bilan}
+
+Au terme de ces deux semaines de travail sur notre projet, nous pouvons constater quelques difficultés rencontrées ainsi qu'un apprentissage en React.
+
+\subsection{Difficultés rencontrées}
+
+\begin{itemize}
+\item Sauvegarde des parties : L'une des principales difficultés auxquelles nous avons été confrontés a été la mise en œuvre de la fonction de sauvegarde des parties. Nous avons rencontré des obstacles techniques.
+\item Mise en place du serveur : Un autre défi majeur a été la configuration et la mise en place du serveur, en particulier dans le contexte de la communication entre le serveur React et le serveur Node.
+\end{itemize}
+
+\subsection{Analyse rétrospective}
+
+Sur le plan organisationnel, nous avons appris l'importance de GitHub lors d'un projet complexe. La répartition claire des tâches, l'entraide et la mise en place de points de contrôle réguliers ont contribué à maintenir notre équipe sur la bonne voie malgré les défis rencontrés.
+
+Du point de vue technique, nous avons appris à utiliser React et à configurer des serveurs.
+
+En fin de compte, ce projet nous a appris à travailler en groupe et à développer en React.
+
+\end{document}

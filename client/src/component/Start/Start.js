@@ -1,19 +1,29 @@
-import './Start.css';
+import "./Start.css";
 
-function Start(props){
-
+function Start(props) {
     return (
-    <div id="divStart">
-        <h2 className="code">code de la partie:</h2>
-        <h2 className="code">{props.code}</h2>
-        <button hidden={!props.afficheStart} id="start" onClick={props.start}>commencer</button>
-        <button hidden={!props.afficheSave} id="save" onClick={props.save}>save</button>
-    </div>
-)
-} 
+        <div id="divStart">
+            <label className="code">code de la partie:</label>
+            <label className="code">{props.code}</label>
+            <button
+                hidden={!props.afficheStart}
+                onClick={props.start}
+            >
+                commencer
+            </button>
+            <button
+                hidden={!props.afficheSave}
+                onClick={props.save}
+            >
+                save
+            </button>
+            <button
+                hidden={!props.afficheBot}
+                onClick={props.addBot}
+            >
+                ajouter un bot
+            </button>
+        </div>
+    );
+}
 export default Start;
-
-
-
-
-

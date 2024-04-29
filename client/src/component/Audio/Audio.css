@@ -1,16 +1,17 @@
 #volumeButton {
     transition: all 0.1s;
     height: 6vh;
+    width: 3vw;
     padding: 1vh;
 
     position: absolute;
     top: 2vw;
     right: 2vw;
-    
+
     background: #573b8a;
     border: none;
     border-radius: 1vh;
-    
+
     color: #fff;
     font-size: 1em;
     font-weight: bold;

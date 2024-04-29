@@ -1,6 +1,6 @@
 class Carte {
     static types = ["Carreau", "Pique", "Coeur", "Trefle"];
-    static valeurs = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Vallet", "Dame", "Roi", "As"]
+    static valeurs = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Vallet", "Dame", "Roi", "As"];
 
     static json(valeur, type) {
         if (!Carte.types.includes(type) || !Carte.valeurs.includes(valeur)) {
@@ -28,10 +28,15 @@ class Carte {
         return carte1.valeur === carte2.valeur && carte1.type === carte2.type;
     }
 
-    static sort(carte1, carte2, AsFort) { // adFort est un boolean qui placera le roi à la fin ou au début
-        const valeur1 = Carte.valeurs.indexOf(carte1.valeur) + Carte.types.indexOf(carte1.type) / 10;
-        const valeur2 = Carte.valeurs.indexOf(carte2.valeur) + Carte.types.indexOf(carte2.type) / 10;
-        return AsFort ? valeur2 - valeur1 : (valeur2 + 1) % Carte.valeurs.length - (valeur1 + 1) % Carte.valeurs.length;
+    static sort(carte1, carte2, AsFort) {
+        // adFort est un boolean qui placera le roi à la fin ou au début
+        const valeur1 =
+            Carte.valeurs.indexOf(carte1.valeur) + Carte.types.indexOf(carte1.type) / 10;
+        const valeur2 =
+            Carte.valeurs.indexOf(carte2.valeur) + Carte.types.indexOf(carte2.type) / 10;
+        return AsFort
+            ? valeur2 - valeur1
+            : ((valeur2 + 1) % Carte.valeurs.length) - ((valeur1 + 1) % Carte.valeurs.length);
     }
 }
 module.exports = Carte;

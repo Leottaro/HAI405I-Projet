@@ -9,11 +9,10 @@ function MesParties() {
     const [listParties, setListPartie] = useState([]);
 
     useEffect(() => {
-        socket.on('resJoin', json => {
-            if (!json.success)
-                setMessage(json.message);
+        socket.on("resJoin", (json) => {
+            if (!json.success) setMessage(json.message);
         });
-        socket.on('resMyGames', liste => {
+        socket.on("resMyGames", (liste) => {
             if (liste) {
                 setListPartie(liste);
             }
@@ -22,10 +21,10 @@ function MesParties() {
         const clock = setInterval(() => socket.emit("reqMyGames", jeux), 1000);
         return () => {
             clearInterval(clock);
-            socket.off('resJoin');
-            socket.off('resMyGames');
+            socket.off("resJoin");
+            socket.off("resMyGames");
         };
-    }, []);
+    }, [jeux]);
 
     return (
         <div id="CRContent">
@@ -33,7 +32,12 @@ function MesParties() {
             <label id="message">{message}</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
-                    <Parties key={index} buttonText="recommencer" nbrJoueurs={partie.jeux.maxPlayers} buttonCallback={() => socket.emit("reqRestart", partie.code)} />
+                    <Parties
+                        key={index}
+                        buttonText="recommencer"
+                        nbrJoueurs={partie.jeux.maxPlayers}
+                        buttonCallback={() => socket.emit("reqRestart", partie.code)}
+                    />
                 ))}
             </div>
         </div>

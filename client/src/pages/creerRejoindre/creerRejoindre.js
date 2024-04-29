@@ -31,11 +31,35 @@ function CreerRejoindre(params) {
         <>
             <div id="CRDiv">
                 <div id="CRbuttonDiv">
-                    <button className="CRButton" onClick={creer} disabled={mode === "creer"}>Creer</button>
-                    <button className="CRButton" onClick={rejoindre} disabled={mode === "rejoindre"}>Rejoindre</button>
-                    <button className="CRButton" onClick={mesParties} disabled={mode === "mesParties"}>Mes parties</button>
+                    <button
+                        className="CRButton"
+                        onClick={creer}
+                        disabled={mode === "creer"}
+                    >
+                        Creer
+                    </button>
+                    <button
+                        className="CRButton"
+                        onClick={rejoindre}
+                        disabled={mode === "rejoindre"}
+                    >
+                        Rejoindre
+                    </button>
+                    <button
+                        className="CRButton"
+                        onClick={mesParties}
+                        disabled={mode === "mesParties"}
+                    >
+                        Mes parties
+                    </button>
                 </div>
-                {mode === "creer" ? <Creer jeux={jeux} /> : (mode === "rejoindre" ? <Rejoindre jeux={jeux} /> : <MesParties jeux={jeux} />)}
+                {mode === "creer" ? (
+                    <Creer jeux={jeux} />
+                ) : mode === "rejoindre" ? (
+                    <Rejoindre jeux={jeux} />
+                ) : (
+                    <MesParties jeux={jeux} />
+                )}
             </div>
         </>
     );

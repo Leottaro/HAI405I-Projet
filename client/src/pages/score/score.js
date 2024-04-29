@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
 import "./score.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Score() {
     const [gagnant, setGagnant] = useState();
@@ -9,12 +9,21 @@ function Score() {
     const [scores, setScores] = useState({});
 
     useEffect(() => {
-        socket.on("winSix", json => {
+        socket.on("winSix", (json) => {
             setGagnant(json.gagnant);
             setListeJoueurs(json.joueurs);
             setScores(json.scores);
         });
-        return () => socket.off("winSix");
+
+        socket.on("winMemory", (json) => {
+            setGagnant(json.gagnant);
+            setListeJoueurs(json.joueurs);
+            setScores(json.scores);
+        });
+        return () => {
+            socket.off("winSix");
+            socket.off("winMemory");
+        };
     }, []);
 
     const navigate = useNavigate();
@@ -28,19 +37,24 @@ function Score() {
             <table id="customers">
                 <thead>
                     <tr>
-                        <th colspan="2">Tableau des scores</th>
+                        <th colSpan={2}>Tableau des scores</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {listeJoueurs.map(id =>
-                        <tr>
+                    {listeJoueurs.map((id) => (
+                        <tr key={id}>
                             <td>{id}</td>
                             <td>{scores[id]}</td>
                         </tr>
-                    )}
+                    ))}
                 </tbody>
             </table>
-            <button id="buttonScore" onClick={rejouer}>Rejouer</button>
+            <button
+                id="buttonScore"
+                onClick={rejouer}
+            >
+                Rejouer
+            </button>
         </div>
     );
 }

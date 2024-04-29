@@ -2,21 +2,20 @@
     height: 95vh;
 }
 
-#img{
+#img {
     transition: all 250ms;
 }
-#droite{
+#droite {
     position: absolute;
     bottom: calc(50vh - 15px);
     right: calc(50vw - 200px);
 }
 
-#gauche{
+#gauche {
     position: absolute;
     bottom: calc(50vh - 15px);
     left: calc(50vw - 200px);
 }
-
 
 .selectionJeuxButton {
     width: 30px;
@@ -27,7 +26,7 @@
     border: none;
     color: white;
     font-size: 16px;
-    padding:4px;
+    padding: 4px;
     padding-bottom: 7px;
     margin: 10px;
 }

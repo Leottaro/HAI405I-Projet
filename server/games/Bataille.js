@@ -36,7 +36,7 @@ class Bataille {
     }
 
     removePlayer(playerID) {
-        if (!this.paquets[playerID]) {
+        if (this.paquets[playerID] === undefined) {
             return false;
         }
         // réintegre sa carthe choisir dans son paquet
@@ -64,7 +64,10 @@ class Bataille {
         }
         delete this.paquets[playerID];
         // si la game n'a plus assez de joueurs, on la supprime
-        if ((this.started && this.playersIDs.length < 2) || (!this.started && this.playersIDs.length == 0)) {
+        if (
+            (this.started && this.playersIDs.length < 2) ||
+            (!this.started && this.playersIDs.length == 0)
+        ) {
             this.endCallback();
         }
         return true;
@@ -74,7 +77,11 @@ class Bataille {
         if (this.playersIDs[playerID]) {
             return false;
         }
-        return { isCreator: this.playersIDs[0] === playerID, paquet: this.paquets[playerID], choosed: this.choosed[playerID] };
+        return {
+            isCreator: this.playersIDs[0] === playerID,
+            paquet: this.paquets[playerID],
+            choosed: this.choosed[playerID],
+        };
     }
 
     start() {
@@ -90,13 +97,19 @@ class Bataille {
         this.started = true;
         for (const playerID of this.playersIDs) {
             delete this.choosed[playerID];
-            this.paquets[playerID] = this.paquets[playerID].sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
+            this.paquets[playerID] = this.paquets[playerID].sort((carteA, carteB) =>
+                Carte.sort(carteA, carteB, true)
+            );
         }
         return true;
     }
 
-    coup(playerID, carte) {
-        if (this.ended || this.choosed[playerID] || !this.paquets[playerID].some(carteJson => Carte.equals(carteJson, carte))) {
+    coup(playerID, carte, index) {
+        if (
+            this.ended ||
+            this.choosed[playerID] ||
+            !this.paquets[playerID].some((carteJson) => Carte.equals(carteJson, carte))
+        ) {
             return false;
         }
         let i = 0;
@@ -106,15 +119,23 @@ class Bataille {
     }
 
     everyonePlayed() {
-        return this.playersIDs.every(playerID => this.paquets[playerID].length == 0 || this.choosed[playerID] || !this.enLice.includes(playerID));
+        return this.playersIDs.every(
+            (playerID) =>
+                this.paquets[playerID].length == 0 ||
+                this.choosed[playerID] ||
+                !this.enLice.includes(playerID)
+        );
     }
 
-    nextRound() { // return 0 si il y a un problème, 1 si tout va bien
+    nextRound() {
+        // return 0 si il y a un problème, 1 si tout va bien
         if (this.ended || !this.everyonePlayed()) {
             return 0;
         }
         let winner;
-        let sortedChoosed = this.enLice.sort((id1, id2) => Carte.sort(this.choosed[id1], this.choosed[id2], true));
+        let sortedChoosed = this.enLice.sort((id1, id2) =>
+            Carte.sort(this.choosed[id1], this.choosed[id2], true)
+        );
         let nbEgalite = 1;
         for (let i = 1; i < sortedChoosed.length; i++) {
             if (this.choosed[sortedChoosed[i]].valeur == this.choosed[sortedChoosed[0]].valeur) {
@@ -125,18 +146,18 @@ class Bataille {
         }
         if (nbEgalite == 1) {
             winner = sortedChoosed[0];
-        }
-        else {
+        } else {
             this.tempCartes.push(this.choosed[sortedChoosed[0]]);
             delete this.choosed[sortedChoosed[0]];
             this.enLice = sortedChoosed.slice(0, nbEgalite);
             return this.nextRound();
         }
-        this.paquets[winner] = this.paquets[winner].concat(Object.values(this.choosed).concat(this.tempCartes))
+        this.paquets[winner] = this.paquets[winner]
+            .concat(Object.values(this.choosed).concat(this.tempCartes))
             .sort((carteA, carteB) => Carte.sort(carteA, carteB, true));
         this.choosed = {};
         this.tempCartes = [];
-        this.enLice = this.playersIDs.filter(playerID => this.paquets[playerID].length > 0);
+        this.enLice = this.playersIDs.filter((playerID) => this.paquets[playerID].length > 0);
         this.ended = this.enLice.length <= 1;
         if (this.ended) {
             this.winner = winner;

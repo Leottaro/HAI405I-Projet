@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import './joueurSix.css';
-import Carte from '../../../component/Carte/Carte';
+import "./joueurSix.css";
+import Carte from "../../../component/Carte/Carte";
 
-function JoueurSix(props) { // {pseudo, carte, carteVisible, score}
+function JoueurSix(props) {
+    // {pseudo, carte, carteVisible, score}
     const [carte, setCarte] = useState({});
     const [carteVisible, setCarteVisible] = useState(false);
 
@@ -17,7 +18,16 @@ function JoueurSix(props) { // {pseudo, carte, carteVisible, score}
         <div className="joueurSix">
             <label className="labelJS">{props.pseudo}</label>
             <label className="labelJS">{props.score + " têtes de boeuf"}</label>
-            {!props.carte ? <></> : <Carte visible={carteVisible} valeur={carte.valeur} type={carte.type} chemin={"CartesSix/" + carte.valeur + carte.type + ".png"} />}
+            {!props.carte ? (
+                <div className="carte"> </div>
+            ) : (
+                <Carte
+                    visible={carteVisible}
+                    valeur={carte.valeur}
+                    type={carte.type}
+                    chemin={"CartesSix/" + carte.valeur + carte.type + ".png"}
+                />
+            )}
         </div>
     );
 }

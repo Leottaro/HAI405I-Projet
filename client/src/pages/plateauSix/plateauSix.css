@@ -5,18 +5,23 @@
 }
 
 #listeJoueurs {
-    display: block;
-    width: 100vw;
-    height: 250px;
+    width: 85vw;
+    height: 20vh;
+    margin: 0px auto 0px auto;
+
     display: flex;
     justify-content: center;
     align-items: top;
 }
 
 #tapis {
-    width: 100vw;
-    height: calc(100vh - 470px);
-    padding-left: 37vw;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+
+    width: 45vw;
+    height: 60vh;
 
     display: flex;
     flex-direction: column;
@@ -26,35 +31,113 @@
 .ligne {
     display: flex;
     flex-direction: row;
+    margin-top: 2vw;
 }
 
 .ligne .carte {
-    margin-right: 20px;
+    margin-right: 1vw;
 }
-
-#winner {
-    width: 300px;
-    height: 30px;
-    position: absolute;
-    color: white;
-    text-align: center;
-    left: calc(50vw - 150px);
-    top: calc(50vh - 15px);
-}
-
 
 #choisie {
+    width: 25vw;
+    height: 20vh;
+
     position: absolute;
-    right: 10vw;
-    bottom: 5vh;
+    right: 0vw;
+    bottom: 1vh;
+
+    display: flex;
+    align-items: center;
 }
 
-#timer {
+#divTimer {
     position: absolute;
     left: 11vw;
     bottom: 23vh;
     transform: translate(-50%, 0%);
+    background: #573b8a;
+    border-radius: 10px;
+    display: flex;
 
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#divTimerOrange {
+    position: absolute;
+    left: 11vw;
+    bottom: 23vh;
+    transform: translate(-50%, 0%);
+    background: orange;
+    border-radius: 10px;
+    display: flex;
+
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#divTimerRed {
+    position: absolute;
+    left: 11vw;
+    bottom: 23vh;
+    transform: translate(-50%, 0%);
+    background: red;
+    border-radius: 10px;
+    display: flex;
+
+    width: 4vw;
+    height: 4vh;
+    min-width: 35px;
+}
+
+#timer {
+    margin-top: 1vh;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
     font-size: 2vh;
     color: #fff;
+}
+
+.botDiv {
+    height: min(10vh, calc(0.7 * 15vw));
+    width: 90%;
+    overflow-y: scroll;
+    background-color: #dedede;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.botType {
+    width: 100%;
+    height: 2vh;
+    font-size: 1.5vh;
+
+    display: flex;
+    text-align: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 5px;
+
+    color: #dedede;
+    padding: 2px;
+}
+
+.botType.light {
+    background: #444;
+}
+
+.botType.dark {
+    background: #666;
+}
+
+.botType:hover {
+    cursor: pointer;
+    background: #666;
 }

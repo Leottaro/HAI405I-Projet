@@ -7,26 +7,37 @@ function Leaderboard() {
     const [general, setGeneral] = useState([]);
     const [bataille, setBataille] = useState([]);
     const [six, setSix] = useState([]);
+    const [memory, setMemory] = useState([]);
 
     useEffect(() => {
-        socket.on("resLeaderboard", ([g, b, s]) => {
+        socket.on("resLeaderboard", ([g, b, s, m]) => {
             setGeneral(g);
             setBataille(b);
             setSix(s);
-        })
+            setMemory(m);
+        });
         socket.emit("reqLeaderboard");
         return () => socket.off("resLeaderboard");
     }, []);
-
 
     return (
         <div id="leaderboard">
             <div id="total">
                 <label className="nomJeu">Général</label>
                 <div className="classement">
-                    {general.map((json, i) =>
+                    {general.map((json, i) => (
                         <div className="divPlace">
-                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
+                            <div
+                                className={
+                                    i === 0
+                                        ? "first"
+                                        : i === 1
+                                          ? "second"
+                                          : i === 2
+                                            ? "third"
+                                            : "place"
+                                }
+                            >
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">
@@ -34,15 +45,25 @@ function Leaderboard() {
                                 <label className="statJoueur">{json.nbWin} Victoires</label>
                             </div>
                         </div>
-                    )}
+                    ))}
                 </div>
             </div>
             <div id="eachGame">
                 <div id="classementBataille">
                     <label className="nomJeu">Bataille</label>
-                    {bataille.map((json, i) =>
+                    {bataille.map((json, i) => (
                         <div className="divPlace">
-                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
+                            <div
+                                className={
+                                    i === 0
+                                        ? "first"
+                                        : i === 1
+                                          ? "second"
+                                          : i === 2
+                                            ? "third"
+                                            : "place"
+                                }
+                            >
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">
@@ -50,13 +71,23 @@ function Leaderboard() {
                                 <label className="statJoueur">{json.nbWin} Victoires</label>
                             </div>
                         </div>
-                    )}
+                    ))}
                 </div>
                 <div id="classementSix">
                     <label className="nomJeu">Six qui prend</label>
-                    {six.map((json, i) =>
+                    {six.map((json, i) => (
                         <div className="divPlace">
-                            <div className={i === 0 ? "first" : (i === 1 ? "second" : (i === 2 ? "third" : "place"))}>
+                            <div
+                                className={
+                                    i === 0
+                                        ? "first"
+                                        : i === 1
+                                          ? "second"
+                                          : i === 2
+                                            ? "third"
+                                            : "place"
+                                }
+                            >
                                 <label className="labelPlace">{i + 1}</label>
                             </div>
                             <div className="joueur">
@@ -64,11 +95,35 @@ function Leaderboard() {
                                 <label className="statJoueur">{json.nbWin} Victoires</label>
                             </div>
                         </div>
-                    )}
+                    ))}
+                </div>
+                <div id="classementMemory">
+                    <label className="nomJeu">Memory</label>
+                    {memory.map((json, i) => (
+                        <div className="divPlace">
+                            <div
+                                className={
+                                    i === 0
+                                        ? "first"
+                                        : i === 1
+                                          ? "second"
+                                          : i === 2
+                                            ? "third"
+                                            : "place"
+                                }
+                            >
+                                <label className="labelPlace">{i + 1}</label>
+                            </div>
+                            <div className="joueur">
+                                <label className="nomJoueur">{json.nom}</label>
+                                <label className="statJoueur">{json.nbWin} Victoires</label>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Leaderboard;

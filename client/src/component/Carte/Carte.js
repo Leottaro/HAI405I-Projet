@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import socket from "../../socket";
-import './Carte.css';
+import "./Carte.css";
 
-function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
+function Carte(props) {
+    // {nom, valeur, type, index} (nom est composé de dossier+nom.png ex: CartesSix/1.png)
     const [chemin, setChemin] = useState("");
     const [visible, setVisible] = useState(false);
     const [valeur, setValeur] = useState("");
     const [type, setType] = useState("");
 
     useEffect(() => {
-        // if (props.chemin) 
+        // if (props.chemin)
         setChemin(props.chemin);
         // else setChemin("FaceCachee.png");
         setVisible(props.visible ? true : false);
@@ -20,11 +21,16 @@ function Carte(props) { // {nom, valeur, type} (nom est composé de dossier+nom.
     }, [props]);
 
     function carteClick() {
-        socket.emit("reqCoup", { "valeur": valeur, "type": type });
+        socket.emit("reqCoup", { carte: { valeur: valeur, type: type }, index: props.index });
     }
 
     return (
-        <img className="carte" onClick={carteClick} src={"../../Assets/" + (visible ? chemin : "FaceCachee.png")} alt=""></img>
+        <img
+            className="carte"
+            onClick={carteClick}
+            src={"../../assets/cartes/" + (visible ? chemin : "FaceCachee.png")}
+            alt=""
+        ></img>
     );
 }
 export default Carte;

@@ -14,11 +14,10 @@ function Rejoindre() {
     }
 
     useEffect(() => {
-        socket.on('resJoin', json => {
-            if (!json.success)
-                setMessage(json.message);
+        socket.on("resJoin", (json) => {
+            if (!json.success) setMessage(json.message);
         });
-        socket.on('resGames', liste => {
+        socket.on("resGames", (liste) => {
             if (liste) {
                 setListPartie(liste);
             }
@@ -29,19 +28,36 @@ function Rejoindre() {
             clearInterval(clock);
             socket.off("resJoin");
             socket.off("resGames");
-        }
-    }, []);
+        };
+    }, [jeux]);
 
     return (
         <div id="CRContent">
             <label className="CRtitle">entrez un lien de partie</label>
-            <input className="CRinput" type="number" max={9999999} onChange={(event) => { setLienPartie(parseInt(event.target.value)) }} />
-            <button className="CRButton CRvalider" onClick={valider}>Rejoindre</button>
+            <input
+                className="CRinput"
+                type="number"
+                max={9999999}
+                onChange={(event) => {
+                    setLienPartie(parseInt(event.target.value));
+                }}
+            />
+            <button
+                className="CRButton CRvalider"
+                onClick={valider}
+            >
+                Rejoindre
+            </button>
             <label id="message">{message}</label>
             <label className="CRtitle">Parties en cours:</label>
             <div id="listeParties">
                 {listParties.map((partie, index) => (
-                    <Parties key={index} buttonText="rejoindre" nbrJoueurs={partie.nbrJoueurs} buttonCallback={() => socket.emit("reqJoin", partie.code)} />
+                    <Parties
+                        key={index}
+                        buttonText="rejoindre"
+                        nbrJoueurs={partie.nbrJoueurs}
+                        buttonCallback={() => socket.emit("reqJoin", partie.code)}
+                    />
                 ))}
             </div>
         </div>

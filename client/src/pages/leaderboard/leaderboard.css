@@ -38,7 +38,7 @@
     overflow-y: scroll;
 }
 
-#classementSix {
+#classementMemory {
     width: 280px;
     min-width: 280px;
     height: 96%;
@@ -54,6 +54,21 @@
     overflow-y: scroll;
 }
 
+#classementSix {
+    width: 280px;
+    min-width: 280px;
+    height: 96%;
+    margin: 10px;
+    background: #573b8a;
+    border-radius: 10px;
+    margin: 5px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
 #eachGame {
     width: 71%;
@@ -92,7 +107,7 @@
     height: 50px;
     background: white;
     border-radius: 5px;
-    margin-left:2.5%;
+    margin-left: 2.5%;
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
@@ -153,7 +168,7 @@
     width: 80%;
     display: flex;
     flex-direction: column;
-    
+
     text-align: center;
 }
 
