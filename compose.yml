@@ -1,0 +1,21 @@
+services:
+    server:
+        image: leottaro/hai405i-project-server:latest
+        build:
+            context: ./server
+        ports:
+            - 3001:3001
+        volumes:
+            - databases:/server/databases
+
+    client:
+        depends_on:
+            - server
+        image: leottaro/hai405i-project-client:latest
+        build:
+            context: ./client
+        ports:
+            - 9090:9090
+
+volumes:
+    databases:

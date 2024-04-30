@@ -8,22 +8,31 @@ on:
     workflow_dispatch:
 
 jobs:
-    build:
-        runs-on: self-hosted
+    docker:
+        runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - name: Build client & server
-              run: | # CI=false to ignore warnings and not fail the build
-                  export CI=false 
-                  cd client && npm install && npm run build
-                  cd ..
-                  cd server && npm install
-                  cd ..
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Build and push
+              run: docker compose build && docker compose push
 
     deploy:
         runs-on: self-hosted
-        needs: build
+        needs: docker
         steps:
-            - name: Start client & server
-              run: |
-                  pm2 start HAI405I-BACK
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - name: Pull image
+              run: docker compose pull
+            - name: Run container
+              run: docker compose up -d
