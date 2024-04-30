@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-            - dockerize
     # You can deploy on any branch if needed in the Actions tab
     workflow_dispatch:
 
