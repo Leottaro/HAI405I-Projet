@@ -310,6 +310,7 @@ io.on("connection", function (socket) {
 
     socket.on("reqMyGames", async (jeux) => {
         // TODO:
+        return;
         if (!sockets[socket.id]) {
             return;
         }
@@ -473,6 +474,7 @@ io.on("connection", function (socket) {
 
     socket.on("reqSave", () => {
         // TODO:
+        return;
         if (!sockets[socket.id] || !sockets[socket.id].partie) {
             return;
         }
