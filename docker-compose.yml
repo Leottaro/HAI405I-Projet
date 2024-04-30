@@ -1,5 +1,6 @@
 services:
     server:
+        platform: linux/arm64/v8
         image: leottaro/hai405i-project-server:latest
         build:
             context: ./server
@@ -11,6 +12,7 @@ services:
     client:
         depends_on:
             - server
+        platform: linux/arm64/v8
         image: leottaro/hai405i-project-client:latest
         build:
             context: ./client

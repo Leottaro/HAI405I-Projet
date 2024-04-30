@@ -1,10 +1,11 @@
 FROM node:22-alpine
 WORKDIR /client
 
-# client
-COPY . .
-RUN npm install 
-RUN npm run build
-EXPOSE 9090
+# Copy dependencies and install them
+COPY package.json ./
+RUN npm install
 
+COPY . .
+RUN run build
+EXPOSE 9090
 CMD npm run serve
