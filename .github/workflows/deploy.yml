@@ -1,5 +1,8 @@
 name: Deploy to Breadberry Pi
 
+env:
+    DOCKER_DEFAULT_PLATFORM: linux/arm64/v8
+
 on:
     push:
         branches:
